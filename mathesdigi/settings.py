@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'Mathes2.apps.Mathes2Config',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

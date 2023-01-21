@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- encoding und rauszoomen auf mobiler Ansicht-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+  <!-- CSS -->
+    {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'Mathes2/css/exercise.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'Mathes2/css/single_answer.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'Mathes2/css/number_keyboard.css' %}">
+  <link href="https://fonts.cdnfonts.com/css/ink-free" rel="stylesheet">
+  <!-- Title -->
+  <title>Mathes 2 - 1.Bsp</title>
+</head>
+
+<body class="example_page">
+<div class="raster">
+  <!-- logo (header) -->
+  <div class="logo">
+      {% load static %} <img class="pic" src="{% static 'Mathes2/pics/Logo.svg' %}" alt="home">
+  </div>
+
+  <!-- Sidebar -->
+  <div class="monkey"><img class="pic" src="pics/Affe_2.svg"></div>
+  <!-- move to next page -->
+  <div class="forward"><a href="1_task_1.html"><img class="pic" src="pics/weiter.svg"></a></div>
+  <!-- return to page before -->
+  <div class="backwards"><a href="Mathes-2.html"><img class="pic" src="pics/zurueck.svg"></a></div>
+
+  <!-- Task and Answer Field -->
+  <div class="task">
+    <div class="task_text">Beispiel <br> Wie viele Radiergummis sind es?</div>
+    <div class="task_pic"><img class="pic" src="pics/2_task/1_example.svg"></div>
+    <input class="answer_field" type="text" inputmode="None" id="antwort1" placeholder="Antwort">
+  </div>
+
+  <!-- Input buttons -->
+  <div class="keyboard">
+    <img class="taste" src="pics/keyboard/Puzzle1.svg" onclick="antwort1.value+=1">
+    <img class="taste" src="pics/keyboard/Puzzle2.svg" onclick="antwort1.value+=2">
+    <img class="taste" src="pics/keyboard/Puzzle3.svg" onclick="antwort1.value+=3">
+    <img class="taste" src="pics/keyboard/Puzzle4.svg" onclick="antwort1.value+=4">
+    <img class="taste" src="pics/keyboard/Puzzle5.svg" onclick="antwort1.value+=5">
+    <img class="taste" src="pics/keyboard/Puzzle6.svg" onclick="antwort1.value+=6">
+    <img class="taste" src="pics/keyboard/Puzzle7.svg" onclick="antwort1.value+=7">
+    <img class="taste" src="pics/keyboard/Puzzle8.svg" onclick="antwort1.value+=8">
+    <img class="taste" src="pics/keyboard/Puzzle9.svg" onclick="antwort1.value+=9">
+    <img class="taste" src="pics/keyboard/Puzzle0.svg" onclick="antwort1.value+=0">
+    <img class="taste" src="pics/keyboard/Puzzle_loeschen.svg" onclick="antwort1.value=''">
+  </div>
+
+  <!-- progressbar -->
+  <img class="progressbar" src="pics/Fortschrittsbalken_0.svg">
+</div>
+</body>
+</html>

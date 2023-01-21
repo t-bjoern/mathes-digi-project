@@ -1,0 +1,36 @@
+.task {
+    grid-area: task;
+    display: grid;
+    background: url("../pics/Task-Background.svg") no-repeat;
+    background-size: 80vw 60vh;
+    grid-template-columns: 50vw 30vw;
+    grid-template-rows: 14vh 46vh;
+    grid-template-areas:
+            "task-text task-text"
+            "task-pic answer-field";
+}
+
+.task_pic{
+    grid-area: task-pic;
+    margin-left: 5vw;
+    margin-bottom: 5vh;
+}
+
+.task_text{
+    grid-area: task-text;
+    text-align: left;
+    margin-left: 5vw;
+    font-size: 5vh;
+    font-family: "Ink Free", sans-serif;
+}
+
+.answer_field{
+    grid-area: answer-field;
+    height: 10vh;
+    width: 20vw;
+    font-size: 5vh;
+    margin-top: 22vh;
+    margin-left: 2vw;
+    border: none;
+    font-family: "Ink Free", sans-serif;
+}

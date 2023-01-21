@@ -1,0 +1,58 @@
+/*******************************************************
+*
+Theme Name: Single Exercise
+Description: A single exercise displayed in a Grid with three columns and three rows.
+Version:       1.0
+*
+*******************************************************/
+/*Background-Settings*/
+.example_page{background-color: #d6e5bc;}
+
+.raster {
+    display: grid;
+    grid-template-columns: 80vw 20vw;
+    grid-template-rows: 15vh 60vh 15vh 5vh;
+    grid-template-areas:
+            "logo forward"
+            "task monkey"
+            "keyboard backwards"
+            "progressbar .";
+}
+
+.forward {grid-area: forward;}
+.backwards {grid-area: backwards;}
+.monkey {grid-area: monkey;}
+
+.logo {
+    grid-area: logo;
+    margin-left: 5vw;
+}
+
+
+.keyboard{
+    grid-area: keyboard;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+}
+
+.progressbar {
+    grid-area: progressbar;
+    width:100%;
+}
+
+.pic{
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+}
+
+/*@media screen and (orientation: portrait) {
+    .raster{
+        display: None;
+    }
+}*/
