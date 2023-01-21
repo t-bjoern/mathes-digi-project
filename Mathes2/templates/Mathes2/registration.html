@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Information Form</title>
+    {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'Mathes2/css/registration.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+</head>
+<body>
+  <h1>Student Information Form</h1>
+
+  <form  action="{% url 'registration' %}" method="post">
+    {% csrf_token %}
+    <label for="pseudonym">Pseudonym des Kindes:</label>
+    <input type="text" id="pseudonym" name="pseudonym"
+           value="{% if pseudonym %}{{ pseudonym }}{% endif %}"><br>
+    {%  if error_pseudonym %}
+        <p style="color: red">Fehler</p>
+    {% endif %} <br>
+    <label for="klasse">Klasse:</label>
+    <input type="text" id="klasse" name="klasse"
+           value="{% if klasse %}{{ klasse }}{% endif %}"> <br>
+    {%  if error_klasse %}
+        <p style="color: red">Klasse muss eine zweistellige Zahl sein.</p>
+    {% endif %} <br>
+    <label for="schule">Schule:</label>
+    <input type="text" id="schule" name="schule"
+           value="{% if schule %}{{ schule }}{% endif %}"><br>
+    {%  if error_schule %}
+        <p style="color: red">Fehler.</p>
+    {% endif %} <br>
+    <label for="jahrgang">Jahrgang:</label>
+    <input type="text" id="jahrgang" name="jahrgang"
+           value="{% if jahrgang %}{{ jahrgang }}{% endif %}"><br>
+    {%  if error_jahrgang %}
+        <p style="color: red">Fehler.</p>
+    {% endif %} <br>
+    <label for="mailadresse">Mailadresse für Ergebnisse:</label>
+    <input type="email" id="mailadresse" name="mailadresse"
+           value="{% if mailadresse %}{{ mailadresse }}{% endif %}"><br>
+    {%  if error_mailadresse %}
+        <p style="color: red">Fehler.</p>
+    {% endif %} <br>
+    <input type="submit" value="Submit">
+  </form>
+</body>
+</html>
+
