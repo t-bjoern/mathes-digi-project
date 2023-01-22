@@ -4,8 +4,13 @@ from django.shortcuts import render, redirect
 from .models import User
 
 
-def example1(request):
-    user_id = request.session.get("user_id")
+def startpage(request):
+    return render(request, 'mathesdigi_app/startpage.html')
+
+
+def heft2_example1(request):
+    user_id = request.session.get("user")
+
     return render(request, 'mathesdigi_app/1_example.html')
 
 
@@ -19,34 +24,34 @@ def registration(request):
         user_name = post_data["pseudonym"]
         klasse = post_data["klasse"]
         schule = post_data["schule"]
-        jahrgang = post_data["jahrgang"]
-        pseudonym = post_data["pseudonym"]
+        heft_nr = int(post_data["heft_nr"])
         mail = post_data["mailadresse"]
 
         try:
-            user_id = create_random_user_id()
-            User.objects.create(user_name=user_name,
-                                user_id=user_id,
-                                klasse=klasse,
-                                schule=schule,
-                                lehrer_mail=mail,
-                                pseudonym=pseudonym,
-                                jahrgang=jahrgang)
+            user = User.objects.create(id=create_random_user_id(),
+                                       user_name=user_name,
+                                       klasse=klasse,
+                                       schule=schule,
+                                       heft_nr=heft_nr,
+                                       mail=mail)
             # Speichern der user_id in der request.session, um auf den nächsten Seiten
             # eine Identifikation des Nutzers zu ermöglichen.
-            request.session["user_id"] = user_id
-            return redirect(example1)
+            request.session["user"] = user.id
+
+            if user.heft_nr == 2:
+                return redirect(heft2_example1)
+
         except Exception as e:
             # Context füllen, um Daten und Fehlermeldungen im Fomrular anzzuzeigen.
             context = post_data
-            if "pseudonym" in str(e):
+            if "user_name" in str(e):
                 context["error_pseudonym"] = True
             if "klasse" in str(e):
                 context["error_klasse"] = True
             if "schule" in str(e):
                 context["error_schule"] = True
-            if "jahrgang" in str(e):
-                context["error_jahrgang"] = True
+            if "heft_nr" in str(e):
+                context["error_heft"] = True
             if "mailadresse" in str(e):
                 context["error_mailadresse"] = True
 
@@ -63,6 +68,6 @@ def create_random_user_id():
     """
     while True:
         user_id = random.randint(10000, 99999)
-        if not User.objects.filter(user_id=user_id).exists():
+        if not User.objects.filter(id=user_id).exists():
             break
     return user_id

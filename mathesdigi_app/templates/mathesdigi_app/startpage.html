@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Startseite</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mathesdigi_app/css/startpage.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h1>Hinweise für Lehrende zum Ablauf des Testes</h1>
+            <ul>
+                <li>Erster Hinweis</li>
+                <li>Zweiter Hinweis</li>
+                <li>Dritter Hinweis</li>
+            </ul>
+            <br>
+            <form method="get" action="{% url 'registration' %}">
+                {% csrf_token %}
+                <input class="myButton" type="submit" value="Weiter zur Registrierung">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
