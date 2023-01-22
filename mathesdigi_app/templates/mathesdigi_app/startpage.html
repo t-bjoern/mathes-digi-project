@@ -3,11 +3,12 @@
 <head>
     <title>Startseite</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'mathesdigi_app/css/startpage.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'mathesdigi_app/css/startpage.css' %}?version={{ timestamp }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
 </head>
 <body>
     <div class="container">
+        <h1>Verfügbare Testhefte:</h1>
         <div>
             <form method="post" action="{% url 'startpage' %}">
                 {% csrf_token %}
