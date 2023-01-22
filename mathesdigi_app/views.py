@@ -6,7 +6,7 @@ from .models import User
 
 def example1(request):
     user_id = request.session.get("user_id")
-    return render(request, 'Mathes2/1_example.html')
+    return render(request, 'mathesdigi_app/1_example.html')
 
 
 def registration(request):
@@ -50,9 +50,9 @@ def registration(request):
             if "mailadresse" in str(e):
                 context["error_mailadresse"] = True
 
-            return render(request, 'Mathes2/registration.html', context)
+            return render(request, 'mathesdigi_app/registration.html', context)
     else:
-        return render(request, 'Mathes2/registration.html')
+        return render(request, 'mathesdigi_app/registration.html')
 
 
 def create_random_user_id():

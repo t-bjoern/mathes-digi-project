@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('Mathes2', '0002_auto_20230121_1843'),
+        ('mathesdigi_app', '0002_auto_20230121_1843'),
     ]
 
     operations = [

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class Mathes2Config(AppConfig):
+class MathesgigAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'Mathes2'
+    name = 'mathesdigi_app'

@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('Mathes2', '0001_initial'),
+        ('mathesdigi_app', '0001_initial'),
     ]
 
     operations = [
