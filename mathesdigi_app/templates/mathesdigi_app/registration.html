@@ -1,38 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Student Information Form</title>
+  <title>Registrierungsseite</title>
     {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'mathesdigi_app/css/registration.css' %}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
 </head>
 <body>
-<br><br>
-  <form  action="{% url 'registration' %}" method="post">
-    {% csrf_token %}
-    <label for="pseudonym">Pseudonym des Kindes:</label>
-    <input type="text" id="pseudonym" name="pseudonym"
-           value="TestUser{% if pseudonym %}{{ pseudonym }}{% endif %}"><br>
-    {%  if error_pseudonym %} <p style="color: red">Fehler</p> {% endif %} <br>
-    <label for="klasse">Klasse:</label>
-    <input type="text" id="klasse" name="klasse"
-           value="2{% if klasse %}{{ klasse }}{% endif %}"> <br>
-    {%  if error_klasse %} <p style="color: red">Klasse muss eine zweistellige Zahl sein.</p> {% endif %} <br>
-    <label for="schule">Schule:</label>
-    <input type="text" id="schule" name="schule"
-           value="GrundschuleHST{% if schule %}{{ schule }}{% endif %}"><br>
-    {%  if error_schule %} <p style="color: red">Fehler.</p> {% endif %} <br>
-    <label for="heft_nr">Heft:</label>
-    <select id="heft_nr" name="heft_nr">
-        <option value="2">Mathes2</option>
-    </select><br>
-    {%  if error_heft %} <p style="color: red">Fehler.</p> {% endif %} <br>
-    <label for="mailadresse">Mailadresse für Ergebnisse:</label>
-    <input type="email" id="mailadresse" name="mailadresse"
-           value="test@mail.de{% if mailadresse %}{{ mailadresse }}{% endif %}"><br>
-    {%  if error_mailadresse %} <p style="color: red">Fehler.</p> {% endif %} <br>
-    <input type="submit" value="Weiter">
-  </form>
+    <div class="container">
+        <h1>Hinweise für Lehrende zum Ablauf des Testes</h1>
+        <ul>
+            <li>Erster Hinweis</li>
+            <li>Zweiter Hinweis</li>
+            <li>Dritter Hinweis</li>
+        </ul>
+    </div>
+    <div class="container">
+        <form  action="{% url 'registration' %}" method="post">
+            {% csrf_token %}
+            <label for="pseudonym">Pseudonym des Kindes:</label>
+            <input type="text" id="pseudonym" name="pseudonym"
+                   value="TestUser{% if pseudonym %}{{ pseudonym }}{% endif %}"><br>
+            {%  if error_pseudonym %} <p style="color: red">Fehler</p> {% endif %} <br>
+            <label for="mailadresse">Mailadresse für Ergebnisse:</label>
+            <input type="email" id="mailadresse" name="mailadresse"
+                   value="test@mail.de{% if mailadresse %}{{ mailadresse }}{% endif %}"><br>
+            {%  if error_mailadresse %} <p style="color: red">Fehler.</p> {% endif %} <br>
+            <input type="submit" value="Weiter">
+        </form>
+    </div>
+
+
 </body>
 </html>
 

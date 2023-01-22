@@ -9,16 +9,9 @@
 <body>
     <div class="container">
         <div>
-            <h1>Hinweise für Lehrende zum Ablauf des Testes</h1>
-            <ul>
-                <li>Erster Hinweis</li>
-                <li>Zweiter Hinweis</li>
-                <li>Dritter Hinweis</li>
-            </ul>
-            <br>
-            <form method="get" action="{% url 'registration' %}">
+            <form method="post" action="{% url 'startpage' %}">
                 {% csrf_token %}
-                <input class="myButton" type="submit" value="Weiter zur Registrierung">
+                <input class="myButton" type="submit" value="Mathes2" id="Mathes2" name="Mathes2">
             </form>
         </div>
     </div>

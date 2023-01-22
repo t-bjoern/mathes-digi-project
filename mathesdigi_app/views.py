@@ -4,8 +4,14 @@ from django.shortcuts import render, redirect
 from .models import User
 
 
-def startpage(request):
+def index(request):
     return render(request, 'mathesdigi_app/startpage.html')
+
+
+def startpage(request):
+    if request.method == 'POST':
+        request.session["heft"] = request.POST["Mathes2"]
+    return render(request, 'mathesdigi_app/registration.html')
 
 
 def heft2_example1(request):
@@ -22,36 +28,25 @@ def registration(request):
         del post_data["csrfmiddlewaretoken"]
 
         user_name = post_data["pseudonym"]
-        klasse = post_data["klasse"]
-        schule = post_data["schule"]
-        heft_nr = int(post_data["heft_nr"])
         mail = post_data["mailadresse"]
 
         try:
             user = User.objects.create(id=create_random_user_id(),
                                        user_name=user_name,
-                                       klasse=klasse,
-                                       schule=schule,
-                                       heft_nr=heft_nr,
                                        mail=mail)
             # Speichern der user_id in der request.session, um auf den nächsten Seiten
             # eine Identifikation des Nutzers zu ermöglichen.
             request.session["user"] = user.id
 
-            if user.heft_nr == 2:
-                return redirect(heft2_example1)
+            print(request.session["heft"])
+
+            return redirect(heft2_example1)
 
         except Exception as e:
             # Context füllen, um Daten und Fehlermeldungen im Fomrular anzzuzeigen.
             context = post_data
             if "user_name" in str(e):
                 context["error_pseudonym"] = True
-            if "klasse" in str(e):
-                context["error_klasse"] = True
-            if "schule" in str(e):
-                context["error_schule"] = True
-            if "heft_nr" in str(e):
-                context["error_heft"] = True
             if "mailadresse" in str(e):
                 context["error_mailadresse"] = True
 
