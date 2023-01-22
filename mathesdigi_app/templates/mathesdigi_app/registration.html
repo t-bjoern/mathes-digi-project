@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Hinweise für Lehrende zum Ablauf des Testes</h1>
+        <h1>Hinweise für Lehrende zum Ablauf des Testes</h1> <br>
         <ul>
             <li>Erster Hinweis</li>
             <li>Zweiter Hinweis</li>
@@ -18,14 +18,13 @@
     <div class="container">
         <form  action="{% url 'registration' %}" method="post">
             {% csrf_token %}
-            <label for="pseudonym">Pseudonym des Kindes:</label>
-            <input type="text" id="pseudonym" name="pseudonym"
-                   value="TestUser{% if pseudonym %}{{ pseudonym }}{% endif %}"><br>
-            {%  if error_pseudonym %} <p style="color: red">Fehler</p> {% endif %} <br>
-            <label for="mailadresse">Mailadresse für Ergebnisse:</label>
-            <input type="email" id="mailadresse" name="mailadresse"
-                   value="test@mail.de{% if mailadresse %}{{ mailadresse }}{% endif %}"><br>
-            {%  if error_mailadresse %} <p style="color: red">Fehler.</p> {% endif %} <br>
+            <label for="user_name">Pseudonym des Kindes:</label>
+            <input type="text" id="user_name" name="user_name"
+                   value="{% if user_name %}{{ user_name }}{% endif %}"><br><br>
+            <label for="mail">Mailadresse für Ergebnisse:</label>
+            <input type="email" id="mail" name="mail"
+                   value="{% if mail %}{{ mail }}{% endif %}"><br>
+            {%  if error_message %} <p style="color: red">{{ error_message }}</p> {% endif %} <br>
             <input type="submit" value="Weiter">
         </form>
     </div>
