@@ -24,7 +24,7 @@
   <!-- Sidebar -->
   <div class="monkey"><img class="pic" src="{% static 'mathesdigi_app/pics/Affe_2.svg' %}" alt="home"></div>
   <!-- move to next page -->
-  <div class="forward"><a href="{% url 'heft2_example1' %}"><img class="pic" src="{% static 'mathesdigi_app/pics/weiter.svg' %}" alt="home"></a></div>
+
   <!-- return to page before -->
   <div class="backwards"><a href="{% url 'registration' %}"><img class="pic" src="{% static 'mathesdigi_app/pics/zurueck.svg' %}" alt="home"></a></div>
 
@@ -32,7 +32,15 @@
   <div class="task">
     <div class="task_text">Beispiel <br> Wie viele Radiergummis sind es?</div>
     <div class="task_pic"><img class="pic" src="{% static 'mathesdigi_app/pics/2_task/1_example.svg' %}" alt="home"></div>
-    <input class="answer_field" type="text" inputmode="None" id="antwort1" placeholder="Antwort">
+    <form  action="{% url 'heft2_example1' %}" method="post">
+        {%  csrf_token %}
+        <input class="answer_field" type="text" inputmode="None" id="antwort1" name="21E" placeholder="Antwort"
+        value="{% if 21E %}{{ 21E }}{% endif %}">
+{#        {%  if 21E %} <p style="color: red">{{ 21E }}</p> {% endif %}#}
+
+        <input class="forward" type="submit" value="Weiter">
+{#        <div class="forward"><a href="{% url 'heft2_example1' %}"><img class="pic" src="{% static 'mathesdigi_app/pics/weiter.svg' %}" alt="home"></a></div>#}
+    </form>
   </div>
 
   <!-- Input buttons -->

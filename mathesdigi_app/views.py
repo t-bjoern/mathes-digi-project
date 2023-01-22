@@ -1,7 +1,7 @@
-import random
-
 from django.shortcuts import render, redirect
-from .models import User
+from .models import User, Aufgaben, Teilaufgaben, Ergebnisse
+
+from mathesdigi_app import helpers
 
 
 def startpage(request):
@@ -20,20 +20,11 @@ def registration(request):
             post_data[key] = post_data[key][0]
         del post_data["csrfmiddlewaretoken"]
 
-        user_name = post_data["user_name"].strip()
-        mail = post_data["mail"].strip()
-
         try:
-            # Validierung der Eingabedaten
-            if user_name == "" or mail == "":
-                raise Exception("Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!")
-
             if "user" not in request.session.keys():
-                user = User.objects.create(id=create_random_user_id(),
-                                           user_name=user_name,
-                                           mail=mail)
-                # Speichern der user_id in der request.session, um auf den nächsten Seiten
-                # eine Identifikation des Nutzers zu ermöglichen.
+                user = helpers.validate_registration_create_user(post_data)
+
+                # Speichern der user_id in der Sessiondaten
                 request.session["user"] = user.id
 
             if request.session["heft"] == "Mathes2":
@@ -58,21 +49,15 @@ def registration(request):
 def heft2_example1(request):
     if request.method == 'POST':
         post_data = dict(request.POST).copy()
+        del post_data["csrfmiddlewaretoken"]
 
+        if any(a != [""] for a in post_data.values()):
+            # context = check_answer_example(post_data)
+            context = helpers.display_solution_example(post_data)
 
-    user_id = request.session.get("user")
+            return render(request, 'mathesdigi_app/1_example.html', context)
 
     return render(request, 'mathesdigi_app/1_example.html')
 
 
-def create_random_user_id():
-    """
-    Erstellen einer zufälligen user_id welche noch nicht in der Datenbank verwendet wird.
-    Returns:
-        user_id: int
-    """
-    while True:
-        user_id = random.randint(10000, 99999)
-        if not User.objects.filter(id=user_id).exists():
-            break
-    return user_id
+
