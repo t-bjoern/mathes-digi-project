@@ -33,7 +33,7 @@
     <div class="backwards"><a href="{% url 'registration' %}">
         <img class="pic" src="{% static 'mathesdigi_app/pics/zurueck.svg' %}" alt="home"></a>
     </div>
-
+{% if wertung %}<p>{{ wertung }}</p>{% endif %}
   <!-- Task and Answer Field -->
   <div class="task">
     <div class="task_text">Beispiel <br> Wie viele Radiergummis sind es?</div>
@@ -44,7 +44,6 @@
     <input class="{% if empty_field %}answer_field_shake{% else %}answer_field{% endif %}"
            type="text" inputmode="None" id="antwort1" name="21E" placeholder="Antwort"
            value="{% if 21E %}{{ 21E }}{% endif %}">
-
   </div>
 
   <!-- Input buttons -->

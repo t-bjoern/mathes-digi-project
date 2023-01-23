@@ -54,10 +54,16 @@ def heft2_task1_example(request):
         post_data = dict(request.POST).copy()
         del post_data["csrfmiddlewaretoken"]
 
+        if "example_showed" in request.session.keys():
+            del request.session["example_showed"]
+            return redirect(heft2_task1_1)
+
         if any(a != [""] for a in post_data.values()):
+            request.session["example_showed"] = True
             context, wertung = helpers.display_solution_example(post_data)
             if wertung:
-                return redirect(heft2_task1_1)
+                context["wertung"] = "Das ist richtig du kannst jetzt auf Weiter drücken!"
+                return render(request, 'mathesdigi_app/1_example.html', context)
         else:
             context = {"empty_field": True}
 
