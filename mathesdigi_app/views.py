@@ -26,9 +26,11 @@ def registration(request):
 
                 # Speichern der user_id in der Sessiondaten
                 request.session["user"] = user.id
+                user.heft = request.session["heft"]
+                user.save()
 
             if request.session["heft"] == "Mathes2":
-                return redirect(heft2_example1)
+                return redirect(heft2_task1_example)
 
         except Exception as e:
             # Context füllen, um Daten und Fehlermeldungen im Fomrular anzzuzeigen.
@@ -46,18 +48,45 @@ def registration(request):
         return render(request, 'mathesdigi_app/registration.html')
 
 
-def heft2_example1(request):
+def heft2_task1_example(request):
     if request.method == 'POST':
         post_data = dict(request.POST).copy()
         del post_data["csrfmiddlewaretoken"]
 
         if any(a != [""] for a in post_data.values()):
             # context = check_answer_example(post_data)
-            context = helpers.display_solution_example(post_data)
+            context, wertung = helpers.display_solution_example(post_data)
+
+            if wertung:
+                return redirect(heft2_task1_1)
 
             return render(request, 'mathesdigi_app/1_example.html', context)
 
     return render(request, 'mathesdigi_app/1_example.html')
 
 
+def heft2_task1_1(request):
+    if request.method == 'POST':
+        post_data = dict(request.POST).copy()
+        del post_data["csrfmiddlewaretoken"]
 
+        if any(a != [""] for a in post_data.values()):
+            user = request.session["user"]
+
+            for key, value in post_data.items():
+                teilaufgaben_id = key
+                ergebnis = int(value[0])
+                teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
+
+                if Ergebnisse.objects.filter(user_id=user, teilaufgabe=teilaufgabe).exists():
+                    ergebnis_obj = Ergebnisse.objects.get(user_id=user, teilaufgabe=teilaufgabe)
+                    ergebnis_obj.eingabe = ergebnis
+                    ergebnis_obj.wertung = bool(ergebnis == teilaufgabe.loesung)
+                    ergebnis_obj.save()
+                else:
+                    Ergebnisse.objects.create(user_id=user,
+                                              teilaufgabe=teilaufgabe,
+                                              eingabe=ergebnis,
+                                              wertung=bool(ergebnis == teilaufgabe.loesung))
+
+    return render(request, 'mathesdigi_app/1_task_1.html')

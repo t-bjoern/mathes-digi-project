@@ -4,29 +4,16 @@ from .models import User, Aufgaben, Teilaufgaben, Ergebnisse
 
 
 def display_solution_example(post_data: dict):
-    for key in post_data.keys():
-        teilaufgaben_id = key
-        teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
-        post_data[key] = teilaufgabe.loesung
-
-    return post_data
-
-
-def check_answer_example(post_data: dict):
-    dicti = {}
+    wertung = False
     for key, value in post_data.items():
         teilaufgaben_id = key
         ergebnis = int(value[0])
-
         teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
         if ergebnis == teilaufgabe.loesung:
-            wert = "Richtig"
-        else:
-            wert = "Falsch"
+            wertung = True
+        post_data[key] = teilaufgabe.loesung
 
-        dicti[teilaufgaben_id] = wert
-
-    return dicti
+    return post_data, wertung
 
 
 def create_random_user_id():
