@@ -1,6 +1,24 @@
 import random
 
-from .models import User, Aufgaben, Teilaufgaben, Ergebnisse
+from .models import User, Teilaufgaben, Ergebnisse
+
+
+def save_answer(post_data: dict, user_id: int):
+    for key, value in post_data.items():
+        teilaufgaben_id = key
+        ergebnis = int(value[0])
+        teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
+
+        if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
+            ergebnis_obj = Ergebnisse.objects.get(user_id=user_id, teilaufgabe=teilaufgabe)
+            ergebnis_obj.eingabe = ergebnis
+            ergebnis_obj.wertung = bool(ergebnis == teilaufgabe.loesung)
+            ergebnis_obj.save()
+        else:
+            Ergebnisse.objects.create(user_id=user_id,
+                                      teilaufgabe=teilaufgabe,
+                                      eingabe=ergebnis,
+                                      wertung=bool(ergebnis == teilaufgabe.loesung))
 
 
 def display_solution_example(post_data: dict):
