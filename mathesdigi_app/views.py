@@ -57,7 +57,6 @@ def heft2_task1_example(request):
         if "example_showed" in request.session.keys():
             del request.session["example_showed"]
             return redirect(heft2_task1_1)
-
         if any(a != [""] for a in post_data.values()):
             request.session["example_showed"] = True
             context = helpers.display_solution_example(post_data)
