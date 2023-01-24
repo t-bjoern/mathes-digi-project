@@ -3,35 +3,41 @@ import random
 from .models import User, Teilaufgaben, Ergebnisse
 
 
-def save_answer(post_data: dict, user_id: int):
-    for key, value in post_data.items():
-        teilaufgaben_id = key
-        ergebnis = int(value[0])
-        teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
+def save_answer(post_data: dict, user_id: int, context: dict):
+    if any(a != [""] for a in post_data.values()):
+        for key, value in post_data.items():
+            teilaufgaben_id = key
+            ergebnis = int(value[0])
+            teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
 
-        if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
-            ergebnis_obj = Ergebnisse.objects.get(user_id=user_id, teilaufgabe=teilaufgabe)
-            ergebnis_obj.eingabe = ergebnis
-            ergebnis_obj.wertung = bool(ergebnis == teilaufgabe.loesung)
-            ergebnis_obj.save()
-        else:
-            Ergebnisse.objects.create(user_id=user_id,
-                                      teilaufgabe=teilaufgabe,
-                                      eingabe=ergebnis,
-                                      wertung=bool(ergebnis == teilaufgabe.loesung))
+            if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
+                ergebnis_obj = Ergebnisse.objects.get(user_id=user_id, teilaufgabe=teilaufgabe)
+                ergebnis_obj.eingabe = ergebnis
+                ergebnis_obj.wertung = bool(ergebnis == teilaufgabe.loesung)
+                ergebnis_obj.save()
+            else:
+                Ergebnisse.objects.create(user_id=user_id,
+                                          teilaufgabe=teilaufgabe,
+                                          eingabe=ergebnis,
+                                          wertung=bool(ergebnis == teilaufgabe.loesung))
+        # return redirect(heft2_task1_2)
+    else:
+        context["empty_field"] = True
+
+    return context
 
 
 def display_solution_example(post_data: dict):
-    wertung = False
+    context = {}
     for key, value in post_data.items():
         teilaufgaben_id = key
         ergebnis = int(value[0])
         teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
-        if ergebnis == teilaufgabe.loesung:
-            wertung = True
-        post_data[key] = teilaufgabe.loesung
+        if ergebnis != teilaufgabe.loesung:
+            context[f"{key}_solution"] = teilaufgabe.loesung
+        context[f"{key}_value"] = ergebnis
 
-    return post_data, wertung
+    return context
 
 
 def create_random_user_id():

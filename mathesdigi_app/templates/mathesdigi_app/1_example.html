@@ -43,7 +43,7 @@
 
     <input class="{% if empty_field %}answer_field_shake{% else %}answer_field{% endif %}"
            type="text" inputmode="None" id="antwort1" name="21E" placeholder="Antwort"
-           value="{% if 21E %}{{ 21E }}{% endif %}">
+           value="{% if 21E_solution %}{{ 21E_solution }}{% else %}{{ 21E_value }}{% endif %}">
   </div>
 
   <!-- Input buttons -->
