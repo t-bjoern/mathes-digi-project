@@ -17,11 +17,19 @@ class Aufgaben(models.Model):
     bezeichnung = models.CharField(max_length=200)
     punktzahl = models.IntegerField()
 
+    class Meta:
+        verbose_name = "Aufgabe"
+        verbose_name_plural = "Aufgaben"
+
 
 class Teilaufgaben(models.Model):
     teilaufgaben_id = models.CharField(max_length=5)
     loesung = models.IntegerField()
     aufgabe = models.ForeignKey(Aufgaben, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Teilaufgabe"
+        verbose_name_plural = "Teilaufgaben"
 
 
 class Ergebnisse(models.Model):
@@ -29,3 +37,7 @@ class Ergebnisse(models.Model):
     wertung = models.BooleanField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     teilaufgabe = models.ForeignKey(Teilaufgaben, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Ergebnis"
+        verbose_name_plural = "Ergebnisse"

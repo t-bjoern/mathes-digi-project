@@ -16,6 +16,7 @@ def startpage(request):
 def registration(request):
     if request.method == 'POST':
         post_data = dict(request.POST).copy()
+        print(post_data)
         for key in post_data:
             post_data[key] = post_data[key][0]
         del post_data["csrfmiddlewaretoken"]
@@ -57,7 +58,6 @@ def heft2_task1_example(request):
         if "example_showed" in request.session.keys():
             del request.session["example_showed"]
             return redirect(heft2_task1_1)
-
         if any(a != [""] for a in post_data.values()):
             request.session["example_showed"] = True
             context = helpers.display_solution_example(post_data)
