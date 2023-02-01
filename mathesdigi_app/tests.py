@@ -11,12 +11,23 @@ def test_user_create():
 
 
 @pytest.mark.django_db
-def test_registration_view(client):
+@pytest.mark.parametrize("user_name, user_mail, count_user, error", [
+    ("test_user", "test@mail.de", 1, False),
+    ("", "test@mail.de", 0, True),
+    (" test_user  ", "test@mail.de", 1, False),
+])
+def test_registration_view(client, user_name, user_mail, count_user, error):
     url = reverse("registration")
-    data = urlencode({'csrfmiddlewaretoken': 'something',
-                      'user_name': 'something',
-                      'mail': 'something_2'})
-    response = client.post(url, data, content_type="application/x-www-form-urlencoded")
-    print(response)
-    print(User.objects.get(user_name="something"))
-    assert False
+    data = urlencode({'csrfmiddlewaretoken': 'some_token',
+                      'user_name': user_name,
+                      'mail': user_mail})
+    response = client.post(url,
+                           data,
+                           content_type="application/x-www-form-urlencoded")
+    if not error:
+        user = User.objects.get(user_name=user_name.strip(),
+                                mail=user_mail.strip())
+        assert user
+    assert User.objects.count() == count_user
+    assert bool("Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!" \
+           in str(response.content, "utf-8")) == error

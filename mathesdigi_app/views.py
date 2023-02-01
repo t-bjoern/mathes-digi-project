@@ -16,7 +16,6 @@ def startpage(request):
 def registration(request):
     if request.method == 'POST':
         post_data = dict(request.POST).copy()
-        print(post_data)
         for key in post_data:
             post_data[key] = post_data[key][0]
         del post_data["csrfmiddlewaretoken"]
