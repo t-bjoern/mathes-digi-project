@@ -48,6 +48,25 @@ def registration(request):
         return render(request, 'mathesdigi_app/registration.html')
 
 
+def task_view(request, heft, template_name):
+    if request.method == 'POST':
+        post_data = dict(request.POST).copy()
+        del post_data["csrfmiddlewaretoken"]
+
+        user_id = request.session["user"]
+        helpers.save_answer(post_data, user_id)
+
+    return render(request, f'mathesdigi_app/{heft}/{template_name}.html')
+
+
+def example_view(request, heft, template_name):
+    context = helpers.get_example_solution(template_name)
+
+    return render(request, f'mathesdigi_app/{heft}/{template_name}.html', context)
+
+
+# Alte Views können entfernt werden sobald alle .html angepasst sind.
+
 def heft2_task1_example(request):
     context = {}
     if request.method == 'POST':
@@ -74,6 +93,6 @@ def heft2_task1_1(request):
 
         user_id = request.session["user"]
 
-        context = helpers.save_answer(post_data, user_id, context)
+        helpers.save_answer(post_data, user_id)
 
     return render(request, 'mathesdigi_app/1_task_1.html', context)

@@ -3,7 +3,7 @@ import random
 from .models import User, Teilaufgaben, Ergebnisse
 
 
-def save_answer(post_data: dict, user_id: int, context: dict):
+def save_answer(post_data: dict, user_id: int):
     if any(a != [""] for a in post_data.values()):
         for key, value in post_data.items():
             teilaufgaben_id = key
@@ -20,9 +20,11 @@ def save_answer(post_data: dict, user_id: int, context: dict):
                                           teilaufgabe=teilaufgabe,
                                           eingabe=ergebnis,
                                           wertung=bool(ergebnis == teilaufgabe.loesung))
-        # return redirect(heft2_task1_2)
-    else:
-        context["empty_field"] = True
+
+
+def get_example_solution(teilaufgaben_id: str):
+    teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
+    context = {teilaufgaben_id: teilaufgabe.loesung}
 
     return context
 
