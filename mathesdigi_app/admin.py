@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 import pandas as pd
 
@@ -33,19 +33,19 @@ class UserAdmin(admin.ModelAdmin):
 
 class CsvImportForm(forms.Form):
     heft_nr = forms.IntegerField()
-    start_time = forms.DateTimeField()
-    end_time = forms.DateTimeField()
+    start_month = forms.CharField()
+    end_month = forms.CharField()
     csv_file = forms.FileField()
 
 
 @admin.register(Wertung)
 class WertungAdmin(admin.ModelAdmin):
+    month_names = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober",
+                   "November", "Dezember"]
     list_display = ('heft_nr', 'zeitraum', 'rohwert', 't_wert', 'prozentrang')
 
     def zeitraum(self, obj):
-        start_time = obj.start_time
-        end_time = obj.end_time
-        return f"{start_time.day}.{start_time.month} - {end_time.day}.{end_time.month}"
+        return f"{self.month_names[obj.start_month-1]} - {self.month_names[obj.end_month-1]}"
 
     change_list_template = "entities/changelist.html"
 
@@ -62,11 +62,11 @@ class WertungAdmin(admin.ModelAdmin):
             df = pd.read_excel(csv_file)
 
             def create_objects(row):
-                start_time = datetime.strptime(request.POST["start_time"], '%d-%m').date()
-                end_time = datetime.strptime(request.POST["end_time"], '%d-%m').date()
+                start_month_number = self.month_names.index(request.POST["start_month"]) + 1
+                end_month_number = self.month_names.index(request.POST["end_month"]) + 1
                 Wertung.objects.get_or_create(heft_nr=request.POST["heft_nr"],
-                                              start_time=start_time,
-                                              end_time=end_time,
+                                              start_month=start_month_number,
+                                              end_month=end_month_number,
                                               rohwert=row["Rohwert"],
                                               t_wert=row["T-Wert"],
                                               prozentrang=row["Prozentrang"])
