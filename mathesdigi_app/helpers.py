@@ -1,6 +1,8 @@
 import random
 
-from .models import User, Teilaufgaben, Ergebnisse
+import pandas as pd
+
+from .models import User, Teilaufgaben, Ergebnisse, Wertung
 
 
 def save_answer(post_data: dict, user_id: int):
@@ -67,3 +69,53 @@ def validate_registration_create_user(registration_data: dict):
                                user_name=user_name,
                                mail=mail)
     return user
+
+
+def create_or_update_wertung_object(row, heft_nr, start_month, start_day, end_month, end_day):
+    if Wertung.objects.filter(heft_nr=heft_nr,
+                              start_month=start_month,
+                              start_day=start_day,
+                              end_month=end_month,
+                              end_day=end_day,
+                              rohwert=row["Rohwert"]).exists():
+        wertung = Wertung.objects.get(heft_nr=heft_nr,
+                                      start_month=start_month,
+                                      start_day=start_day,
+                                      end_month=end_month,
+                                      end_day=end_day,
+                                      rohwert=row["Rohwert"])
+        wertung.t_wert = row["T-Wert"]
+        wertung.prozentrang = row["Prozentrang"]
+        wertung.save()
+    else:
+        Wertung.objects.create(heft_nr=heft_nr,
+                               start_month=start_month,
+                               start_day=start_day,
+                               end_month=end_month,
+                               end_day=end_day,
+                               rohwert=row["Rohwert"],
+                               t_wert=row["T-Wert"],
+                               prozentrang=row["Prozentrang"])
+
+
+def read_and_validate_file(file):
+    df = None
+    error_message = []
+    try:
+        df = pd.read_excel(file)
+    except Exception as e:
+        error_message.append(str(e))
+        error_message.append("Try to read with csv reader!")
+        try:
+            df = pd.read_csv(file)
+        except Exception as e:
+            error_message.append(str(e))
+
+    if "Rohwert" not in df.columns or "T-Wert" not in df.columns or "Prozentrang" not in df.columns:
+        error_message.append(
+            "Tabelle ist im falschen Format. Rohwert, T-Wert und Prozentrang müssen im Tabellenkopf sein.")
+    if len(df.columns) != 3:
+        error_message.append(
+            "Tabelle ist im falschen Format. Tabelle enthällt zu viele Spalten")
+
+    return df, error_message
