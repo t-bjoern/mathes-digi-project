@@ -5,11 +5,13 @@ from mathesdigi_app import helpers
 
 
 def startpage(request):
+    if "heft" in request.session.keys():
+        del request.session["heft"]
+    if "user" in request.session.keys():
+        del request.session["user"]
     if request.method == 'POST':
         request.session["heft"] = request.POST["Mathes2"]
         return redirect(registration)
-    if "user" in request.session.keys():
-        del request.session["user"]
     return render(request, 'mathesdigi_app/startpage.html')
 
 
@@ -21,16 +23,20 @@ def registration(request):
         del post_data["csrfmiddlewaretoken"]
 
         try:
+            # Fehlermeldung wenn kein Heft auf der ertsen Seite gewählt wurde. Später dann durch Alert und
+            # redirect auf startpage.
+            if "heft" not in request.session.keys():
+                raise Exception("Bitte starte auf der ertsen Seite und wähle dort ein Heft aus!")
             if "user" not in request.session.keys():
                 user = helpers.validate_registration_create_user(post_data)
-
                 # Speichern der user_id in der Sessiondaten
                 request.session["user"] = user.id
                 user.heft = request.session["heft"]
                 user.save()
-
             if request.session["heft"] == "Mathes2":
                 return redirect(heft2_task1_example)
+                # Mit neuen views in etwa so...
+                # return redirect(example_view(request, heft=request.session["heft"], template_name="2A1E"))
 
         except Exception as e:
             # Context füllen, um Daten und Fehlermeldungen im Fomrular anzzuzeigen.
