@@ -53,28 +53,50 @@
 
         <!-- Input buttons -->
         <div class="input_buttons">
-            <img id="p1" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle1.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
-            <img id="p2" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle2.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
-            <img id="p3" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle3.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
-            <img id="p4" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle4.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
-            <img id="p5" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle5.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
-            <img id="p6" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle6.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
-            <img id="p7" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle7.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
-            <img id="p8" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle8.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
-            <img id="p9" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle9.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
-            <img id="p0" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle0.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
-            <img id="p_delete" class="taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle_loeschen.svg' %}"
-                 onclick="add_number(this)" draggable="false" alt="">
+            <button type="button" value="1" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle1.svg' %}" draggable="false"
+                     alt="">
+            </button>
+            <button type="button" value="2" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle2.svg' %}" draggable="false"
+                     alt="">
+            </button>
+            <button type="button" value="3" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle3.svg' %}" draggable="false"
+                     alt="">
+            </button>
+            <button type="button" value="4" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle4.svg' %}" draggable="false"
+                     alt="">
+            </button>
+            <button type="button" value="5" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle5.svg' %}" draggable="false"
+                     alt="">
+            </button>
+            <button type="button" value="6" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle6.svg' %}" draggable="false"
+                     alt="">
+            </button>
+            <button type="button" value="7" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle7.svg' %}" draggable="false"
+                     alt="">
+            </button>
+            <button type="button" value="8" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle8.svg' %}" draggable="false"
+                     alt="">
+            </button>
+            <button type="button" value="9" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle9.svg' %}" draggable="false"
+                     alt="">
+            </button>
+            <button type="button" value="0" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle0.svg' %}" draggable="false"
+                     alt="">
+            </button>
+            <button type="button" id="p_delete" class="taste" onclick="buttons_add_number(this)">
+                <img class="pic_taste" src="{% static 'mathesdigi_app/img/keyboard/Puzzle_loeschen.svg' %}"
+                     draggable="false" alt="">
+            </button>
         </div>
 
         <!-- progressbar -->
