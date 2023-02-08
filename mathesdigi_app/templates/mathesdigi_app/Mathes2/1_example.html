@@ -29,8 +29,9 @@
 
         <!-- Sidebar -->
         <img class="monkey" src="{% static 'mathesdigi_app/img/Affe_example.svg' %}" alt="">
-        <!-- move to next page -->
-        <div class="forward"><input type="submit" value="Weiter"></div>
+        <!-- move to next page and submit answers-->
+        <button class="forward-button pic" type="submit">
+            <img class="pic" src="{% static 'mathesdigi_app/img/weiter.svg' %}" alt="Submit"></button>
 
         <!-- return to page before -->
         <div class="backwards"><a href="{% url 'registration' %}">

@@ -26,8 +26,10 @@ Version:       1.0
             "progressbar progressbar full_screen";
 }
 
-.forward {
+.forward-button {
     grid-area: forward;
+    background-color: transparent;
+    border: None;
 }
 
 .backwards {
