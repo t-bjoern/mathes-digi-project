@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
@@ -50,6 +51,36 @@ def registration(request):
             return render(request, 'mathesdigi_app/registration.html', context)
 
         return render(request, 'mathesdigi_app/registration.html')
+
+
+def registration_new(request):
+    context = {}
+    if request.method == 'POST':
+        post_data = dict(request.POST).copy()
+        for key in post_data:
+            post_data[key] = post_data[key][0]
+        del post_data["csrfmiddlewaretoken"]
+
+        try:
+            if not request.session.get("heft"):
+                raise ValidationError("Bitte starte auf der ersten Seite und wähle dort ein Heft aus!")
+            if not request.session.get("user"):
+                user = helpers.validate_registration_create_user(post_data)
+                request.session["user"] = user.id
+                user.heft = request.session["heft"]
+                user.save()
+            return redirect(reverse('main_view', args=(request.session["heft"], "1_example")))
+        except ValidationError as e:
+            context["error_message"] = str(e)
+
+    if request.session.get("user"):
+        user = User.objects.get(id=request.session["user"])
+        context.update({
+            "user_name": user.user_name,
+            "mail": user.mail
+        })
+
+    return render(request, 'mathesdigi_app/registration.html', context)
 
 
 def main_view(request, heft, next_task_name):

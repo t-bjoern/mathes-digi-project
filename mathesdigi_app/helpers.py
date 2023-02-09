@@ -97,6 +97,7 @@ def create_or_update_wertung_object(row, heft_nr, start_month, start_day, end_mo
 def read_and_validate_file(file):
     df = None
     error_message = []
+    # TODO Dateigröße prüfen, um Server nicht zu überlasten
     try:
         df = pd.read_excel(file)
     except Exception as e:
