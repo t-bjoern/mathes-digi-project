@@ -1,8 +1,10 @@
+@import "variablen.css";
+
 .task {
     grid-area: task;
     display: grid;
-    background: url("../pics/Task-Background.svg") no-repeat;
-    background-size: 80vw 60vh;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
     grid-template-columns: 50vw 30vw;
     grid-template-rows: 14vh 46vh;
     grid-template-areas:
@@ -10,47 +12,78 @@
             "task-pic answer-field";
 }
 
-.task_pic{
+
+.task_pic {
     grid-area: task-pic;
     margin-left: 5vw;
     margin-bottom: 5vh;
 }
 
-.task_text{
+.task_text {
     grid-area: task-text;
     text-align: left;
     margin-left: 5vw;
-    font-size: 5vh;
-    font-family: "Ink Free", sans-serif;
+    font-size: var(--task-font-size);
+    align-self: end;
+    margin-bottom: 1vh;
+    font-family: var(--standard-font-family);
 }
 
-.answer_field{
+.answer_field {
     grid-area: answer-field;
-    height: 10vh;
-    width: 20vw;
-    font-size: 5vh;
-    margin-top: 22vh;
+    height: 9vh;
+    width: 21vw;
+    font-size: var(--answer-font-size);
+    margin-top: 24vh;
     margin-left: 2vw;
+    text-align: center;
     border: none;
-    font-family: "Ink Free", sans-serif;
+    font-family: var(--standard-font-family);
+    caret-color: transparent;
+}
+
+.input_field_small_right {
+    grid-area: answer-field;
+    height: 9vh;
+    width: 8vw;
+    font-size: var(--answer-font-size);
+    margin-top: 21.5vh;
+    margin-left: 0.5vw;
+    text-align: center;
+    border-style: none;
+    font-family: var(--standard-font-family);
+    caret-color: transparent;
+}
+
+.input_field_small_left {
+    grid-area: task-pic;
+    height: 9vh;
+    width: 8vw;
+    font-size: var(--answer-font-size);
+    margin-top: 21.5vh;
+    margin-left: 22.2vw;
+    text-align: center;
+    border-style: none;
+    font-family: var(--standard-font-family);
+    caret-color: transparent;
 }
 
 @keyframes shake {
-  10%, 90% {
-    transform: translate3d(-10px, 0, 0);
-  }
+    10%, 90% {
+        transform: translate3d(-10px, 0, 0);
+    }
 
-  20%, 80% {
-    transform: translate3d(10px, 0, 0);
-  }
+    20%, 80% {
+        transform: translate3d(10px, 0, 0);
+    }
 
-  30%, 50%, 70% {
-    transform: translate3d(-10px, 0, 0);
-  }
+    30%, 50%, 70% {
+        transform: translate3d(-10px, 0, 0);
+    }
 
-  40%, 60% {
-    transform: translate3d(10px, 0, 0);
-  }
+    40%, 60% {
+        transform: translate3d(10px, 0, 0);
+    }
 }
 
 .answer_field_shake {
