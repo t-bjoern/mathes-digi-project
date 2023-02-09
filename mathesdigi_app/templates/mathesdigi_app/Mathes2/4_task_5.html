@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- encoding und rauszoomen auf mobiler Ansicht-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+    <!-- Statics -->
+    {% load static %}
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'mathesdigi_app/css/exercise.css' %}?version={{ timestamp }}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'mathesdigi_app/css/single_answer.css' %}?version={{ timestamp }}">
+    <!-- JS -->
+    <script src="{% static 'mathesdigi_app/JS/Keyboard_functions.js' %}?version={{ timestamp }}"></script>
+    <!-- Schriftart -->
+    <link href="https://fonts.cdnfonts.com/css/ink-free" rel="stylesheet">
+    <!-- Title -->
+    <title>Mathes 2 - 4.5</title>
+</head>
+
+<body>
+<form action="{% url 'task_view' heft='Mathes2' template_name='4_task_6' %}" method="post">
+    {% csrf_token %}
+    <div class="raster">
+        <!-- logo (header) -->
+        <div class="logo"><img class="pic" src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
+
+        <!-- Sidebar -->
+        <img class="monkey" src="{% static 'mathesdigi_app/img/Affe_2.svg' %}" alt="">
+        <!-- move to next page and submit answers-->
+        <button class="forward-button pic" type="submit">
+            <img class="pic" src="{% static 'mathesdigi_app/img/weiter.svg' %}" alt="Submit"></button>
+
+        <!-- return to page before -->
+        <button class="backwards pic" type="button"
+                onclick="window.location.href = '{% url "task_view" heft="Mathes2" template_name="4_task_4" %}'">
+            <img class="pic" src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
+        </button>
+
+        <!-- Task and Answer Field -->
+        <div class="task"
+             style="background-image: url('{% static "mathesdigi_app/img/Background_eimer_3.svg" %}');">
+            <div class="task_text">Halbiere.</div>
+            <div class="input_field_small_right">84</div>
+            <input class="{% if empty_field %}answer_field_shake input_field_small_left{% else %}input_field_small_left{% endif %}"
+                   type="text" inputmode="None" id="antwort1" name="2A45" placeholder="Antwort"
+                   value="{% if 2A45_solution %}{{ 2A45_solution }}{% else %}{{ 2A45_value }}{% endif %}">
+        </div>
+
+        <!-- Number/Input buttons -->
+        <div class="input_buttons">
+            {% include "mathesdigi_app/number_buttons.html" %}
+        </div>
+
+        <!-- progressbar -->
+        <div class="progressbar"
+             style="background-image: url('{% static "mathesdigi_app/img/progressbar/Fortschrittsbalken_0.svg" %}');"></div>
+
+        <!-- full-screen -->
+        <div class="full-screen"><img class="pic" src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""
+                                      onclick="openFullscreen()"></div>
+    </div>
+</form>
+<div id="turn_device"></div>
+</body>
+</html>
