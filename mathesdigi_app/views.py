@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
+
 from .models import User, Aufgaben, Teilaufgaben, Ergebnisse
 
 from mathesdigi_app import helpers
@@ -33,11 +35,8 @@ def registration(request):
                 request.session["user"] = user.id
                 user.heft = request.session["heft"]
                 user.save()
-            if request.session["heft"] == "Mathes2":
-                return redirect(heft2_task1_example)
-                # Mit neuen views in etwa so...
-                # return redirect(example_view(request, heft=request.session["heft"], template_name="2A1E"))
 
+            return redirect(reverse('main_view', args=(request.session["heft"], "1_example")))
         except Exception as e:
             # Context füllen, um Daten und Fehlermeldungen im Fomrular anzzuzeigen.
             context = post_data
@@ -54,51 +53,27 @@ def registration(request):
         return render(request, 'mathesdigi_app/registration.html')
 
 
-def task_view(request, heft, template_name):
-    if request.method == 'POST':
-        post_data = dict(request.POST).copy()
-        del post_data["csrfmiddlewaretoken"]
-
-        user_id = request.session["user"]
-        helpers.save_answer(post_data, user_id)
-
-    return render(request, f'mathesdigi_app/{heft}/{template_name}.html')
-
-
-def example_view(request, heft, template_name):
-    context = helpers.get_example_solution(template_name)
-
-    return render(request, f'mathesdigi_app/{heft}/{template_name}.html', context)
-
-
-# Alte Views können entfernt werden sobald alle .html angepasst sind.
-
-def heft2_task1_example(request):
+def main_view(request, heft, next_task_name):
     context = {}
     if request.method == 'POST':
         post_data = dict(request.POST).copy()
+        post_data = {key: value[0] for key, value in post_data.items()}
+        # Delete unnecessary information in post_data
         del post_data["csrfmiddlewaretoken"]
-
-        if "example_showed" in request.session.keys():
-            del request.session["example_showed"]
-            return redirect(heft2_task1_1)
-        if any(a != [""] for a in post_data.values()):
-            request.session["example_showed"] = True
-            context = helpers.display_solution_example(post_data)
-        else:
-            context = {"empty_field": True}
-
-    return render(request, 'mathesdigi_app/1_example.html', context)
-
-
-def heft2_task1_1(request):
-    context = {}
-    if request.method == 'POST':
-        post_data = dict(request.POST).copy()
-        del post_data["csrfmiddlewaretoken"]
-
+        this_task_process = post_data["this_task_process"]
+        is_next_example = helpers.str2bool(post_data["is_next_example"])
         user_id = request.session["user"]
 
-        helpers.save_answer(post_data, user_id)
-
-    return render(request, 'mathesdigi_app/1_task_1.html', context)
+        if is_next_example:
+            example_id = post_data["example_id"]
+            context = helpers.get_example_solution(example_id)
+        if this_task_process == "task" and isinstance(post_data["input"], int):
+            teilaufgaben_id = post_data["task_id"]
+            ergebnis = int(post_data["input"])
+            helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
+        if this_task_process == "drag_and_drop":
+            # preprocess for save drag and drop answer
+            # ...
+            # helpers.save_answer(post_data, user_id)
+            pass
+    return render(request, f'mathesdigi_app/{heft}/{next_task_name}.html', context)

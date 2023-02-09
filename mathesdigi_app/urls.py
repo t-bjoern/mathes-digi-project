@@ -7,8 +7,5 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', views.startpage, name='startpage'),
     path('registration/', views.registration, name='registration'),
-    path('Mathes2/example1/', views.heft2_task1_example, name='heft2_task1_example'),
-    path('Mathes2/task1/', views.heft2_task1_1, name='heft2_task1_1'),
-    path("<str:heft>/<str:template_name>/", views.task_view, name="task_view"),
-
+    path("<str:heft>/<str:next_task_name>/", views.main_view, name="main_view")
 ]

@@ -5,23 +5,19 @@ import pandas as pd
 from .models import User, Teilaufgaben, Ergebnisse, Wertung
 
 
-def save_answer(post_data: dict, user_id: int):
-    if any(a != [""] for a in post_data.values()):
-        for key, value in post_data.items():
-            teilaufgaben_id = key
-            ergebnis = int(value[0])
-            teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
+def save_answer(teilaufgaben_id: str, ergebnis: int, user_id: int):
+        teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
 
-            if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
-                ergebnis_obj = Ergebnisse.objects.get(user_id=user_id, teilaufgabe=teilaufgabe)
-                ergebnis_obj.eingabe = ergebnis
-                ergebnis_obj.wertung = bool(ergebnis == teilaufgabe.loesung)
-                ergebnis_obj.save()
-            else:
-                Ergebnisse.objects.create(user_id=user_id,
-                                          teilaufgabe=teilaufgabe,
-                                          eingabe=ergebnis,
-                                          wertung=bool(ergebnis == teilaufgabe.loesung))
+        if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
+            ergebnis_obj = Ergebnisse.objects.get(user_id=user_id, teilaufgabe=teilaufgabe)
+            ergebnis_obj.eingabe = ergebnis
+            ergebnis_obj.wertung = bool(ergebnis == teilaufgabe.loesung)
+            ergebnis_obj.save()
+        else:
+            Ergebnisse.objects.create(user_id=user_id,
+                                      teilaufgabe=teilaufgabe,
+                                      eingabe=ergebnis,
+                                      wertung=bool(ergebnis == teilaufgabe.loesung))
 
 
 def get_example_solution(teilaufgaben_id: str):
@@ -119,3 +115,7 @@ def read_and_validate_file(file):
             "Tabelle ist im falschen Format. Tabelle enthällt zu viele Spalten")
 
     return df, error_message
+
+
+def str2bool(string: str):
+    return string.lower() in ("yes", "true", "t", "1")

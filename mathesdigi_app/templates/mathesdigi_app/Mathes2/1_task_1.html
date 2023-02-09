@@ -14,8 +14,12 @@
 </head>
 
 <body>
-<form  action="{% url 'heft2_task1_1' %}" method="post">
-{%  csrf_token %}
+<form  action="{% url 'main_view' heft='Mathes2' next_task_name='1_task_1' %}" method="post">
+    {%  csrf_token %}
+    <input type="hidden" name="is_next_example" value="False">
+    <input type="hidden" name="task_id" value="211">
+{# Wenn is_next_example == True dann example ID mit übergeben #}
+    <input type="hidden" name="this_task_process" value="task">
 <div class="raster">
     <!-- logo (header) -->
     <div class="logo"><img class="pic" src="{% static 'mathesdigi_app/pics/Logo.svg' %}" alt="home"></div>
@@ -26,7 +30,7 @@
     <div class="forward"><input type="submit" value="Weiter"></div>
 {#    <div class="forward"><a href="1_task_2.html"><img class="pic" src="pics/weiter.svg"></a></div>#}
     <!-- return to page before -->
-    <div class="backwards"><a href="{% url 'heft2_task1_example' %}">
+    <div class="backwards"><a href="{% url 'main_view' heft='Mathes2' next_task_name='1_example' %}">
         <img class="pic" src="{% static 'mathesdigi_app/pics/zurueck.svg' %}" alt="home"></a>
     </div>
 
@@ -37,7 +41,7 @@
             <img class="pic" src="{% static 'mathesdigi_app/pics/2_task/1_1.svg' %}" alt="home">
         </div>
         <input class="{% if empty_field %}answer_field_shake{% else %}answer_field{% endif %}"
-               type="text" inputmode="None" id="antwort1" name="211" placeholder="Antwort">
+               type="text" inputmode="None" id="antwort1" name="input" placeholder="Antwort">
 
     </div>
 

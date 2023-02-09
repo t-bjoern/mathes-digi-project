@@ -19,8 +19,11 @@
 </head>
 
 <body class="example_page">
-<form action="{% url 'task_view' heft='Mathes2' template_name='1_task_1' %}" method="post">
+<form action="{% url 'main_view' heft='Mathes2' next_task_name='1_task_1' %}" method="post">
     {% csrf_token %}
+    <input type="hidden" name="is_next_example" value="False">
+{# Wenn is_next_example == True dann example ID mit übergeben? #}
+    <input type="hidden" name="this_task_process" value="example">
     <div class="raster">
         <!-- logo (header) -->
         <div class="logo"><img class="pic" src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
