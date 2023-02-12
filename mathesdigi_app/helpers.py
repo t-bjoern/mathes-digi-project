@@ -76,20 +76,16 @@ def validate_registration_create_or_update_user(registration_data: dict, user_id
     return user
 
 
-def validate_registration_update_user(registration_data: dict, user_id: int):
-    user_name = registration_data["user_name"].strip()
-    mail = registration_data["mail"].strip()
-
-    return None
-
-
-def create_or_update_wertung_object(row, heft_nr, start_month, start_day, end_month, end_day):
-    if Wertung.objects.filter(heft_nr=heft_nr,
-                              start_month=start_month,
-                              start_day=start_day,
-                              end_month=end_month,
-                              end_day=end_day,
-                              rohwert=row["Rohwert"]).exists():
+def create_or_update_wertung_apply(row, heft_nr, start_month, start_day, end_month, end_day):
+    updated = 0
+    created = 0
+    wertung_exists = Wertung.objects.filter(heft_nr=heft_nr,
+                                            start_month=start_month,
+                                            start_day=start_day,
+                                            end_month=end_month,
+                                            end_day=end_day,
+                                            rohwert=row["Rohwert"]).exists()
+    if wertung_exists:
         wertung = Wertung.objects.get(heft_nr=heft_nr,
                                       start_month=start_month,
                                       start_day=start_day,
@@ -99,6 +95,7 @@ def create_or_update_wertung_object(row, heft_nr, start_month, start_day, end_mo
         wertung.t_wert = row["T-Wert"]
         wertung.prozentrang = row["Prozentrang"]
         wertung.save()
+        updated += 1
     else:
         Wertung.objects.create(heft_nr=heft_nr,
                                start_month=start_month,
@@ -108,12 +105,18 @@ def create_or_update_wertung_object(row, heft_nr, start_month, start_day, end_mo
                                rohwert=row["Rohwert"],
                                t_wert=row["T-Wert"],
                                prozentrang=row["Prozentrang"])
+        created += 1
+    return updated, created
 
 
-def read_and_validate_file(file):
-    df = None
+def read_and_validate_file(file, max_file_size=1048576):
     error_message = []
-    # TODO Dateigröße prüfen, um Server nicht zu überlasten
+    file.seek(0, 2)  # move the cursor to the end of the file to get its size
+    file_size = file.tell()
+    if file_size > max_file_size:
+        error_message.append("File size exceeds the limit of {} MB".format(max_file_size / 1024 / 1024))
+        return None, error_message
+    file.seek(0)  # move the cursor back to the beginning of the file
     try:
         df = pd.read_excel(file)
     except Exception as e:
@@ -123,14 +126,15 @@ def read_and_validate_file(file):
             df = pd.read_csv(file)
         except Exception as e:
             error_message.append(str(e))
+    if "df" not in locals():
+        return None, error_message
 
-    if "Rohwert" not in df.columns or "T-Wert" not in df.columns or "Prozentrang" not in df.columns:
+    if not all(col in df.columns for col in ["Rohwert", "T-Wert", "Prozentrang"]):
         error_message.append(
-            "Tabelle ist im falschen Format. Rohwert, T-Wert und Prozentrang müssen im Tabellenkopf sein.")
+            "Table format is incorrect. Rohwert, T-Wert, and Prozentrang must be in the header.")
     if len(df.columns) != 3:
         error_message.append(
-            "Tabelle ist im falschen Format. Tabelle enthällt zu viele Spalten")
-
+            "Table format is incorrect. The table contains too many columns.")
     return df, error_message
 
 

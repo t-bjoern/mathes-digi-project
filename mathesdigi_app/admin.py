@@ -11,14 +11,17 @@ from . import helpers
 from .models import User, Aufgaben, Teilaufgaben, Ergebnisse, Wertung
 
 
+@admin.register(Teilaufgaben)
 class TeilaufgabenAdmin(admin.ModelAdmin):
     list_display = ('teilaufgaben_id', 'loesung')
 
 
+@admin.register(Aufgaben)
 class AufgabenAdmin(admin.ModelAdmin):
     list_display = ('heft_nr', 'aufgaben_nr', 'bezeichnung', 'punktzahl')
 
 
+@admin.register(Ergebnisse)
 class ErgebnisseAdmin(admin.ModelAdmin):
     list_display = ('user', 'teilaufgaben_name', 'eingabe', 'wertung')
 
@@ -28,6 +31,7 @@ class ErgebnisseAdmin(admin.ModelAdmin):
     teilaufgaben_name.short_description = 'Teilaufgaben ID'
 
 
+@admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('user_name', 'mail', 'pub_date', 'heft')
 
@@ -64,16 +68,16 @@ class WertungAdmin(admin.ModelAdmin):
         if request.method == "POST":
             file = request.FILES["file"]
             df, error_message = helpers.read_and_validate_file(file)
-            if not error_message:
+            if df is not None:
                 try:
                     start_day, start_month = request.POST["start_time"].split(".")
                     end_day, end_month = request.POST["end_time"].split(".")
-                    heft_nr = request.POST["heft_nr"]
-                    if df is not None:
-                        df.apply(helpers.create_or_update_wertung_object,
-                                 args=(heft_nr, start_month, start_day, end_month, end_day), axis=1)
-                        self.message_user(request, "Your file has been imported")
-                        return redirect("..")
+                    result = df.apply(helpers.create_or_update_wertung_apply,
+                                      args=(request.POST["heft_nr"], start_month, start_day, end_month, end_day), axis=1)
+                    updated = result.apply(lambda x: x[0]).sum()
+                    created = result.apply(lambda x: x[1]).sum()
+                    self.message_user(request, f"Your file has been imported. Updated: {updated} Created: {created}")
+                    return redirect("..")
                 except ValueError:
                     error_message.append("Datum ist im falschen Format. Bitte im Format dd.mm angeben. Beispiel: 01.02")
                 except Exception as e:
@@ -85,9 +89,3 @@ class WertungAdmin(admin.ModelAdmin):
                                               'file': request.POST.get('file')})
                 context = {'form': form, "error_message": error_message}
         return render(request, "admin/csv_form.html", context)
-
-
-admin.site.register(Teilaufgaben, TeilaufgabenAdmin)
-admin.site.register(User, UserAdmin)
-admin.site.register(Aufgaben, AufgabenAdmin)
-admin.site.register(Ergebnisse, ErgebnisseAdmin)
