@@ -1,4 +1,5 @@
 import random
+from django.core.exceptions import ValidationError
 
 import pandas as pd
 
@@ -6,18 +7,18 @@ from .models import User, Teilaufgaben, Ergebnisse, Wertung
 
 
 def save_answer(teilaufgaben_id: str, ergebnis: int, user_id: int):
-        teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
+    teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
 
-        if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
-            ergebnis_obj = Ergebnisse.objects.get(user_id=user_id, teilaufgabe=teilaufgabe)
-            ergebnis_obj.eingabe = ergebnis
-            ergebnis_obj.wertung = bool(ergebnis == teilaufgabe.loesung)
-            ergebnis_obj.save()
-        else:
-            Ergebnisse.objects.create(user_id=user_id,
-                                      teilaufgabe=teilaufgabe,
-                                      eingabe=ergebnis,
-                                      wertung=bool(ergebnis == teilaufgabe.loesung))
+    if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
+        ergebnis_obj = Ergebnisse.objects.get(user_id=user_id, teilaufgabe=teilaufgabe)
+        ergebnis_obj.eingabe = ergebnis
+        ergebnis_obj.wertung = bool(ergebnis == teilaufgabe.loesung)
+        ergebnis_obj.save()
+    else:
+        Ergebnisse.objects.create(user_id=user_id,
+                                  teilaufgabe=teilaufgabe,
+                                  eingabe=ergebnis,
+                                  wertung=bool(ergebnis == teilaufgabe.loesung))
 
 
 def get_example_solution(teilaufgaben_id: str):
@@ -53,18 +54,33 @@ def create_random_user_id():
     return user_id
 
 
-def validate_registration_create_user(registration_data: dict):
+def validate_registration_create_or_update_user(registration_data: dict, user_id=None):
     user_name = registration_data["user_name"].strip()
     mail = registration_data["mail"].strip()
 
     # Validierung der Eingabedaten
     if user_name == "" or mail == "":
-        raise Exception("Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!")
+        raise ValidationError("Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!")
 
-    user = User.objects.create(id=create_random_user_id(),
-                               user_name=user_name,
-                               mail=mail)
+    user, created = User.objects.get_or_create(id=user_id, defaults={
+        "user_name": user_name,
+        "mail": mail,
+        "id": create_random_user_id()
+    })
+
+    if not created:
+        user.user_name = user_name
+        user.mail = mail
+        user.save()
+
     return user
+
+
+def validate_registration_update_user(registration_data: dict, user_id: int):
+    user_name = registration_data["user_name"].strip()
+    mail = registration_data["mail"].strip()
+
+    return None
 
 
 def create_or_update_wertung_object(row, heft_nr, start_month, start_day, end_month, end_day):
