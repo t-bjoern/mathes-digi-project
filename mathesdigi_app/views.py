@@ -81,7 +81,9 @@ def evaluation_send(request):
     user = User.objects.get(id=user_id)
     context = {"mail": user.mail}
     eva_obj = Evaluate(user)
-    eva_obj.evaluate()
+    eva_obj.send_evaluation()
+    eva_obj.save_evaluation_for_statistic()
+    # save values for statistics
     return render(request, 'mathesdigi_app/end.html', context)
 
 
