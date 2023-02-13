@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
+from .evaluation import Evaluate
 from .models import User, Aufgaben, Teilaufgaben, Ergebnisse
 
 from mathesdigi_app import helpers
@@ -79,7 +80,8 @@ def evaluation_send(request):
     user_id = request.session["user"]
     user = User.objects.get(id=user_id)
     context = {"mail": user.mail}
-    # ... Hier dann Auswertung zusammenstellen und an mailadresse senden ...
+    eva_obj = Evaluate(user)
+    eva_obj.evaluate()
     return render(request, 'mathesdigi_app/end.html', context)
 
 
