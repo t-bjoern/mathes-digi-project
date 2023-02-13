@@ -12,10 +12,24 @@
     <!-- Title -->
     <title>Mathes 2 - 1.1</title>
 </head>
-
+<script>
+  function validateForm() {
+    var x = document.getElementById("antwort1").value;
+    if (x.trim() === "") {
+      document.getElementById("antwort1").classList.add("answer_field_shake");
+      setTimeout(function() {
+        document.getElementById("antwort1").classList.remove("answer_field_shake");
+      }, 1000);
+      return false;
+    } else {
+      document.getElementById("antwort1").classList.remove("answer_field_shake");
+      return true;
+    }
+  }
+</script>
 <body>
-<form  action="{% url 'main_view' heft='Mathes2' next_task_name='1_task_1' %}" method="post">
-    {%  csrf_token %}>
+<form onsubmit="return validateForm()" action="{% url 'main_view' heft='Mathes2' next_task_name='evaluation' %}" method="post">
+    {%  csrf_token %}
     <input type="hidden" name="task_id" value="211">
     <input type="hidden" name="this_task_process" value="task_normal">
 <div class="raster">
@@ -38,8 +52,9 @@
         <div class="task_pic">
             <img class="pic" src="{% static 'mathesdigi_app/pics/2_task/1_1.svg' %}" alt="home">
         </div>
-        <input class="{% if empty_field %}answer_field_shake{% else %}answer_field{% endif %}"
-               type="text" inputmode="None" id="antwort1" name="input" placeholder="Antwort">
+    <input class="answer_field" type="text" inputmode="None" id="antwort1" name="input" placeholder="Antwort">
+        <!-- <input class="answer_field"
+               type="text" inputmode="None" id="antwort1" name="input" placeholder="Antwort"> -->
 
     </div>
 

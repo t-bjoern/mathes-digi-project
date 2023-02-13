@@ -52,15 +52,48 @@ def main_view(request, heft, next_task_name):
         del post_data["csrfmiddlewaretoken"]
         this_task_process = post_data["this_task_process"]
         user_id = request.session["user"]
-
         if this_task_process == "example":
             pass
-        elif this_task_process == "task_normal" and isinstance(post_data["input"], int):
+        elif this_task_process == "task_normal":
             teilaufgaben_id = post_data["task_id"]
             ergebnis = int(post_data["input"])
+            print(teilaufgaben_id, ergebnis)
             helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
         elif this_task_process == "drag_and_drop":
             # preprocess ...
             # helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
             pass
+    if next_task_name == "evaluation":
+        return redirect(evaluation)
     return render(request, f'mathesdigi_app/{heft}/{next_task_name}.html')
+
+
+def evaluation(request):
+    user_id = request.session["user"]
+    user = User.objects.get(id=user_id)
+    context = {"user_name": user.user_name, "mail": user.mail}
+    return render(request, 'mathesdigi_app/evaluation.html', context)
+
+
+def evaluation_send(request):
+    user_id = request.session["user"]
+    user = User.objects.get(id=user_id)
+    context = {"mail": user.mail}
+    # ... Hier dann Auswertung zusammenstellen und an mailadresse senden ...
+    return render(request, 'mathesdigi_app/end.html', context)
+
+
+def evaluation_change_user_data(request):
+    user_id = request.session["user"]
+    user = User.objects.get(id=user_id)
+    if request.method == "POST":
+        post_data = dict(request.POST).copy()
+        post_data = {key: value[0] for key, value in post_data.items()}
+        user_name = post_data["user_name"]
+        mail = post_data["mail"]
+
+        user.user_name = user_name
+        user.mail = mail
+        user.save()
+    context = {"user_name": user.user_name, "mail": user.mail}
+    return render(request, 'mathesdigi_app/evaluation.html', context)

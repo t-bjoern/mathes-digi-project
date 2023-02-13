@@ -88,14 +88,14 @@
 
 .answer_field_shake {
     animation: shake 0.8s;
-    animation-iteration-count: 1;
     grid-area: answer-field;
-    height: 10vh;
-    width: 20vw;
-    font-size: 5vh;
-    margin-top: 22vh;
+    height: 9vh;
+    width: 21vw;
+    font-size: var(--answer-font-size);
+    margin-top: 24vh;
     margin-left: 2vw;
+    text-align: center;
     border: none;
-    font-family: "Ink Free", sans-serif;
+    font-family: var(--standard-font-family);
+    caret-color: transparent;
 }
-
