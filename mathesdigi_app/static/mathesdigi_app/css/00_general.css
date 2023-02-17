@@ -1,0 +1,23 @@
+@import "00_variablen.css";
+
+input {
+    border-radius: 0;
+    padding: 0;
+    text-align: center;
+    border-style: none;
+    font-family: var(--standard-font-family);
+    caret-color: transparent;
+    background-color: transparent;
+    font-size: var(--answer-font-size);
+}
+
+input[disabled] {
+    color: black;
+}
+
+.general_pic {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+}

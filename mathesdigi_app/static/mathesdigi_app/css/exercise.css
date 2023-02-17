@@ -68,13 +68,6 @@ Version:       1.0
     background-size: 100% 100%;
 }
 
-.pic {
-    max-height: 100%;
-    max-width: 100%;
-    width: auto;
-    height: auto;
-}
-
 .full-screen {
     grid-area: full_screen;
     display: flex;

@@ -5,60 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
     <!-- CSS -->
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'mathesdigi_app/css/exercise.css' %}?version={{ timestamp }}">
-    <link rel="stylesheet" type="text/css" href="{% static 'mathesdigi_app/css/single_answer.css' %}?version={{ timestamp }}">
-    <link rel="stylesheet" type="text/css" href="{% static 'mathesdigi_app/css/number_keyboard.css' %}?version={{ timestamp }}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'mathesdigi_app/css/exercise.css' %}?version={{ timestamp }}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'mathesdigi_app/css/single_answer.css' %}?version={{ timestamp }}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'mathesdigi_app/css/number_keyboard.css' %}?version={{ timestamp }}">
     <link href="https://fonts.cdnfonts.com/css/ink-free" rel="stylesheet">
     <!-- Title -->
     <title>Mathes 2 - 1.1</title>
 </head>
 
 <body>
-<form  action="{% url 'heft2_task1_1' %}" method="post">
-{%  csrf_token %}
-<div class="raster">
-    <!-- logo (header) -->
-    <div class="logo"><img class="pic" src="{% static 'mathesdigi_app/pics/Logo.svg' %}" alt="home"></div>
+<form action="{% url 'heft2_task1_1' %}" method="post">
+    {% csrf_token %}
+    <div class="raster">
+        <!-- logo (header) -->
+        <div class="logo"><img class="general_pic" src="{% static 'mathesdigi_app/pics/Logo.svg' %}" alt="home"></div>
 
-    <!-- Sidebar -->
-    <div class="monkey"><img class="pic" src="{% static 'mathesdigi_app/pics/Affe_2.svg' %}" alt="home"></div>
-    <!-- move to next page -->
-    <div class="forward"><input type="submit" value="Weiter"></div>
-{#    <div class="forward"><a href="1_task_2.html"><img class="pic" src="pics/weiter.svg"></a></div>#}
-    <!-- return to page before -->
-    <div class="backwards"><a href="{% url 'heft2_task1_example' %}">
-        <img class="pic" src="{% static 'mathesdigi_app/pics/zurueck.svg' %}" alt="home"></a>
-    </div>
-
-    <!-- Task and Answer Field -->
-    <div class="task">
-        <div class="task_text"><br>Wie viele Radiergummis sind es?</div>
-        <div class="task_pic">
-            <img class="pic" src="{% static 'mathesdigi_app/pics/2_task/1_1.svg' %}" alt="home">
+        <!-- Sidebar -->
+        <div class="monkey"><img class="general_pic" src="{% static 'mathesdigi_app/pics/Affe_2.svg' %}" alt="home">
         </div>
-        <input class="{% if empty_field %}answer_field_shake{% else %}answer_field{% endif %}"
-               type="text" inputmode="None" id="antwort1" name="211" placeholder="Antwort">
+        <!-- move to next page -->
+        <div class="forward-button"><input type="submit" value="Weiter"></div>
+        {#    <div class="forward"><a href="1_task_2.html"><img class="pic" src="pics/weiter.svg"></a></div>#}
+        <!-- return to page before -->
+        <div class="backwards"><a href="{% url 'heft2_task1_example' %}">
+            <img class="general_pic" src="{% static 'mathesdigi_app/pics/zurueck.svg' %}" alt="home"></a>
+        </div>
 
+        <!-- Task and Answer Field -->
+        <div class="task">
+            <div class="task_text"><br>Wie viele Radiergummis sind es?</div>
+            <div class="task_pic">
+                <img class="general_pic" src="{% static 'mathesdigi_app/pics/2_task/1_1.svg' %}" alt="home">
+            </div>
+            <input class="{% if empty_field %}answer_field_shake{% else %}answer_field{% endif %}"
+                   type="text" inputmode="None" id="antwort1" name="211" placeholder="Antwort">
+
+        </div>
+
+        <!-- Input buttons -->
+        <div class="keyboard">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle1.svg' %}" alt="home"
+                 onclick="antwort1.value+=1">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle2.svg' %}" alt="home"
+                 onclick="antwort1.value+=2">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle3.svg' %}" alt="home"
+                 onclick="antwort1.value+=3">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle4.svg' %}" alt="home"
+                 onclick="antwort1.value+=4">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle5.svg' %}" alt="home"
+                 onclick="antwort1.value+=5">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle6.svg' %}" alt="home"
+                 onclick="antwort1.value+=6">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle7.svg' %}" alt="home"
+                 onclick="antwort1.value+=7">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle8.svg' %}" alt="home"
+                 onclick="antwort1.value+=8">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle9.svg' %}" alt="home"
+                 onclick="antwort1.value+=9">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle0.svg' %}" alt="home"
+                 onclick="antwort1.value+=0">
+            <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle_loeschen.svg' %}" alt="home"
+                 onclick="antwort1.value=''">
+        </div>
+
+        <!-- progressbar -->
+        <img class="progressbar" src="{% static 'mathesdigi_app/pics/Fortschrittsbalken_0.svg' %}" alt="home">
     </div>
-
-    <!-- Input buttons -->
-    <div class="keyboard">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle1.svg' %}" alt="home" onclick="antwort1.value+=1">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle2.svg' %}" alt="home" onclick="antwort1.value+=2">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle3.svg' %}" alt="home" onclick="antwort1.value+=3">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle4.svg' %}" alt="home" onclick="antwort1.value+=4">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle5.svg' %}" alt="home" onclick="antwort1.value+=5">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle6.svg' %}" alt="home" onclick="antwort1.value+=6">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle7.svg' %}" alt="home" onclick="antwort1.value+=7">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle8.svg' %}" alt="home" onclick="antwort1.value+=8">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle9.svg' %}" alt="home" onclick="antwort1.value+=9">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle0.svg' %}" alt="home" onclick="antwort1.value+=0">
-        <img class="taste" src="{% static 'mathesdigi_app/pics/keyboard/Puzzle_loeschen.svg' %}" alt="home" onclick="antwort1.value=''">
-    </div>
-
-    <!-- progressbar -->
-    <img class="progressbar" src="{% static 'mathesdigi_app/pics/Fortschrittsbalken_0.svg' %}" alt="home">
-</div>
 </form>
 </body>
 </html>

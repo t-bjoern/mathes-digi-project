@@ -7,6 +7,8 @@
     {% load static %}
     <!-- CSS -->
     <link rel="stylesheet" type="text/css"
+          href="{% static 'mathesdigi_app/css/00_general.css' %}?version={{ timestamp }}">
+    <link rel="stylesheet" type="text/css"
           href="{% static 'mathesdigi_app/css/exercise.css' %}?version={{ timestamp }}">
     <link rel="stylesheet" type="text/css"
           href="{% static 'mathesdigi_app/css/single_answer.css' %}?version={{ timestamp }}">
@@ -23,27 +25,28 @@
     {% csrf_token %}
     <div class="raster">
         <!-- logo (header) -->
-        <div class="logo"><img class="pic" src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
+        <div class="logo"><img class="general_pic" src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
 
         <!-- Sidebar -->
         <img class="monkey" src="{% static 'mathesdigi_app/img/Affe_2.svg' %}" alt="">
         <!-- move to next page and submit answers-->
-        <button class="forward-button pic" type="submit">
-            <img class="pic" src="{% static 'mathesdigi_app/img/weiter.svg' %}" alt="Submit"></button>
+        <button class="forward-button general_pic" type="submit">
+            <img class="general_pic" src="{% static 'mathesdigi_app/img/weiter.svg' %}" alt="Submit"></button>
 
         <!-- return to page before -->
-        <button class="backwards pic" type="button"
+        <button class="backwards general_pic" type="button"
                 onclick="window.location.href = '{% url "task_view" heft="Mathes2" template_name="1_example" %}'">
-            <img class="pic" src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
+            <img class="general_pic" src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
         </button>
 
         <!-- Task and Answer Field -->
         <div class="task"
              style="background-image: url('{% static "mathesdigi_app/img/Background_with_single_answerfield.svg" %}');">
             <div class="task_text">Wie viele Radiergummis sind es?</div>
-            <div class="task_pic"><img class="pic" src="{% static 'mathesdigi_app/img/2_task/1_1.svg' %}" alt="">
+            <div class="task_pic"><img class="general_pic" src="{% static 'mathesdigi_app/img/2_task/1_1.svg' %}"
+                                       alt="">
             </div>
-            <input class="{% if empty_field %}answer_field_shake answer_field{% else %}answer_field{% endif %}"
+            <input class="{% if empty_field %}answer_field_shake input_field_large{% else %}input_field_large{% endif %}"
                    type="text" inputmode="None" id="antwort1" name="2A11" placeholder="Antwort"
                    value="{% if 2A11_solution %}{{ 2A11_solution }}{% else %}{{ 2A11_value }}{% endif %}">
         </div>
@@ -58,7 +61,7 @@
              style="background-image: url('{% static "mathesdigi_app/img/progressbar/Fortschrittsbalken_0.svg" %}');"></div>
 
         <!-- full-screen -->
-        <div class="full-screen"><img class="pic" src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""
+        <div class="full-screen"><img class="general_pic" src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""
                                       onclick="openFullscreen()"></div>
     </div>
     <div id="turn_device"></div>

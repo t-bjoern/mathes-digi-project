@@ -1,4 +1,4 @@
-@import "variablen.css";
+@import "00_variablen.css";
 
 .task {
     grid-area: task;
@@ -29,46 +29,29 @@
     font-family: var(--standard-font-family);
 }
 
-.answer_field {
+.input_field_large {
     grid-area: answer-field;
     height: 9vh;
     width: 21vw;
-    font-size: var(--answer-font-size);
     margin-top: 24vh;
     margin-left: 2vw;
-    text-align: center;
-    border: none;
-    font-family: var(--standard-font-family);
-    caret-color: transparent;
-    background-color: transparent;
+    margin-right: 7vw;
 }
 
 .input_field_small_right {
     grid-area: answer-field;
     height: 9vh;
     width: 8vw;
-    font-size: var(--answer-font-size);
     margin-top: 21.5vh;
     margin-left: 0.5vw;
-    text-align: center;
-    border-style: none;
-    font-family: var(--standard-font-family);
-    caret-color: transparent;
-    background-color: transparent;
 }
 
 .input_field_small_left {
     grid-area: task-pic;
     height: 9vh;
     width: 8vw;
-    font-size: var(--answer-font-size);
     margin-top: 21.5vh;
     margin-left: 22.2vw;
-    text-align: center;
-    border-style: none;
-    font-family: var(--standard-font-family);
-    caret-color: transparent;
-    background-color: transparent;
 }
 
 @keyframes shake {
