@@ -12,6 +12,8 @@
           href="{% static 'mathesdigi_app/css/exercise.css' %}?version={{ timestamp }}">
     <link rel="stylesheet" type="text/css"
           href="{% static 'mathesdigi_app/css/single_answer.css' %}?version={{ timestamp }}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'mathesdigi_app/css/number_keyboard.css' %}?version={{ timestamp }}">
     <!-- JS -->
     <script src="{% static 'mathesdigi_app/JS/Keyboard_functions.js' %}?version={{ timestamp }}"></script>
     <!-- Schriftart -->
@@ -21,8 +23,10 @@
 </head>
 
 <body>
-<form action="{% url 'task_view' heft='Mathes2' template_name='3_example' %}" method="post">
+<form action="{% url 'main_view' heft='Mathes2' next_task_name='3_example' %}" method="post">
     {% csrf_token %}
+    <input type="hidden" name="task_id" value="211">
+    <input type="hidden" name="this_task_process" value="task_normal">
     <div class="raster">
         <!-- logo (header) -->
         <div class="logo"><img class="general_pic" src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
@@ -35,7 +39,7 @@
 
         <!-- return to page before -->
         <button class="backwards general_pic" type="button"
-                onclick="window.location.href = '{% url "task_view" heft="Mathes2" template_name="1_task_1" %}'">
+                onclick="window.location.href = '{% url "main_view" heft="Mathes2" next_task_name="1_task_1" %}'">
             <img class="general_pic" src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
         </button>
 

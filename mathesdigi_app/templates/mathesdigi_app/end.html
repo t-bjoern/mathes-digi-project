@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+      {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mathesdigi_app/css/evaluation.css' %}?version={{ timestamp }}">
+    <title>Ende</title>
+  </head>
+  <body>
+    <div style="text-align: center;">
+      <p>Testergebnis wurde erfolgreich an {{ mail }} übermittelt. Sie können jetzt einen neuen Test starten oder diese Seite schließen.</p>
+        <a href="{% url 'startpage' %}"><button type="button">Neuer Test</button></a>
+    </div>
+  </body>
+</html>

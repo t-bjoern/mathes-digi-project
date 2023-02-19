@@ -7,17 +7,21 @@ from django import forms
 from django.shortcuts import redirect, render
 from django.urls import path
 
+from . import helpers
 from .models import User, Aufgaben, Teilaufgaben, Ergebnisse, Wertung
 
 
+@admin.register(Teilaufgaben)
 class TeilaufgabenAdmin(admin.ModelAdmin):
     list_display = ('teilaufgaben_id', 'loesung')
 
 
+@admin.register(Aufgaben)
 class AufgabenAdmin(admin.ModelAdmin):
     list_display = ('heft_nr', 'aufgaben_nr', 'bezeichnung', 'punktzahl')
 
 
+@admin.register(Ergebnisse)
 class ErgebnisseAdmin(admin.ModelAdmin):
     list_display = ('user', 'teilaufgaben_name', 'eingabe', 'wertung')
 
@@ -27,15 +31,16 @@ class ErgebnisseAdmin(admin.ModelAdmin):
     teilaufgaben_name.short_description = 'Teilaufgaben ID'
 
 
+@admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('user_name', 'mail', 'pub_date', 'heft')
 
 
 class CsvImportForm(forms.Form):
     heft_nr = forms.IntegerField()
-    start_month = forms.CharField()
-    end_month = forms.CharField()
-    csv_file = forms.FileField()
+    start_time = forms.CharField()
+    end_time = forms.CharField()
+    file = forms.FileField()
 
 
 @admin.register(Wertung)
@@ -45,7 +50,8 @@ class WertungAdmin(admin.ModelAdmin):
     list_display = ('heft_nr', 'zeitraum', 'rohwert', 't_wert', 'prozentrang')
 
     def zeitraum(self, obj):
-        return f"{self.month_names[obj.start_month-1]} - {self.month_names[obj.end_month-1]}"
+        return f"{obj.start_day}.{self.month_names[obj.start_month - 1]} - " \
+               f"{obj.end_day}.{self.month_names[obj.end_month - 1]} "
 
     change_list_template = "entities/changelist.html"
 
@@ -57,32 +63,29 @@ class WertungAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def import_csv(self, request):
-        if request.method == "POST":
-            csv_file = request.FILES["csv_file"]
-            df = pd.read_excel(csv_file)
-
-            def create_objects(row):
-                start_month_number = self.month_names.index(request.POST["start_month"]) + 1
-                end_month_number = self.month_names.index(request.POST["end_month"]) + 1
-                Wertung.objects.get_or_create(heft_nr=request.POST["heft_nr"],
-                                              start_month=start_month_number,
-                                              end_month=end_month_number,
-                                              rohwert=row["Rohwert"],
-                                              t_wert=row["T-Wert"],
-                                              prozentrang=row["Prozentrang"])
-
-            df.apply(create_objects, axis=1)
-
-            self.message_user(request, "Your csv file has been imported")
-            return redirect("..")
         form = CsvImportForm()
-        payload = {"form": form}
-        return render(
-            request, "admin/csv_form.html", payload
-        )
-
-
-admin.site.register(Teilaufgaben, TeilaufgabenAdmin)
-admin.site.register(User, UserAdmin)
-admin.site.register(Aufgaben, AufgabenAdmin)
-admin.site.register(Ergebnisse, ErgebnisseAdmin)
+        context = {"form": form}
+        if request.method == "POST":
+            file = request.FILES["file"]
+            df, error_message = helpers.read_and_validate_file(file)
+            if df is not None:
+                try:
+                    start_day, start_month = request.POST["start_time"].split(".")
+                    end_day, end_month = request.POST["end_time"].split(".")
+                    result = df.apply(helpers.create_or_update_wertung_apply,
+                                      args=(request.POST["heft_nr"], start_month, start_day, end_month, end_day), axis=1)
+                    updated = result.apply(lambda x: x[0]).sum()
+                    created = result.apply(lambda x: x[1]).sum()
+                    self.message_user(request, f"Your file has been imported. Updated: {updated} Created: {created}")
+                    return redirect("..")
+                except ValueError:
+                    error_message.append("Datum ist im falschen Format. Bitte im Format dd.mm angeben. Beispiel: 01.02")
+                except Exception as e:
+                    error_message.append(str(e))
+            if error_message:
+                form = CsvImportForm(initial={'heft_nr': request.POST.get('heft_nr'),
+                                              'start_time': request.POST.get('start_time'),
+                                              'end_time': request.POST.get('end_time'),
+                                              'file': request.POST.get('file')})
+                context = {'form': form, "error_message": error_message}
+        return render(request, "admin/csv_form.html", context)

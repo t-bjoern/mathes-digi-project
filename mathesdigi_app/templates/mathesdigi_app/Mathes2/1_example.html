@@ -12,6 +12,8 @@
           href="{% static 'mathesdigi_app/css/exercise.css' %}?version={{ timestamp }}">
     <link rel="stylesheet" type="text/css"
           href="{% static 'mathesdigi_app/css/single_answer.css' %}?version={{ timestamp }}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'mathesdigi_app/css/number_keyboard.css' %}?version={{ timestamp }}">
     <!-- JS -->
     <script src="{% static 'mathesdigi_app/JS/Keyboard_functions.js' %}?version={{ timestamp }}"></script>
     <!-- Schriftart -->
@@ -21,8 +23,9 @@
 </head>
 
 <body class="example_page">
-<form action="{% url 'task_view' heft='Mathes2' template_name='1_task_1' %}" method="post">
+<form action="{% url 'main_view' heft='Mathes2' next_task_name='1_task_1' %}" method="post">
     {% csrf_token %}
+    <input type="hidden" name="this_task_process" value="example">
     <div class="raster">
         <!-- logo (header) -->
         <div class="logo"><img class="general_pic" src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
