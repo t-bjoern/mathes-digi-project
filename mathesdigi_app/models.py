@@ -18,6 +18,9 @@ class Aufgaben(models.Model):
     bezeichnung = models.CharField(max_length=200)
     punktzahl = models.IntegerField()
 
+    def __str__(self):
+        return f"Nr. {self.aufgaben_nr} ({self.bezeichnung})"
+
     class Meta:
         verbose_name = "Aufgabe"
         verbose_name_plural = "Aufgaben"
