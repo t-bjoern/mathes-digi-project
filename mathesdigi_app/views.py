@@ -22,6 +22,9 @@ def startpage(request):
 def registration(request):
     context = {}
     if request.method == 'POST':
+        # TODO Currently check for old users at each new registration later as a cronjob or celery task every day.
+        helpers.delete_old_users()
+
         post_data = dict(request.POST).copy()
         for key in post_data:
             post_data[key] = post_data[key][0]

@@ -2,6 +2,7 @@ import random
 from django.core.exceptions import ValidationError
 
 import pandas as pd
+from django.utils import timezone
 
 from .models import User, Teilaufgaben, Ergebnisse, Wertung
 
@@ -140,3 +141,9 @@ def read_and_validate_file(file, max_file_size=1048576):
 
 def str2bool(string: str):
     return string.lower() in ("yes", "true", "t", "1")
+
+
+def delete_old_users():
+    one_week_ago = timezone.now() - timezone.timedelta(days=7)
+    old_users = User.objects.filter(pub_date__lt=one_week_ago)
+    old_users.delete()
