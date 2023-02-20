@@ -22,26 +22,6 @@ def save_answer(teilaufgaben_id: str, ergebnis: int, user_id: int):
                                   wertung=bool(ergebnis == teilaufgabe.loesung))
 
 
-def get_example_solution(teilaufgaben_id: str):
-    teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
-    context = {teilaufgaben_id: teilaufgabe.loesung}
-
-    return context
-
-
-def display_solution_example(post_data: dict):
-    context = {}
-    for key, value in post_data.items():
-        teilaufgaben_id = key
-        ergebnis = int(value[0])
-        teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
-        if ergebnis != teilaufgabe.loesung:
-            context[f"{key}_solution"] = teilaufgabe.loesung
-        context[f"{key}_value"] = ergebnis
-
-    return context
-
-
 def create_random_user_id():
     """
     Erstellen einer zufälligen user_id welche noch nicht in der Datenbank verwendet wird.

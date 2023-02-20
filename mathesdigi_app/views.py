@@ -11,8 +11,10 @@ from mathesdigi_app import helpers
 def startpage(request):
     if "heft" in request.session.keys():
         del request.session["heft"]
-    if "user" in request.session.keys():
-        del request.session["user"]
+    # zum testen immer gleiche user_id nutzen
+    request.session["user"] = 14095
+    # if "user" in request.session.keys():
+    #     del request.session["user"]
     if request.method == 'POST':
         request.session["heft"] = request.POST["Mathes2"]
         return redirect(registration)
@@ -83,9 +85,9 @@ def evaluation_send(request):
     user_id = request.session["user"]
     user = User.objects.get(id=user_id)
     context = {"mail": user.mail}
-    eva_obj = Evaluate(user)
-    eva_obj.send_evaluation()
-    eva_obj.save_evaluation_for_statistic()
+    Evaluate(user)
+    # eva_obj.send_evaluation()
+    # eva_obj.save_results_for_statistic()
     # save values for statistics
     return render(request, 'mathesdigi_app/end.html', context)
 
