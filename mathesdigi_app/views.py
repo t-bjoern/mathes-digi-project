@@ -12,9 +12,10 @@ def startpage(request):
     if "heft" in request.session.keys():
         del request.session["heft"]
     # zum testen immer gleiche user_id nutzen
-    request.session["user"] = 14095
-    # if "user" in request.session.keys():
-    #     del request.session["user"]
+    if User.objects.filter(id=14095).exists():
+        request.session["user"] = 14095
+    elif "user" in request.session.keys():
+        del request.session["user"]
     if request.method == 'POST':
         request.session["heft"] = request.POST["Mathes2"]
         return redirect(registration)
@@ -62,7 +63,7 @@ def main_view(request, heft, next_task_name):
             pass
         elif this_task_process == "task_normal":
             teilaufgaben_id = post_data["task_id"]
-            ergebnis = int(post_data["input"])
+            ergebnis = post_data["input"]
             print(teilaufgaben_id, ergebnis)
             helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
         elif this_task_process == "drag_and_drop":

@@ -1,4 +1,4 @@
-from mathesdigi_app.models import User, Ergebnisse
+from mathesdigi_app.models import User, Ergebnisse, Wertung
 
 
 class Evaluate:
@@ -8,6 +8,13 @@ class Evaluate:
         self.evaluate()
 
     def evaluate(self):
+        print(f"{self.user.pub_date.date().day}.{self.user.pub_date.date().month}")
+        user_day = self.user.pub_date.date().day
+        user_month = self.user.pub_date.date().month
+        wertung_time_period = Wertung.objects.filter(start_day__lt=user_day,
+                                                     start_month__lte=user_month, end_month__gte=user_month)
+        wertung = wertung_time_period.get(rohwert=self.summed_points)
+        print(wertung.rohwert, wertung.t_wert, wertung.prozentrang)
         # In Wertung schauen was dem Rohwert entspricht
         # Leistungseinschätzung machen (siehe Excel)
         pass

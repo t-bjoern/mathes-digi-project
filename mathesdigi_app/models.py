@@ -28,7 +28,7 @@ class Aufgaben(models.Model):
 
 class Teilaufgaben(models.Model):
     teilaufgaben_id = models.CharField(max_length=5)
-    loesung = models.IntegerField()
+    loesung = models.CharField(max_length=20)
     aufgabe = models.ForeignKey(Aufgaben, on_delete=models.CASCADE)
 
     class Meta:
