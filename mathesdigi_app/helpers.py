@@ -1,3 +1,4 @@
+import os
 import random
 from django.core.exceptions import ValidationError
 
@@ -92,6 +93,10 @@ def create_or_update_wertung_apply(row, heft_nr, start_month, start_day, end_mon
 
 def read_and_validate_file(file, max_file_size=1048576):
     error_message = []
+    ext = os.path.splitext(str(file))[-1].lower()
+    if ext not in ['.csv', '.xls', '.xlsx']:
+        error_message.append("File is not in the correct format. You can only upload Excel or CSV files.")
+        return None, error_message
     file.seek(0, 2)  # move the cursor to the end of the file to get its size
     file_size = file.tell()
     if file_size > max_file_size:
