@@ -28,17 +28,17 @@
     <input type="hidden" name="this_task_process" value="example">
     <div class="raster">
         <!-- logo (header) -->
-        <div class="logo"><img class="general_pic" src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
+        <div class="logo"><img src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
 
         <!-- Sidebar -->
         <img class="monkey" src="{% static 'mathesdigi_app/img/Affe_example.svg' %}" alt="">
         <!-- move to next page and submit answers-->
-        <button class="forward-button general_pic" type="submit">
-            <img class="general_pic" src="{% static 'mathesdigi_app/img/weiter.svg' %}" alt="Submit"></button>
+        <button class="forward-button" type="submit">
+            <img src="{% static 'mathesdigi_app/img/weiter.svg' %}" alt="Submit"></button>
 
         <!-- return to page before -->
-        <button class="backwards general_pic" type="button" onclick="window.location.href = '{% url 'registration' %}'">
-            <img class="general_pic" src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
+        <button class="backwards " type="button" onclick="window.location.href = '{% url 'registration' %}'">
+            <img src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
         </button>
 
 
@@ -46,7 +46,7 @@
         <div class="task"
              style="background-image: url('{% static "mathesdigi_app/img/Background_with_single_answerfield.svg" %}');">
             <div class="task_text">Wie viele Radiergummis sind es?</div>
-            <div class="task_pic"><img class="general_pic" src="{% static 'mathesdigi_app/img/2_task/1_example.svg' %}"
+            <div class="task_pic"><img src="{% static 'mathesdigi_app/img/2_task/1_example.svg' %}"
                                        alt="">
             </div>
             <input class="{% if empty_field %}answer_field_shake input_field_large{% else %}input_field_large{% endif %}"
@@ -64,7 +64,7 @@
              style="background-image: url('{% static "mathesdigi_app/img/progressbar/Fortschrittsbalken_0.svg" %}');"></div>
 
         <!-- full-screen -->
-        <div class="full-screen"><img class="general_pic" src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""
+        <div class="full-screen"><img src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""
                                       onclick="openFullscreen()"></div>
     </div>
 </form>

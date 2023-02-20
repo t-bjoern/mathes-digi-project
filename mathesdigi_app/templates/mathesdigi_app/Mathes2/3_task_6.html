@@ -27,18 +27,18 @@
     {% csrf_token %}
     <div class="raster">
         <!-- logo (header) -->
-        <div class="logo"><img class="general_pic" src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
+        <div class="logo"><img src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
 
         <!-- Sidebar -->
         <img class="monkey" src="{% static 'mathesdigi_app/img/Affe_2.svg' %}" alt="">
         <!-- move to next page and submit answers-->
-        <button class="forward-button general_pic" type="submit">
-            <img class="general_pic" src="{% static 'mathesdigi_app/img/weiter.svg' %}" alt="Submit"></button>
+        <button class="forward-button" type="submit">
+            <img src="{% static 'mathesdigi_app/img/weiter.svg' %}" alt="Submit"></button>
 
         <!-- return to page before -->
-        <button class="backwards general_pic" type="button"
+        <button class="backwards" type="button"
                 onclick="window.location.href = '{% url "task_view" heft="Mathes2" template_name="3_task_5" %}'">
-            <img class="general_pic" src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
+            <img src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
         </button>
 
         <!-- Task and Answer Field -->
@@ -61,7 +61,7 @@
              style="background-image: url('{% static "mathesdigi_app/img/progressbar/Fortschrittsbalken_0.svg" %}');"></div>
 
         <!-- full-screen -->
-        <div class="full-screen"><img class="general_pic" src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""
+        <div class="full-screen"><img src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""
                                       onclick="openFullscreen()"></div>
     </div>
 </form>
