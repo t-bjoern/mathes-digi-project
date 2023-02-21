@@ -28,7 +28,6 @@
 <form onsubmit="return checkForm_singleAnswer()"
       action="{% url 'main_view' heft='Mathes2' direct_to_task_name='1_task_B' %}" method="post">
     {% csrf_token %}
-    <input type="hidden" name="task_id" value="211">
     <input type="hidden" name="this_task_process" value="task_normal">
     <div class="raster">
         <!-- logo (header) -->
