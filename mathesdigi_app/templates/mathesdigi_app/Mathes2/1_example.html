@@ -16,6 +16,7 @@
           href="{% static 'mathesdigi_app/css/number_keyboard.css' %}?version={{ timestamp }}">
     <!-- JS -->
     <script src="{% static 'mathesdigi_app/JS/Keyboard_functions.js' %}?version={{ timestamp }}"></script>
+    <script src="{% static 'mathesdigi_app/JS/validation.js' %}?version{{ timestamp }}"></script>
     <!-- Schriftart -->
     <link href="https://fonts.cdnfonts.com/css/ink-free" rel="stylesheet">
     <!-- Title -->
@@ -23,7 +24,8 @@
 </head>
 
 <body class="example_page">
-<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='1_task_A' %}" method="post">
+<form onsubmit="return validateForm_singleAnswer()"
+      action="{% url 'main_view' heft='Mathes2' direct_to_task_name='1_task_A' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="this_task_process" value="example">
     <div class="raster">
@@ -49,9 +51,9 @@
             <div class="task_pic"><img src="{% static 'mathesdigi_app/img/2_task/1_example.svg' %}"
                                        alt="">
             </div>
-            <input class="{% if empty_field %}answer_field_shake input_field_large{% else %}input_field_large{% endif %}"
-                   type="text" inputmode="None" id="kids_answer_1" name="2A1E" placeholder="Antwort"
-                   value="{% if 2A1E_solution %}{{ 2A1E_solution }}{% else %}{{ 2A1E_value }}{% endif %}">
+            <input class="input_field_large" type="text" inputmode="None" id="kids_answer_1" placeholder="Antwort">
+            <!-- TODO Ergebnisüberprüfung -->
+            <!-- TODO value="{% if 2A1E_solution %}{{ 2A1E_solution }}{% else %}{{ 2A1E_value }}{% endif %}"-->
         </div>
 
         <!-- Number/Input buttons -->
