@@ -48,9 +48,8 @@
              style="background-image: url('{% static "mathesdigi_app/img/Background_eimer_2.svg" %}');">
             <div class="task_text">Halbiere.</div>
             <input class="input_field_small_right" disabled value="14">
-            <input class="{% if empty_field %}answer_field_shake input_field_small_left{% else %}input_field_small_left{% endif %}"
-                   type="text" inputmode="None" id="kids_answer_1" name="2A42" placeholder="Antwort"
-                   value="{% if 2A42_solution %}{{ 2A42_solution }}{% else %}{{ 2A42_value }}{% endif %}">
+            <input class="input_field_small_left" type="text" inputmode="None" id="kids_answer_1" name="2A42"
+                   placeholder="Antwort">
         </div>
 
         <!-- Number/Input buttons -->

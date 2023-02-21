@@ -24,7 +24,8 @@
 </head>
 
 <body class="example_page">
-<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='3_task_A' %}" method="post">
+<form onsubmit="return validateForm_singleAnswer()"
+      action="{% url 'main_view' heft='Mathes2' direct_to_task_name='3_task_A' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="this_task_process" value="example">
     <div class="raster">
@@ -48,9 +49,8 @@
              style="background-image: url('{% static "mathesdigi_app/img/Background_eimer_2.svg" %}');">
             <div class="task_text">Verdopple.</div>
             <input class="input_field_small_left" disabled value="5">
-            <input class="{% if empty_field %}answer_field_shake input_field_small_right{% else %}input_field_small_right{% endif %}"
-                   type="text" inputmode="None" id="kids_answer_1" name="2A3E" placeholder="Antwort"
-                   value="{% if 2A3E_solution %}{{ 2A3E_solution }}{% else %}{{ 2A3E_value }}{% endif %}">
+            <input class="input_field_small_right" type="text" inputmode="None" id="kids_answer_1"
+                   placeholder="Antwort">
         </div>
 
         <!-- Number/Input buttons -->

@@ -44,6 +44,7 @@
     width: 8vw;
     margin-top: 21.5vh;
     margin-left: 0.5vw;
+    color: black;
 }
 
 .input_field_small_left {
@@ -52,36 +53,20 @@
     width: 8vw;
     margin-top: 21.5vh;
     margin-left: 22.2vw;
+    color: black;
+}
+
+.input_field_shake {
+    animation: shake 0.8s;
 }
 
 @keyframes shake {
-    10%, 90% {
+    10%, 30%, 50%, 70%, 90% {
         transform: translate3d(-10px, 0, 0);
     }
-
-    20%, 80% {
-        transform: translate3d(10px, 0, 0);
-    }
-
-    30%, 50%, 70% {
-        transform: translate3d(-10px, 0, 0);
-    }
-
-    40%, 60% {
+    20%, 40%, 60%, 80% {
         transform: translate3d(10px, 0, 0);
     }
 }
 
-.answer_field_shake {
-    animation: shake 0.8s;
-    grid-area: answer-field;
-    height: 9vh;
-    width: 21vw;
-    font-size: var(--answer-font-size);
-    margin-top: 24vh;
-    margin-left: 2vw;
-    text-align: center;
-    border: none;
-    font-family: var(--standard-font-family);
-    caret-color: transparent;
-}
+
