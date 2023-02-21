@@ -56,6 +56,43 @@
     color: black;
 }
 
+
+/* Adaptive size of Placeholder-Text (not connected to input-font-size)*/
+.input_field_small_right::placeholder,
+.input_field_small_left::placeholder {
+    font-size: 5vh;
+}
+
+@media screen and (max-aspect-ratio: 20/9) {
+    .input_field_small_right::placeholder,
+    .input_field_small_left::placeholder {
+        font-size: 4.5vh;
+    }
+}
+
+
+@media screen and (max-aspect-ratio: 18/9) {
+    .input_field_small_right::placeholder,
+    .input_field_small_left::placeholder {
+        font-size: 4vh;
+    }
+}
+
+@media screen and (max-aspect-ratio: 16/9) {
+    .input_field_small_right::placeholder,
+    .input_field_small_left::placeholder {
+        font-size: 3.5vh;
+    }
+}
+
+@media screen and (max-aspect-ratio: 14/9) {
+    .input_field_small_right::placeholder,
+    .input_field_small_left::placeholder {
+        font-size: 3.0vh;
+    }
+}
+
+/* Shake (used for empty Input-Fields)*/
 .input_field_shake {
     animation: shake 0.8s;
 }
@@ -68,5 +105,6 @@
         transform: translate3d(10px, 0, 0);
     }
 }
+
 
 
