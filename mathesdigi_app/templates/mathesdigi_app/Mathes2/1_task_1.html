@@ -23,8 +23,10 @@
 </head>
 
 <body>
-<form action="{% url 'task_view' heft='Mathes2' template_name='1_task_2' %}" method="post">
+<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='1_task_2' %}" method="post">
     {% csrf_token %}
+    <input type="hidden" name="task_id" value="211">
+    <input type="hidden" name="this_task_process" value="task_normal">
     <div class="raster">
         <!-- logo (header) -->
         <div class="logo"><img src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
@@ -37,7 +39,7 @@
 
         <!-- return to page before -->
         <button class="backwards" type="button"
-                onclick="window.location.href = '{% url "main_view" heft="Mathes2" next_task_name="1_example" %}'">
+                onclick="window.location.href = '{% url "main_view" heft="Mathes2" direct_to_task_name="1_example" %}'">
             <img src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
         </button>
 
@@ -49,7 +51,7 @@
                                        alt="">
             </div>
             <input class="{% if empty_field %}answer_field_shake input_field_large{% else %}input_field_large{% endif %}"
-                   type="text" inputmode="None" id="antwort1" name="2A11" placeholder="Antwort"
+                   type="text" inputmode="None" id="kids_answer_1" name="input" placeholder="Antwort"
                    value="{% if 2A11_solution %}{{ 2A11_solution }}{% else %}{{ 2A11_value }}{% endif %}">
         </div>
 
@@ -67,6 +69,7 @@
                                       onclick="openFullscreen()"></div>
     </div>
     <div id="turn_device"></div>
+</form>
 </body>
 </html>
 

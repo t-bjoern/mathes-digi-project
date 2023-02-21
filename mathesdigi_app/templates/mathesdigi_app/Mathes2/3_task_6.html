@@ -23,8 +23,9 @@
 </head>
 
 <body>
-<form action="{% url 'task_view' heft='Mathes2' template_name='4_example' %}" method="post">
+<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='4_example' %}" method="post">
     {% csrf_token %}
+    <input type="hidden" name="this_task_process" value="task_normal">
     <div class="raster">
         <!-- logo (header) -->
         <div class="logo"><img src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
@@ -37,7 +38,7 @@
 
         <!-- return to page before -->
         <button class="backwards" type="button"
-                onclick="window.location.href = '{% url "task_view" heft="Mathes2" template_name="3_task_5" %}'">
+                onclick="window.location.href = '{% url "main_view" heft="Mathes2" direct_to_task_name="3_task_5" %}'">
             <img src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
         </button>
 
@@ -47,7 +48,7 @@
             <div class="task_text">Verdopple.</div>
             <input class="input_field_small_left" disabled value="38">
             <input class="{% if empty_field %}answer_field_shake input_field_small_right{% else %}input_field_small_right{% endif %}"
-                   type="text" inputmode="None" id="antwort1" name="2A36" placeholder="Antwort"
+                   type="text" inputmode="None" id="kids_answer_1" name="2A36" placeholder="Antwort"
                    value="{% if 2A36_solution %}{{ 2A36_solution }}{% else %}{{ 2A36_value }}{% endif %}">
         </div>
 
