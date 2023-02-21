@@ -11,10 +11,6 @@ input {
     font-size: var(--answer-font-size);
 }
 
-input[disabled] {
-    color: black;
-}
-
 img {
     max-height: 100%;
     max-width: 100%;
