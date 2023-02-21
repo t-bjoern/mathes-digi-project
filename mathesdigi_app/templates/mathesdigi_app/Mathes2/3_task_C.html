@@ -19,11 +19,11 @@
     <!-- Schriftart -->
     <link href="https://fonts.cdnfonts.com/css/ink-free" rel="stylesheet">
     <!-- Title -->
-    <title>Mathes 2 - 4.B</title>
+    <title>Mathes 2 - 3.C</title>
 </head>
 
 <body>
-<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='4_task_3' %}" method="post">
+<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='3_task_D' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="this_task_process" value="task_normal">
     <div class="raster">
@@ -38,18 +38,18 @@
 
         <!-- return to page before -->
         <button class="backwards" type="button"
-                onclick="window.location.href = '{% url "main_view" heft="Mathes2" direct_to_task_name="4_task_1" %}'">
+                onclick="window.location.href = '{% url "main_view" heft="Mathes2" direct_to_task_name="3_task_B" %}'">
             <img src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
         </button>
 
         <!-- Task and Answer Field -->
         <div class="task"
-             style="background-image: url('{% static "mathesdigi_app/img/Background_eimer_2.svg" %}');">
-            <div class="task_text">Halbiere.</div>
-            <input class="input_field_small_right" disabled value="14">
-            <input class="{% if empty_field %}answer_field_shake input_field_small_left{% else %}input_field_small_left{% endif %}"
-                   type="text" inputmode="None" id="kids_answer_1" name="2A42" placeholder="Antwort"
-                   value="{% if 2A42_solution %}{{ 2A42_solution }}{% else %}{{ 2A42_value }}{% endif %}">
+             style="background-image: url('{% static "mathesdigi_app/img/Background_eimer_4.svg" %}');">
+            <div class="task_text">Verdopple.</div>
+            <input class="input_field_small_left" disabled value="40">
+            <input class="{% if empty_field %}answer_field_shake input_field_small_right{% else %}input_field_small_right{% endif %}"
+                   type="text" inputmode="None" id="kids_answer_1" name="2A33" placeholder="Antwort"
+                   value="{% if 2A33_solution %}{{ 2A33_solution }}{% else %}{{ 2A33_value }}{% endif %}">
         </div>
 
         <!-- Number/Input buttons -->

@@ -23,7 +23,7 @@
 </head>
 
 <body class="example_page">
-<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='1_task_1' %}" method="post">
+<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='1_task_A' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="this_task_process" value="example">
     <div class="raster">
