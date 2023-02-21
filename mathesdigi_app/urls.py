@@ -11,5 +11,4 @@ urlpatterns = [
     path('evaluation/', views.evaluation, name='evaluation'),
     path('evaluation/change_user_data', views.evaluation_change_user_data, name='evaluation_change_user_data'),
     path('evaluation/send', views.evaluation_send, name='evaluation_send'),
-
 ]

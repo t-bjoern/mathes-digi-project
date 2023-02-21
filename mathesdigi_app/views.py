@@ -11,7 +11,10 @@ from mathesdigi_app import helpers
 def startpage(request):
     if "heft" in request.session.keys():
         del request.session["heft"]
-    if "user" in request.session.keys():
+    # zum testen immer gleiche user_id nutzen
+    if User.objects.filter(id=14095).exists():
+        request.session["user"] = 14095
+    elif "user" in request.session.keys():
         del request.session["user"]
     if request.method == 'POST':
         request.session["heft"] = request.POST["Mathes2"]
@@ -22,6 +25,9 @@ def startpage(request):
 def registration(request):
     context = {}
     if request.method == 'POST':
+        # TODO Currently check for old users at each new registration later as a cronjob or celery task every day.
+        helpers.delete_old_users()
+
         post_data = dict(request.POST).copy()
         for key in post_data:
             post_data[key] = post_data[key][0]
@@ -56,11 +62,10 @@ def main_view(request, heft, direct_to_task_name):
         if this_task_process == "example":
             pass
         elif this_task_process == "task_normal":
-            # teilaufgaben_id = post_data["task_id"]
-            # ergebnis = int(post_data["input"])
-            # print(teilaufgaben_id, ergebnis)
-            # helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
-            pass
+            teilaufgaben_id = post_data["task_id"]
+            ergebnis = post_data["input"]
+            print(teilaufgaben_id, ergebnis)
+            helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
         elif this_task_process == "drag_and_drop":
             # preprocess ...
             # helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
@@ -81,9 +86,9 @@ def evaluation_send(request):
     user_id = request.session["user"]
     user = User.objects.get(id=user_id)
     context = {"mail": user.mail}
-    eva_obj = Evaluate(user)
-    eva_obj.send_evaluation()
-    eva_obj.save_evaluation_for_statistic()
+    Evaluate(user)
+    # eva_obj.send_evaluation()
+    # eva_obj.save_results_for_statistic()
     # save values for statistics
     return render(request, 'mathesdigi_app/end.html', context)
 

@@ -18,6 +18,9 @@ class Aufgaben(models.Model):
     bezeichnung = models.CharField(max_length=200)
     punktzahl = models.IntegerField()
 
+    def __str__(self):
+        return f"Nr. {self.aufgaben_nr} ({self.bezeichnung})"
+
     class Meta:
         verbose_name = "Aufgabe"
         verbose_name_plural = "Aufgaben"
@@ -25,7 +28,7 @@ class Aufgaben(models.Model):
 
 class Teilaufgaben(models.Model):
     teilaufgaben_id = models.CharField(max_length=5)
-    loesung = models.IntegerField()
+    loesung = models.CharField(max_length=20)
     aufgabe = models.ForeignKey(Aufgaben, on_delete=models.CASCADE)
 
     class Meta:

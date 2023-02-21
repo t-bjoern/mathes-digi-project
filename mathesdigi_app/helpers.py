@@ -1,7 +1,9 @@
+import os
 import random
 from django.core.exceptions import ValidationError
 
 import pandas as pd
+from django.utils import timezone
 
 from .models import User, Teilaufgaben, Ergebnisse, Wertung
 
@@ -19,26 +21,6 @@ def save_answer(teilaufgaben_id: str, ergebnis: int, user_id: int):
                                   teilaufgabe=teilaufgabe,
                                   eingabe=ergebnis,
                                   wertung=bool(ergebnis == teilaufgabe.loesung))
-
-
-def get_example_solution(teilaufgaben_id: str):
-    teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
-    context = {teilaufgaben_id: teilaufgabe.loesung}
-
-    return context
-
-
-def display_solution_example(post_data: dict):
-    context = {}
-    for key, value in post_data.items():
-        teilaufgaben_id = key
-        ergebnis = int(value[0])
-        teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
-        if ergebnis != teilaufgabe.loesung:
-            context[f"{key}_solution"] = teilaufgabe.loesung
-        context[f"{key}_value"] = ergebnis
-
-    return context
 
 
 def create_random_user_id():
@@ -111,6 +93,10 @@ def create_or_update_wertung_apply(row, heft_nr, start_month, start_day, end_mon
 
 def read_and_validate_file(file, max_file_size=1048576):
     error_message = []
+    ext = os.path.splitext(str(file))[-1].lower()
+    if ext not in ['.csv', '.xls', '.xlsx']:
+        error_message.append("File is not in the correct format. You can only upload Excel or CSV files.")
+        return None, error_message
     file.seek(0, 2)  # move the cursor to the end of the file to get its size
     file_size = file.tell()
     if file_size > max_file_size:
@@ -140,3 +126,9 @@ def read_and_validate_file(file, max_file_size=1048576):
 
 def str2bool(string: str):
     return string.lower() in ("yes", "true", "t", "1")
+
+
+def delete_old_users():
+    one_week_ago = timezone.now() - timezone.timedelta(days=7)
+    old_users = User.objects.filter(pub_date__lt=one_week_ago)
+    old_users.delete()
