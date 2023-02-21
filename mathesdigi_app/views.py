@@ -71,7 +71,7 @@ def main_view(request, heft, next_task_name):
         if this_task_process == "example":
             pass
         elif this_task_process == "task_normal":
-            time_on_task = round(end_time - start_time)
+            time_required = round(end_time - start_time)
             for teilaufgaben_id in teilaufgaben_ids:
                 ergebnis = post_data[teilaufgaben_id]
                 helpers.save_answer(teilaufgaben_id, ergebnis, user_id)

@@ -8,7 +8,7 @@ class User(models.Model):
     user_name = models.CharField(max_length=20, null=False, blank=False)
     # klassen_schlüssel = models.CharField(max_length=8)
     mail = models.EmailField(null=False, blank=False)
-    pub_date = models.DateTimeField(default=datetime.datetime.now(tz=timezone.utc))
+    pub_date = models.DateTimeField(auto_now_add=True)
     heft = models.CharField(max_length=50)
 
 
@@ -40,6 +40,7 @@ class Ergebnisse(models.Model):
     eingabe = models.CharField(max_length=200, null=True)
     wertung = models.BooleanField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    time_required = models.IntegerField(null=True, default=None)
     teilaufgabe = models.ForeignKey(Teilaufgaben, on_delete=models.CASCADE)
 
     class Meta:
