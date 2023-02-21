@@ -1,3 +1,6 @@
+import re
+import time
+
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -6,6 +9,9 @@ from .evaluation import Evaluate
 from .models import User, Aufgaben, Teilaufgaben, Ergebnisse
 
 from mathesdigi_app import helpers
+
+start_time = None
+end_time = None
 
 
 def startpage(request):
@@ -51,27 +57,31 @@ def registration(request):
 
 
 def main_view(request, heft, next_task_name):
+    global start_time, end_time
     if request.method == 'POST':
+        end_time = time.time()
         post_data = dict(request.POST).copy()
         # Convert lists in dict to single values
         post_data = {key: value[0] for key, value in post_data.items()}
         # Delete unnecessary information in post_data
         del post_data["csrfmiddlewaretoken"]
+        teilaufgaben_ids = [key for key in post_data.keys() if re.match(r"^\d\w\d\w$", key)]
         this_task_process = post_data["this_task_process"]
         user_id = request.session["user"]
         if this_task_process == "example":
             pass
         elif this_task_process == "task_normal":
-            teilaufgaben_id = post_data["task_id"]
-            ergebnis = post_data["input"]
-            print(teilaufgaben_id, ergebnis)
-            helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
+            time_on_task = round(end_time - start_time)
+            for teilaufgaben_id in teilaufgaben_ids:
+                ergebnis = post_data[teilaufgaben_id]
+                helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
         elif this_task_process == "drag_and_drop":
             # preprocess ...
             # helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
             pass
     if next_task_name == "evaluation":
         return redirect(evaluation)
+    start_time = time.time()
     return render(request, f'mathesdigi_app/{heft}/{next_task_name}.html')
 
 
