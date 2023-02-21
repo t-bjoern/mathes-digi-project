@@ -1,26 +1,14 @@
 import os
 import random
+import re
+
 from django.core.exceptions import ValidationError
 
 import pandas as pd
 from django.utils import timezone
 
 from .models import User, Teilaufgaben, Ergebnisse, Wertung
-
-
-def save_answer(teilaufgaben_id: str, ergebnis: int, user_id: int):
-    teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
-
-    if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
-        ergebnis_obj = Ergebnisse.objects.get(user_id=user_id, teilaufgabe=teilaufgabe)
-        ergebnis_obj.eingabe = ergebnis
-        ergebnis_obj.wertung = bool(ergebnis == teilaufgabe.loesung)
-        ergebnis_obj.save()
-    else:
-        Ergebnisse.objects.create(user_id=user_id,
-                                  teilaufgabe=teilaufgabe,
-                                  eingabe=ergebnis,
-                                  wertung=bool(ergebnis == teilaufgabe.loesung))
+from bs4 import BeautifulSoup
 
 
 def create_random_user_id():
@@ -56,6 +44,44 @@ def validate_registration_create_or_update_user(registration_data: dict, user_id
         user.save()
 
     return user
+
+
+def delete_old_users():
+    one_week_ago = timezone.now() - timezone.timedelta(days=7)
+    old_users = User.objects.filter(pub_date__lt=one_week_ago)
+    old_users.delete()
+
+
+def save_answer(teilaufgaben_id: str, ergebnis: int, user_id: int, time_required: int):
+    teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
+
+    if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
+        ergebnis_obj = Ergebnisse.objects.get(user_id=user_id, teilaufgabe=teilaufgabe)
+        ergebnis_obj.eingabe = ergebnis
+        ergebnis_obj.wertung = bool(ergebnis == teilaufgabe.loesung)
+        ergebnis_obj.time_required += time_required
+        ergebnis_obj.save()
+    else:
+        Ergebnisse.objects.create(user_id=user_id,
+                                  teilaufgabe=teilaufgabe,
+                                  eingabe=ergebnis,
+                                  wertung=bool(ergebnis == teilaufgabe.loesung),
+                                  time_required=time_required)
+
+
+def get_previous_solution(heft, direct_to_task_name, user_id, context):
+    templates_dir = os.path.join(os.path.dirname(__file__), 'templates', 'mathesdigi_app')
+    template_path = os.path.join(templates_dir, heft, f'{direct_to_task_name}.html')
+    with open(template_path) as fp:
+        soup = BeautifulSoup(fp, 'html.parser')
+        field_names = [field.get('name') for field in soup.find_all(['input', 'textarea'])
+                       if re.match(r"^\d\w\d\w$", str(field.get('name')))]
+    for field_name in field_names:
+        teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=field_name)
+        if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
+            previous_solution = Ergebnisse.objects.get(user_id=user_id, teilaufgabe=teilaufgabe)
+            context.update({field_name: previous_solution.eingabe})
+    return context
 
 
 def create_or_update_wertung_apply(row, heft_nr, start_month, start_day, end_month, end_day):
@@ -128,7 +154,11 @@ def str2bool(string: str):
     return string.lower() in ("yes", "true", "t", "1")
 
 
-def delete_old_users():
-    one_week_ago = timezone.now() - timezone.timedelta(days=7)
-    old_users = User.objects.filter(pub_date__lt=one_week_ago)
-    old_users.delete()
+def preprocess_request_post_data(post_data: dict):
+    # Convert lists in dict to single values
+    post_data = {key: value[0] for key, value in post_data.items()}
+    # Delete unnecessary information in post_data
+    del post_data["csrfmiddlewaretoken"]
+    teilaufgaben_ids = [key for key in post_data.keys() if re.match(r"^\d\w\d\w$", key)]
+    this_task_process = post_data.get("this_task_process")
+    return post_data, teilaufgaben_ids, this_task_process

@@ -6,20 +6,17 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .evaluation import Evaluate
-from .models import User, Aufgaben, Teilaufgaben, Ergebnisse
+from .models import User
 
 from mathesdigi_app import helpers
-
-start_time = None
-end_time = None
 
 
 def startpage(request):
     if "heft" in request.session.keys():
         del request.session["heft"]
     # zum testen immer gleiche user_id nutzen
-    if User.objects.filter(id=14095).exists():
-        request.session["user"] = 14095
+    # if User.objects.filter(id=91281).exists():
+    #     request.session["user"] = 91281
     elif "user" in request.session.keys():
         del request.session["user"]
     if request.method == 'POST':
@@ -57,32 +54,25 @@ def registration(request):
 
 
 def main_view(request, heft, direct_to_task_name):
-    global start_time, end_time
+    user_id = request.session.get("user")
+    context = {}
     if request.method == 'POST':
-        end_time = time.time()
-        post_data = dict(request.POST).copy()
-        # Convert lists in dict to single values
-        post_data = {key: value[0] for key, value in post_data.items()}
-        # Delete unnecessary information in post_data
-        del post_data["csrfmiddlewaretoken"]
-        teilaufgaben_ids = [key for key in post_data.keys() if re.match(r"^\d\w\d\w$", key)]
-        this_task_process = post_data["this_task_process"]
-        user_id = request.session["user"]
-        if this_task_process == "example":
-            pass
-        elif this_task_process == "task_normal":
-            time_required = round(end_time - start_time)
+        time_required = round(time.time() - request.session.get("start_time"))
+        post_data, teilaufgaben_ids, this_task_process = helpers.preprocess_request_post_data(dict(request.POST).copy())
+        if this_task_process == "task_normal":
             for teilaufgaben_id in teilaufgaben_ids:
-                ergebnis = post_data[teilaufgaben_id]
-                helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
+                ergebnis = post_data.get(teilaufgaben_id)
+                helpers.save_answer(teilaufgaben_id, ergebnis, user_id, time_required)
         elif this_task_process == "drag_and_drop":
             # preprocess ...
             # helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
             pass
+    if "task" in direct_to_task_name:
+        context = helpers.get_previous_solution(heft, direct_to_task_name, user_id, context)
     if direct_to_task_name == "evaluation":
         return redirect(evaluation)
-    start_time = time.time()
-    return render(request, f'mathesdigi_app/{heft}/{direct_to_task_name}.html')
+    request.session["start_time"] = time.time()
+    return render(request, f'mathesdigi_app/{heft}/{direct_to_task_name}.html', context=context)
 
 
 def evaluation(request):

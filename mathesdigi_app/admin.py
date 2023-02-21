@@ -23,7 +23,7 @@ class AufgabenAdmin(admin.ModelAdmin):
 
 @admin.register(Ergebnisse)
 class ErgebnisseAdmin(admin.ModelAdmin):
-    list_display = ('user', 'teilaufgaben_name', 'eingabe', 'wertung')
+    list_display = ('user', 'teilaufgaben_name', 'eingabe', 'wertung', 'time_required')
 
     def teilaufgaben_name(self, obj):
         return obj.teilaufgabe.teilaufgaben_id
