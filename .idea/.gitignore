@@ -8,7 +8,7 @@
 /dataSources.local.xml
 
 # Exclude everything
-/mathesdigi/
+mathesdigi/
 
 
 # Exclude unnecessary files
