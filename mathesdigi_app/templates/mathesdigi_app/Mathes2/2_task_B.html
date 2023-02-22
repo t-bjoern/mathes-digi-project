@@ -20,12 +20,12 @@
     <!-- Schriftart -->
     <link href="https://fonts.cdnfonts.com/css/ink-free" rel="stylesheet">
     <!-- Title -->
-    <title>Mathes 2 - 2.A</title>
+    <title>Mathes 2 - 2.B</title>
 </head>
 
 <body>
-{# TODO onsubmit="return checkForm_dragAndDrop()"#}
-<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='2_task_B' %}" method="post">
+{# TODO onsubmit="return checkForm_dragAndDrop()" #}
+<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='3_example' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="this_task_process" value="task_normal">
     <div class="raster">
@@ -40,7 +40,7 @@
 
         <!-- return to page before -->
         <button class="backwards" type="button"
-                onclick="window.location.href = '{% url "main_view" heft="Mathes2" direct_to_task_name="2_example" %}'">
+                onclick="window.location.href = '{% url "main_view" heft="Mathes2" direct_to_task_name="2_task_A" %}'">
             <img src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
         </button>
 
@@ -48,17 +48,17 @@
         <div class="task" style="background-image: url('{% static "mathesdigi_app/img/Background_clean.svg" %}');">
             <div class="task_text">Ordne. Beginne mit der kleinsten Zahl.</div>
             <div class="task_pics" id="task_pics">
-                <img id="55" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_55.svg' %}" draggable="true"
+                <img id="72" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_72.svg' %}" draggable="true"
                      alt="">
-                <img id="8" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_8.svg' %}" draggable="true"
+                <img id="34" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_34.svg' %}" draggable="true"
                      alt="">
-                <img id="98" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_98.svg' %}" draggable="true"
+                <img id="67" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_67.svg' %}" draggable="true"
                      alt="">
-                <img id="12" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_12.svg' %}" draggable="true"
+                <img id="71" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_71.svg' %}" draggable="true"
                      alt="">
-                <img id="45" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_45.svg' %}" draggable="true"
+                <img id="14" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_14.svg' %}" draggable="true"
                      alt="">
-                <img id="88" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_88.svg' %}" draggable="true"
+                <img id="0" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_0.svg' %}" draggable="true"
                      alt="">
             </div>
             <div class="answers">
@@ -71,7 +71,7 @@
             </div>
 
             <!-- Only for sending the data in our form. -->
-            <input id="answers_collected" hidden name="2A2A">
+            <input id="answers_collected" hidden name="2A2B">
         </div>
 
         <!-- Number/Input buttons -->
