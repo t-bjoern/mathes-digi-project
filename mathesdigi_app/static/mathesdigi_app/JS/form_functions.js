@@ -119,12 +119,12 @@ function checkForm_example_dragAndDrop(solution) {
                 task_pics.append(imgElement);
                 task_pics.querySelector('.img_placeholder').remove();
 
-                let kids_answer = single_answer.innerText = imgID;
-                if (kids_answer === solution[counter]) {
-                    single_answer.style.color = 'green';
-                } else {
-                    single_answer.style.color = 'red';
-                }
+                single_answer.innerText = imgID;
+            }
+            if (single_answer.innerText === solution[counter]) {
+                single_answer.style.color = 'green';
+            } else {
+                single_answer.style.color = 'red';
             }
             counter += 1;
         });
@@ -137,7 +137,7 @@ function checkForm_example_dragAndDrop(solution) {
                 single_answer.style.color = 'green';
                 counter += 1;
             })
-        }, red_to_green_duration);
+        }, red_to_green_duration * 2);
 
         // submit form
         setTimeout(function () {
@@ -147,4 +147,3 @@ function checkForm_example_dragAndDrop(solution) {
     return false;
 }
 
-_scree
