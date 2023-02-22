@@ -1,5 +1,8 @@
 let last_clicked_input_div_id;
 
+//TODO remove keyboard-function (Führt zu Seiteneffekten beim drag and drop. In manchen Fällen wird das Bild dann anstelle
+// von geschoben kopiert.
+
 /** This code listens for the DOM to load. After that it adds EventListener for clicking, keyboard-inputs
  * and drag & drop. */
 document.addEventListener("DOMContentLoaded", function () {
@@ -8,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
         answer.addEventListener("click", function () {
             last_clicked_input_div_id = this.id;
         });
-        answer.addEventListener("keydown", keyboard_add_number_div);
+        // answer.addEventListener("keydown", keyboard_add_number_div);
     });
 
     for (const draggable of document.querySelectorAll("[draggable=true]")) {
@@ -22,22 +25,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-/** Action for keyboard-input
- * Only keys 0-9 and Backspace are allowed. Only three digits can be written.
- * If an image had been set before to the target, the image is set back to the task images.
- */
-function keyboard_add_number_div(event) {
-    if ((event.key >= "0" && event.key <= "9" && this.innerText.length < 3) || event.key === "Backspace") {
-        if (this.innerHTML.includes('<img')) {
-            const imgElement = this.querySelector('img');
-            const task_pics = document.getElementById('task_pics');
-            task_pics.appendChild(imgElement);
-            task_pics.querySelector('.img_placeholder').remove();
-        }
-    } else {
-        event.preventDefault();
-    }
-}
+// /** Action for keyboard-input
+//  * Only keys 0-9 and Backspace are allowed. Only three digits can be written.
+//  * If an image had been set before to the target, the image is set back to the task images.
+//  */
+// function keyboard_add_number_div(event) {
+//     if ((event.key >= "0" && event.key <= "9" && this.innerText.length < 3) || event.key === "Backspace") {
+//         if (this.innerHTML.includes('<img')) {
+//             const imgElement = this.querySelector('img');
+//             const task_pics = document.getElementById('task_pics');
+//             task_pics.appendChild(imgElement);
+//             task_pics.querySelector('.img_placeholder').remove();
+//         }
+//     } else {
+//         event.preventDefault();
+//     }
+// }
 
 /** Action for number-buttons
  * The value of the clicked button is appended to the text of the last clicked target. Only three digits are allowed.
@@ -79,6 +82,8 @@ function dragStart(event) {
     // set ids for child and parent
     event.dataTransfer.setData("moved_element_id", child_id);
     event.dataTransfer.setData('parent_id', parent_element.id);
+
+    event.dataTransfer.dropEffect = "move";
 }
 
 /** First it gets all information which were set it dragStart.
@@ -105,6 +110,8 @@ function drop(event) {
     if (parent_id === 'task_pics') {
         if (target.id === 'task_pics') {
             return
+        } else if (target.hasChildNodes()) {
+            parent_element.appendChild(target.firstChild);
         } else {
             // create placeholder Element
             task_pics.appendChild(createPlaceholderElement(moved_element_id));
