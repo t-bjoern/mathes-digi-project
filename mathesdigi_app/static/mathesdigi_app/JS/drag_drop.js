@@ -1,7 +1,7 @@
 let last_clicked_input_div_id;
 
-/**This code listens for the DOM to load and then sets a reference for each input-field.
- It then sets an event listener on that input field for the "keydown" and "click" event.*/
+/** This code listens for the DOM to load. After that it adds EventListener for clicking, keyboard-inputs
+ * and drag & drop. */
 document.addEventListener("DOMContentLoaded", function () {
     const multi_answers = document.querySelectorAll('.answer');
     multi_answers.forEach(function (answer) {
@@ -20,31 +20,28 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /** Action for keyboard-input
- The function attached to the event listener checks the pressed key. If the target already contains an
- image the image gets reset to the other task_pics. If it is a number between 0 and 9 and
- the length of the input value is less than 3, it allows the key press to go through. If the pressed key is
- the backspace key, it also allows the key press to go through. In all other cases, it prevents the default
- behavior of the key press.*/
+ * Only keys 0-9 and Backspace are allowed. Only three digits can be written.
+ * If an image had been set before to the target, the image is set back to the task images.
+ */
 function keyboard_add_number_div(event) {
-    if (this.innerHTML.includes('<img')) {
-        let imgElement = this.querySelector('img');
-        const task_pics = document.getElementById('task_pics');
-        task_pics.appendChild(imgElement);
-    }
-    if (event.key >= "0" && event.key <= "9" && this.innerText.length < 3) {
-    } else if (event.key === "Backspace") {
+    if ((event.key >= "0" && event.key <= "9" && this.innerText.length < 3) || event.key === "Backspace") {
+        if (this.innerHTML.includes('<img')) {
+            const imgElement = this.querySelector('img');
+            const task_pics = document.getElementById('task_pics');
+            task_pics.appendChild(imgElement);
+            task_pics.querySelector('.img_placeholder').remove();
+        }
     } else {
         event.preventDefault();
     }
 }
 
 /** Action for number-buttons
- The information about the clicked buttons is stored in stat.
- If no input-field has been clicked, the default-input field "kids_answer_1" will be selected.
- Otherwise, if the user already clicked an input-field the id of that field will be stored in lastclickedinputfield_id.
- If the target already contains an image the image gets reset to the other task_pics.
- If the clicked button id is "p_delete" the input-field is going to be set to ''. If the value of the input-field has
- fewer than 3 digits, the function appends the value of the clicked button (stat) to the target (input-field).*/
+ * The value of the clicked button is appended to the text of the last clicked target. Only three digits are allowed.
+ * If no input-field had been clicked it will automatically start writing in the first field.
+ * If the user already dragged an image into the target the image ist set back to the task-images.
+ *
+ * The information about the clicked buttons is stored in stat.*/
 function buttons_add_number(stat) {
     if (typeof last_clicked_input_div_id === "undefined") {
         last_clicked_input_div_id = "kids_answer_1"
@@ -52,9 +49,10 @@ function buttons_add_number(stat) {
 
     let target = document.getElementById(last_clicked_input_div_id);
     if (target.innerHTML.includes('<img')) {
-        let imgElement = target.querySelector('img');
+        const imgElement = target.querySelector('img');
         const task_pics = document.getElementById('task_pics');
         task_pics.appendChild(imgElement);
+        task_pics.querySelector('.img_placeholder').remove();
     }
 
     if (stat.id === 'p_delete') {
@@ -66,6 +64,9 @@ function buttons_add_number(stat) {
     }
 }
 
+/** dragStart is set for each element that is draggable. It saves the id of the element that is moved and its parent-id.
+ * This data is used for actions in drop()
+ * */
 function dragStart(event) {
     // Setzen der Daten, die beim Ablegen des Elements verwendet werden
     const child_id = event.target.id;
@@ -74,13 +75,14 @@ function dragStart(event) {
 
     // set ids for child and parent
     event.dataTransfer.setData("moved_element_id", child_id);
-    event.dataTransfer.setData('parent_id', parent_element.id)
-
-    // TODO entfernen
-    // Setzen des Effekts, der beim Ablegen des Elements angezeigt wird
-    // event.dataTransfer.dropEffect = "move";
+    event.dataTransfer.setData('parent_id', parent_element.id);
 }
 
+/** First it gets all information which were set it dragStart.
+ * Already set text in the target is removed. Images are dropped in the target and an empty field
+ * gets appended to the task-pics (so that the distance between two elements does not change). Two
+ * already moved elements will be changed.
+ */
 function drop(event) {
     event.preventDefault();
 
@@ -89,43 +91,36 @@ function drop(event) {
     const unsorted_task_pics = document.getElementById('task_pics');
     const moved_element_id = event.dataTransfer.getData("moved_element_id");
     const parent_id = event.dataTransfer.getData('parent_id');
+    const parent_element = document.getElementById(parent_id);
+
 
     // reset text-inputs
     if (target.innerText !== '') {
         target.innerText = ''
     }
 
-    if (parent_id === 'task_pics') {
-        //remove already dropped element
-        if (target.hasChildNodes()) {
-            unsorted_task_pics.appendChild(target.firstChild);
-
-        } else {
-            // create placeholder Element
-            unsorted_task_pics.appendChild(createPlaceholderElement(moved_element_id));
-        }
+    // remove or switch child-Element from target
+    if (target.hasChildNodes()) {
+        parent_element.appendChild(target.firstChild);
+    } else if (parent_id === 'task_pics') {
+        // create placeholder Element
+        unsorted_task_pics.appendChild(createPlaceholderElement(moved_element_id));
     }
-
-    // TODO Ablauf wenn zwei liegende Bücher aufeinander geschoben werden (Aktuell ist es so, dass dann beide Bücher in einem Feld landen.)
     // add child to target
     target.appendChild(document.getElementById(moved_element_id));
-
-    // TODO entfernen
-    // Entfernen Sie das verschobene Element
-    // unsorted_task_pics.removeChild(verschobenesElement);0
-    // let parentNode = document.getElementById(moved_element_id).parentNode
-    // alert(parentNode.id)
-    // element.addEventListener("dragstart", dragStart);
 }
 
+/** It creates an HTML-Element, with the same dimensions as the moved-element
+ *
+ * @param moved_element_id
+ * @returns {HTMLDivElement}
+ */
 function createPlaceholderElement(moved_element_id) {
     const verschobenesElement = document.getElementById(moved_element_id);
     const neuesElement = document.createElement("div");
     neuesElement.style.width = verschobenesElement.offsetWidth + "px";
     neuesElement.style.height = verschobenesElement.offsetHeight + "px";
-    // TODO entfernen
-    // neuesElement.classList.add('empty');
-    // TODO color = transparent
-    neuesElement.style.backgroundColor = "red";
+    neuesElement.classList.add('img_placeholder');
+    neuesElement.style.backgroundColor = "transparent";
     return neuesElement
 }
