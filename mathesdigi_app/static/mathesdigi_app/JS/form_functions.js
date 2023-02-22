@@ -9,9 +9,6 @@ function checkForm_singleAnswer() {
             kids_answer_input_field.classList.remove("input_field_shake");
         }, 800);
         return false;
-    } else {
-        kids_answer_input_field.classList.remove("input_field_shake");
-        return true;
     }
 }
 
