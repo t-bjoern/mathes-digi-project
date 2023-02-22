@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+  }
+</style>
+<body>
+<h1>Ergebnisübersicht für {{ name }} vom {{ pub_date }} </h1>
+<h1>Normorientierte Leistungseinschätzung</h1>
+<table>
+  <tr>
+    <th>Rohwert</th>
+    <th>Prozentrang</th>
+    <th>T-Wert</th>
+    <th>Leistungseinschätzung</th>
+  </tr>
+  <tr>
+    <td>{{ rohwert }}</td>
+    <td>{{ prozentrang }}</td>
+    <td>{{ t_wert }}</td>
+    <td>{{ leistungseinschätzung }}</td>
+  </tr>
+</table>
+<p>{{ negativ_prozentrang }} Prozent  der gleichaltrigen Schülerinnen und Schüler haben ein besseres Ergebnis erzielt.
+    Für den Vergleich wurden ... Testergebnisse anderer Kinder zum gleichen Testzeitpunkt herangezogen.
+    Vor diesem Hintergrund ist die Leistung als {{ leistungseinschätzung }} zu bewerten.
+    Eine differenzierte Analyse des Lernstandes des Kindes und darauf angepasste Fördermaßnahmen werden empfohlen. </p>
+</body>
+</html>

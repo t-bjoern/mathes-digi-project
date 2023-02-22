@@ -2,21 +2,25 @@ import re
 import time
 
 from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template import Context
+from django.template.loader import get_template
 from django.urls import reverse
 
 from .evaluation import Evaluate
 from .models import User
 
 from mathesdigi_app import helpers
+from xhtml2pdf import pisa
 
 
 def startpage(request):
     if "heft" in request.session.keys():
         del request.session["heft"]
     # zum testen immer gleiche user_id nutzen
-    if User.objects.filter(id=76713).exists():
-        request.session["user"] = 76713
+    if User.objects.filter(id=53696).exists():
+        request.session["user"] = 53696
     elif "user" in request.session.keys():
         del request.session["user"]
     if request.method == 'POST':
@@ -85,12 +89,30 @@ def evaluation(request):
 def evaluation_send(request):
     user_id = request.session["user"]
     user = User.objects.get(id=user_id)
-    context = {"mail": user.mail}
-    Evaluate(user)
-    # eva_obj.send_evaluation()
-    # eva_obj.save_results_for_statistic()
-    # save values for statistics
-    return render(request, 'mathesdigi_app/end.html', context)
+    eval_obj = Evaluate(user)
+
+    # Template laden und mit Daten füllen
+    template = get_template('evaluation_template.html')
+    context = {'name': str(user.user_name),
+               'pub_date': f"{user.pub_date.day}.{user.pub_date.month}.{user.pub_date.year}",
+               'rohwert': str(eval_obj.summed_points),
+               'prozentrang': str(eval_obj.prozentrang),
+               'negativ_prozentrang': str(100-eval_obj.prozentrang),
+               't_wert': str(eval_obj.t_wert),
+               'leistungseinschätzung': str(eval_obj.performance_evaluation)}
+    html = template.render(context)
+
+    # Create a PDF response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Auswertung.pdf"'
+
+    # Generate the PDF from the HTML content
+    pisa_status = pisa.CreatePDF(html, dest=response)
+
+    # Check if the PDF was generated successfully
+    if pisa_status.err:
+        return HttpResponse('Error generating PDF file')
+    return response
 
 
 def evaluation_change_user_data(request):
