@@ -30,7 +30,8 @@
 
       <button type="button" id="editButton" onclick="enableEditing()">Daten ändern</button>
       <input type="submit" id="submitButton" value="Daten übermitteln" style="display:none;">
-      <a href="{% url 'evaluation_send' %}"><button type="button">Auswertung erstellen</button></a>
+      <a href="{% url 'evaluation_show' %}"><button type="button">Auswertung anzeigen</button></a>
+      <a href="{% url 'evaluation_download' %}"><button type="button">Auswertung herunterladen</button></a>
     </form>
   </body>
 </html>

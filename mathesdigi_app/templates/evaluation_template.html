@@ -10,9 +10,91 @@
     padding: 8px;
     text-align: left;
   }
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>
 <body>
+{% load static %}
+<div class="center">
+    <img src="{% static 'mathesdigi_app/img/Logo.svg' %}">
+</div>
 <h1>Ergebnisübersicht für {{ name }} vom {{ pub_date }} </h1>
+<table style="table-layout: auto;">
+  <thead>
+    <tr>
+      <th>Aufgabe</th>
+      <th>Beschreibung</th>
+      <th>Punkte</th>
+      <th>von</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Zählen</td>
+      <td>XXX</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Ordnen</td>
+      <td>XXX</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Verdoppeln</td>
+      <td>XXX</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Halbieren</td>
+      <td>XXX</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Addieren</td>
+      <td>XXX</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Subtrahieren</td>
+      <td>XXX</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Grundvorstellungen Multiplikation</td>
+      <td>XXX</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Multiplizieren</td>
+      <td>XXX</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>Dividieren</td>
+      <td>XXX</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>Gesamt</td>
+      <td>-------------------</td>
+      <td></td>
+      <td>56</td>
+    </tr>
+  </tbody>
+</table>
+
 <h1>Normorientierte Leistungseinschätzung</h1>
 <table>
   <tr>

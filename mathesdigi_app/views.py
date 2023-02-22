@@ -86,11 +86,10 @@ def evaluation(request):
     return render(request, 'mathesdigi_app/evaluation.html', context)
 
 
-def evaluation_send(request):
+def evaluation_show(request):
     user_id = request.session["user"]
     user = User.objects.get(id=user_id)
     eval_obj = Evaluate(user)
-
     # Template laden und mit Daten füllen
     template = get_template('evaluation_template.html')
     context = {'name': str(user.user_name),
@@ -101,14 +100,28 @@ def evaluation_send(request):
                't_wert': str(eval_obj.t_wert),
                'leistungseinschätzung': str(eval_obj.performance_evaluation)}
     html = template.render(context)
+    # Return the rendered HTML page
+    return HttpResponse(html)
 
-    # Create a PDF response
+
+def evaluation_download(request):
+    user_id = request.session["user"]
+    user = User.objects.get(id=user_id)
+    eval_obj = Evaluate(user)
+    # Template laden und mit Daten füllen
+    template = get_template('evaluation_template.html')
+    context = {'name': str(user.user_name),
+               'pub_date': f"{user.pub_date.day}.{user.pub_date.month}.{user.pub_date.year}",
+               'rohwert': str(eval_obj.summed_points),
+               'prozentrang': str(eval_obj.prozentrang),
+               'negativ_prozentrang': str(100-eval_obj.prozentrang),
+               't_wert': str(eval_obj.t_wert),
+               'leistungseinschätzung': str(eval_obj.performance_evaluation)}
+    html = template.render(context)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="Auswertung.pdf"'
-
     # Generate the PDF from the HTML content
     pisa_status = pisa.CreatePDF(html, dest=response)
-
     # Check if the PDF was generated successfully
     if pisa_status.err:
         return HttpResponse('Error generating PDF file')
