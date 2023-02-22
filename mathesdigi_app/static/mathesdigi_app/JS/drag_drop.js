@@ -25,6 +25,28 @@ function keyboard_add_number_div(event) {
     }
 }
 
+/** Action for number-buttons
+ The information about the clicked buttons is stored in stat.
+ If no input-field has been clicked, the default-input field "kids_answer_1" will be selected.
+ Otherwise, if the user already clicked an input-field the id of that field will be stored in lastclickedinputfield_id.
+ If the clicked button id is "p_delete" the input-field is going to be set to ''. If the value of the input-field has
+ fewer than 3 digits, the function appends the value of the clicked button (stat) to the target (input-field).*/
+function buttons_add_number(stat) {
+    if (typeof last_clicked_input_div_id === "undefined") {
+        last_clicked_input_div_id = "kids_answer_1"
+    }
+
+    let target = document.getElementById(last_clicked_input_div_id);
+
+    if (stat.id === 'p_delete') {
+        target.value = ''
+    } else {
+        if (target.innerText.length < 3) {
+            target.innerText = target.innerText + stat.value;
+        }
+    }
+}
+
 //
 // let lastclickedid;
 //
