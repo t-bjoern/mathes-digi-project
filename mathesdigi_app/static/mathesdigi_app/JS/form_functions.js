@@ -40,3 +40,40 @@ function checkForm_example_singleAnswer(solution) {
     }
     return false;
 }
+
+/** Handling for Drag and Drop tasks.
+ * Adds shaking to empty answer-fields and sets the given answers into a hidden
+ * input-field for submitting.
+ * Divs are needed for allowing images and text in the same field. */
+function checkForm_dragAndDrop() {
+    const answer_divs = document.querySelectorAll('.answer');
+    let kids_answer_list = [];
+    let shake_list = [];
+    answer_divs.forEach(function (single_answer) {
+        if (single_answer.innerHTML.trim() === '') {
+            shake_list.push(single_answer.id);
+        } else if (single_answer.innerHTML.includes('<img')) {
+            let imgElement = single_answer.querySelector('img');
+            let imgId = imgElement.getAttribute('id');
+            kids_answer_list.push(imgId);
+        } else {
+            kids_answer_list.push(single_answer.textContent.trim());
+        }
+    });
+
+    if (shake_list.length !== 0) {
+        shake_list.forEach(function (shake_element) {
+            let shake_field = document.getElementById(shake_element);
+            shake_field.classList.add("input_field_shake");
+            setTimeout(function () {
+                shake_field.classList.remove("input_field_shake");
+            }, 800);
+            return false;
+        });
+    } else {
+        const input_field = document.getElementById('answers_collected');
+        input_field.value = kids_answer_list;
+        return true;
+    }
+    return false;
+}
