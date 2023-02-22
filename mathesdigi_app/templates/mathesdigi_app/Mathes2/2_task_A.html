@@ -24,8 +24,8 @@
 </head>
 
 <body>
-{# TODO onsubmit="return checkForm_dragAndDrop()"#}
-<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='2_task_B' %}" method="post">
+<form onsubmit="return checkForm_dragAndDrop()"
+      action="{% url 'main_view' heft='Mathes2' direct_to_task_name='2_task_B' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="this_task_process" value="task_normal">
     <div class="raster">
