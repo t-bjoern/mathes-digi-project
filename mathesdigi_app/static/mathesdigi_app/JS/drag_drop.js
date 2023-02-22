@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     for (const dropzone of document.querySelectorAll(".dropzone")) {
         dropzone.addEventListener("drop", drop);
+        dropzone.addEventListener("dragover", function (event) {
+            event.preventDefault()
+        });
     }
 });
 
@@ -88,7 +91,7 @@ function drop(event) {
 
     // get ids (child and parent), target and task_pics-element
     const target = event.currentTarget;
-    const unsorted_task_pics = document.getElementById('task_pics');
+    const task_pics = document.getElementById('task_pics');
     const moved_element_id = event.dataTransfer.getData("moved_element_id");
     const parent_id = event.dataTransfer.getData('parent_id');
     const parent_element = document.getElementById(parent_id);
@@ -99,14 +102,21 @@ function drop(event) {
         target.innerText = ''
     }
 
-    // remove or switch child-Element from target
-    if (target.hasChildNodes()) {
-        parent_element.appendChild(target.firstChild);
-    } else if (parent_id === 'task_pics') {
-        // create placeholder Element
-        unsorted_task_pics.appendChild(createPlaceholderElement(moved_element_id));
+    if (parent_id === 'task_pics') {
+        if (target.id === 'task_pics') {
+            return
+        } else {
+            // create placeholder Element
+            task_pics.appendChild(createPlaceholderElement(moved_element_id));
+        }
+    } else {
+        if (target.id === 'task_pics') {
+            task_pics.querySelector('.img_placeholder').remove();
+        } else if (target.hasChildNodes()) {
+            parent_element.appendChild(target.firstChild);
+        }
     }
-    // add child to target
+
     target.appendChild(document.getElementById(moved_element_id));
 }
 

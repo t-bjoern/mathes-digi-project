@@ -47,7 +47,7 @@
         <!-- Task and Answer Field -->
         <div class="task" style="background-image: url('{% static "mathesdigi_app/img/Background_clean.svg" %}');">
             <div class="task_text">Ordne. Beginne mit der kleinsten Zahl.</div>
-            <div class="task_pics" id="task_pics">
+            <div class="task_pics dropzone" id="task_pics">
                 <img id="55" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_55.svg' %}" draggable="true"
                      alt="">
                 <img id="8" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_8.svg' %}" draggable="true"
@@ -62,13 +62,14 @@
                      alt="">
             </div>
             <div class="answers">
-                <div id="kids_answer_1" class="answer dropzone" contenteditable="true" inputmode="none"></div>
+                <div id="kids_answer_1" class="answer dropzone" inputmode="none"></div>
                 <div id="kids_answer_2" class="answer dropzone" contenteditable="true" inputmode="none"></div>
                 <div id="kids_answer_3" class="answer dropzone" contenteditable="true" inputmode="none"></div>
                 <div id="kids_answer_4" class="answer dropzone" contenteditable="true" inputmode="none"></div>
                 <div id="kids_answer_5" class="answer dropzone" contenteditable="true" inputmode="none"></div>
                 <div id="kids_answer_6" class="answer dropzone" contenteditable="true" inputmode="none"></div>
             </div>
+
 
             <!-- Only for sending the data in our form. -->
             <input id="answers_collected" hidden name="2A2A">
