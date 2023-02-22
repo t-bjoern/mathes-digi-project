@@ -53,10 +53,8 @@ class Wertung(models.Model):
     rohwert = models.IntegerField()
     t_wert = models.CharField(max_length=4)
     prozentrang = models.IntegerField()
-    start_month = models.IntegerField()
-    start_day = models.IntegerField()
-    end_month = models.IntegerField()
-    end_day = models.IntegerField()
+    start_time = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(null=True)
 
     class Meta:
         verbose_name = "Wertung"

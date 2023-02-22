@@ -15,8 +15,8 @@ def startpage(request):
     if "heft" in request.session.keys():
         del request.session["heft"]
     # zum testen immer gleiche user_id nutzen
-    # if User.objects.filter(id=91281).exists():
-    #     request.session["user"] = 91281
+    if User.objects.filter(id=76713).exists():
+        request.session["user"] = 76713
     elif "user" in request.session.keys():
         del request.session["user"]
     if request.method == 'POST':
