@@ -24,8 +24,7 @@
 </head>
 
 <body class="example_page">
-{# TODO checkForm_dragAndDrop --> checkForm_example_dragAndDrop#}
-<form onsubmit="return checkForm_dragAndDrop()"
+<form id='example_form' onsubmit="return checkForm_example_dragAndDrop(['4','9','18','23','35','50'])"
       action="{% url 'main_view' heft='Mathes2' direct_to_task_name='2_task_A' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="this_task_process" value="task_normal">

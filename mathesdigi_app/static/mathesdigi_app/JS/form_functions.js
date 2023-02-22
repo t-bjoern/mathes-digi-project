@@ -77,3 +77,57 @@ function checkForm_dragAndDrop() {
     }
     return false;
 }
+
+function checkForm_example_dragAndDrop(solution) {
+    const answer_divs = document.querySelectorAll('.answer');
+    const task_pics = document.getElementById('task_pics');
+    let shake_list = [];
+    answer_divs.forEach(function (single_answer) {
+        if (single_answer.innerHTML.trim() === '') {
+            shake_list.push(single_answer.id);
+        }
+    });
+
+    if (shake_list.length !== 0) {
+        shake_list.forEach(function (shake_element) {
+            let shake_field = document.getElementById(shake_element);
+            shake_field.classList.add("input_field_shake");
+            setTimeout(function () {
+                shake_field.classList.remove("input_field_shake");
+            }, 800);
+        });
+    } else {
+        let counter = 0;
+        answer_divs.forEach(function (single_answer) {
+            if (single_answer.innerHTML.includes('<img')) {
+                let imgElement = single_answer.querySelector('img');
+                let imgID = imgElement.getAttribute('id');
+
+                task_pics.append(imgElement);
+                task_pics.querySelector('.img_placeholder').remove();
+
+                let kids_answer = single_answer.innerText = imgID;
+                if (kids_answer === solution[counter]) {
+                    single_answer.style.color = 'green';
+                } else {
+                    single_answer.style.color = 'red';
+                }
+            }
+            counter += 1;
+        });
+        setTimeout(function () {
+            let counter = 0;
+            answer_divs.forEach(function (single_answer) {
+                single_answer.innerHTML = solution[counter];
+                single_answer.style.color = 'green';
+                counter += 1;
+            })
+        }, 1000);
+
+        setTimeout(function () {
+            document.getElementById("example_form").submit();
+        }, 3000);
+
+    }
+    return false;
+}
