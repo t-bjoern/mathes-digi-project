@@ -57,9 +57,7 @@
     background: white;
     font-size: var(--answer-font-size);
     font-family: var(--standard-font-family);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
     caret-color: transparent;
 }
 
