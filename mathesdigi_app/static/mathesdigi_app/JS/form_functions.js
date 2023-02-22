@@ -54,8 +54,8 @@ function checkForm_dragAndDrop() {
             shake_list.push(single_answer.id);
         } else if (single_answer.innerHTML.includes('<img')) {
             let imgElement = single_answer.querySelector('img');
-            let imgId = imgElement.getAttribute('id');
-            kids_answer_list.push(imgId);
+            let imgID = imgElement.getAttribute('id');
+            kids_answer_list.push(imgID);
         } else {
             kids_answer_list.push(single_answer.textContent.trim());
         }
