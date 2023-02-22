@@ -62,7 +62,7 @@ function buttons_add_number(stat) {
     }
 
     if (stat.id === 'p_delete') {
-        target.value = ''
+        target.innerText = ''
     } else {
         if (target.innerText.length < 3) {
             target.innerText = target.innerText + stat.value;

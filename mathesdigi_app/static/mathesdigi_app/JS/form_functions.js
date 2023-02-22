@@ -1,3 +1,9 @@
+const shake_duration = 800;
+const red_to_green_duration = 1000;
+const correct_forward = 2000;
+const wrong_forward = 3000;
+
+
 /** This function checks if the input field is empty and if so, adds a CSS class input_field_shake
  *  to create a shaking effect to draw the user's attention.
  *  It then removes this class after a delay of 1 second using setTimeout().*/
@@ -7,12 +13,14 @@ function checkForm_singleAnswer() {
         kids_answer_input_field.classList.add("input_field_shake");
         setTimeout(function () {
             kids_answer_input_field.classList.remove("input_field_shake");
-        }, 800);
+        }, shake_duration);
         return false;
+    } else {
+        return true;
     }
 }
 
-/** This function is called for each example. The input-field shakes if it is empty. Otherwise, it changes the
+/** This function is called for each single_example. The input-field shakes if it is empty. Otherwise, it changes the
  * color of the answer to red or green. For wrong answers it shows the correct solution.
  * The page redirects (submits the form) after a few seconds.
  * */
@@ -22,37 +30,45 @@ function checkForm_example_singleAnswer(solution) {
         kids_answer_input_field.classList.add("input_field_shake");
         setTimeout(function () {
             kids_answer_input_field.classList.remove("input_field_shake");
-        }, 800);
+        }, shake_duration);
     } else if (kids_answer_input_field.value === solution) {
         kids_answer_input_field.style.color = 'green';
         setTimeout(function () {
             document.getElementById("example_form").submit();
-        }, 2000);
+        }, correct_forward);
     } else {
         kids_answer_input_field.style.color = 'red';
         setTimeout(function () {
             kids_answer_input_field.value = solution;
             kids_answer_input_field.style.color = 'green';
-        }, 1000);
+        }, red_to_green_duration);
         setTimeout(function () {
             document.getElementById("example_form").submit();
-        }, 3000);
+        }, wrong_forward);
     }
     return false;
 }
 
 /** Handling for Drag and Drop tasks.
- * Adds shaking to empty answer-fields and sets the given answers into a hidden
- * input-field for submitting.
+ * Adds shaking to empty answer-fields and sets the given answers into a hidden input-field for submitting.
  * Divs are needed for allowing images and text in the same field. */
 function checkForm_dragAndDrop() {
     const answer_divs = document.querySelectorAll('.answer');
     let kids_answer_list = [];
-    let shake_list = [];
+    let shake = false;
+
+
     answer_divs.forEach(function (single_answer) {
+        // shake-Handling
         if (single_answer.innerHTML.trim() === '') {
-            shake_list.push(single_answer.id);
-        } else if (single_answer.innerHTML.includes('<img')) {
+            single_answer.classList.add("input_field_shake");
+            setTimeout(function () {
+                single_answer.classList.remove("input_field_shake");
+            }, shake_duration);
+            shake = true;
+        }
+        // collecting kids_answers
+        else if (single_answer.innerHTML.includes('<img')) {
             let imgElement = single_answer.querySelector('img');
             let imgID = imgElement.getAttribute('id');
             kids_answer_list.push(imgID);
@@ -61,16 +77,8 @@ function checkForm_dragAndDrop() {
         }
     });
 
-    if (shake_list.length !== 0) {
-        shake_list.forEach(function (shake_element) {
-            let shake_field = document.getElementById(shake_element);
-            shake_field.classList.add("input_field_shake");
-            setTimeout(function () {
-                shake_field.classList.remove("input_field_shake");
-            }, 800);
-            return false;
-        });
-    } else {
+    // set collected_answers in hidden input-field and submit form
+    if (!shake) {
         const input_field = document.getElementById('answers_collected');
         input_field.value = kids_answer_list;
         return true;
@@ -78,25 +86,30 @@ function checkForm_dragAndDrop() {
     return false;
 }
 
+/** Handling for examples with Drag and Drop.
+ * Adds shaking to empty answer-fields.
+ * If all answers where given, the images are exchanged against text in red or green and on the same time tey are reset
+ * to the task-pics field. After that the wrong answer are getting corrected and set to green. Then the page is redirected
+ * to the next task (submit the form)
+ * Divs are needed for allowing images and text in the same field. */
 function checkForm_example_dragAndDrop(solution) {
     const answer_divs = document.querySelectorAll('.answer');
     const task_pics = document.getElementById('task_pics');
-    let shake_list = [];
+    let shake = false;
+
+    // shake-Handling
     answer_divs.forEach(function (single_answer) {
         if (single_answer.innerHTML.trim() === '') {
-            shake_list.push(single_answer.id);
+            single_answer.classList.add("input_field_shake");
+            setTimeout(function () {
+                single_answer.classList.remove("input_field_shake");
+            }, shake_duration);
+            shake = true;
         }
     });
 
-    if (shake_list.length !== 0) {
-        shake_list.forEach(function (shake_element) {
-            let shake_field = document.getElementById(shake_element);
-            shake_field.classList.add("input_field_shake");
-            setTimeout(function () {
-                shake_field.classList.remove("input_field_shake");
-            }, 800);
-        });
-    } else {
+    // reset images and set red and green text
+    if (!shake) {
         let counter = 0;
         answer_divs.forEach(function (single_answer) {
             if (single_answer.innerHTML.includes('<img')) {
@@ -115,6 +128,8 @@ function checkForm_example_dragAndDrop(solution) {
             }
             counter += 1;
         });
+
+        // correct red answers to green answers
         setTimeout(function () {
             let counter = 0;
             answer_divs.forEach(function (single_answer) {
@@ -122,12 +137,14 @@ function checkForm_example_dragAndDrop(solution) {
                 single_answer.style.color = 'green';
                 counter += 1;
             })
-        }, 1000);
+        }, red_to_green_duration);
 
+        // submit form
         setTimeout(function () {
             document.getElementById("example_form").submit();
-        }, 3000);
-
+        }, wrong_forward);
     }
     return false;
 }
+
+_scree
