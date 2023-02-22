@@ -7,10 +7,11 @@
 /dataSources/
 /dataSources.local.xml
 
-mathesdigi
-manage.py
-pytest.ini
-requirements.txt
-db.sqlite3
-.pytest_cache
-venv
+# Exclude everything
+/mathesdigi/
+
+
+# Exclude unnecessary files
+*.pyc
+__pycache__/
+*.sqlite3
