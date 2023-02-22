@@ -26,7 +26,6 @@
 <body>
 <form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='2_example' %}" method="post">
     {% csrf_token %}
-    <input type="hidden" name="task_id" value="212">
     <input type="hidden" name="this_task_process" value="task_normal">
     <div class="raster">
         <!-- logo (header) -->
