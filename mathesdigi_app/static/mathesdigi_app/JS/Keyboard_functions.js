@@ -3,20 +3,14 @@ let last_clicked_input_field_id
 /**This code listens for the DOM to load and then sets a reference for each input-field.
  It then sets an event listener on that input field for the "keydown" and "click" event.*/
 document.addEventListener("DOMContentLoaded", function () {
-    let inputFields = document.querySelectorAll("input[type='text']");
-
+    const inputFields = document.querySelectorAll("input[type='text']");
     inputFields.forEach(function (inputField) {
-        inputField.addEventListener("click", getID);
+        inputField.addEventListener("click", function () {
+            last_clicked_input_field_id = this.id;
+        });
         inputField.addEventListener("keydown", keyboard_add_number);
     });
 });
-
-/**
- * The function attached to the event listener sets the id of the clicked input field to lastclickedinputfield_id.
- */
-function getID() {
-    last_clicked_input_field_id = this.id;
-}
 
 /** Action for keyboard-input
  The function attached to the event listener checks the pressed key, if it is a number between 0 and 9 and
