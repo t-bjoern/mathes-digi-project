@@ -47,7 +47,7 @@ def registration(request):
             request.session["user"] = user.id
             user.heft = request.session["heft"]
             user.save()
-            return redirect(reverse('main_view', args=(request.session["heft"], "1_example")))
+            return redirect(check_user_data)
         except ValidationError as e:
             context = post_data
             context["error_message"] = str(e)
@@ -79,11 +79,31 @@ def main_view(request, heft, direct_to_task_name):
     return render(request, f'mathesdigi_app/{heft}/{direct_to_task_name}.html', context=context)
 
 
-def evaluation(request):
+def check_user_data(request):
     user_id = request.session["user"]
     user = User.objects.get(id=user_id)
-    context = {"user_name": user.user_name, "mail": user.mail}
-    return render(request, 'mathesdigi_app/evaluation.html', context)
+    context = {"user_name": user.user_name, "mail": user.mail, "heft": user.heft}
+    return render(request, 'mathesdigi_app/check_user_data.html', context)
+
+
+def change_user_data(request):
+    user_id = request.session["user"]
+    user = User.objects.get(id=user_id)
+    if request.method == "POST":
+        post_data = dict(request.POST).copy()
+        post_data = {key: value[0] for key, value in post_data.items()}
+        user_name = post_data["user_name"]
+        mail = post_data["mail"]
+
+        user.user_name = user_name
+        user.mail = mail
+        user.save()
+    context = {"user_name": user.user_name, "mail": user.mail, "heft": user.heft}
+    return render(request, 'mathesdigi_app/check_user_data.html', context)
+
+
+def evaluation(request):
+    return render(request, 'mathesdigi_app/evaluation.html')
 
 
 def evaluation_show(request):
@@ -128,17 +148,4 @@ def evaluation_download(request):
     return response
 
 
-def evaluation_change_user_data(request):
-    user_id = request.session["user"]
-    user = User.objects.get(id=user_id)
-    if request.method == "POST":
-        post_data = dict(request.POST).copy()
-        post_data = {key: value[0] for key, value in post_data.items()}
-        user_name = post_data["user_name"]
-        mail = post_data["mail"]
 
-        user.user_name = user_name
-        user.mail = mail
-        user.save()
-    context = {"user_name": user.user_name, "mail": user.mail}
-    return render(request, 'mathesdigi_app/evaluation.html', context)

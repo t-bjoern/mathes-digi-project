@@ -22,7 +22,7 @@ input[type="email"] {
 
 button[type="button"],
 input[type="submit"]{
-  width: 150px;
+  width: 200px;
   height: 40px;
   margin-right: 20px;
   margin-top: 20px;
@@ -32,6 +32,7 @@ input[type="submit"]{
   border-radius: 5px;
   cursor: pointer;
 }
+
 
 button[type="button"]:hover,
 input[type="submit"]:hover {

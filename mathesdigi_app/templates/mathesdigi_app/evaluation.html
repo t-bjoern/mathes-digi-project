@@ -4,34 +4,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'mathesdigi_app/css/evaluation.css' %}?version={{ timestamp }}">
-    <script>
-      function enableEditing() {
-          document.getElementById("user_name").disabled = false;
-          document.getElementById("mail").disabled = false;
-          document.getElementById("editButton").style.display = "none";
-          document.getElementById("submitButton").style.display = "inline";
-      }
-    </script>
+          <!-- Schriftart -->
+    <link href="https://fonts.cdnfonts.com/css/ink-free" rel="stylesheet">
     <title>Auswertung</title>
   </head>
   <body>
     <div style="text-align: center;">
         <h1>Auswertung</h1>
-        <p>Bitte überprüfe nochmal die User Daten bevor die Auswertung erstellt wird.</p>
-        <p>Die Auswertung wird dann an die unten stehende E-Mail versendet.</p>
-    </div>
-    <form action="{% url 'evaluation_change_user_data' %}" method="post">
-        {% csrf_token %}
-      <label for="user_name">Benutzername:</label>
-      <input type="text" id="user_name" name="user_name" value="{{ user_name }}" disabled>
-
-      <label for="mail">E-Mail:</label>
-      <input type="email" id="mail" name="mail" value="{{ mail }}" disabled>
-
-      <button type="button" id="editButton" onclick="enableEditing()">Daten ändern</button>
-      <input type="submit" id="submitButton" value="Daten übermitteln" style="display:none;">
       <a href="{% url 'evaluation_show' %}"><button type="button">Auswertung anzeigen</button></a>
       <a href="{% url 'evaluation_download' %}"><button type="button">Auswertung herunterladen</button></a>
-    </form>
+    </div>
   </body>
 </html>
