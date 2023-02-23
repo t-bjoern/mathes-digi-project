@@ -1,12 +1,10 @@
-import re
 import time
+from io import BytesIO
 
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.template import Context
 from django.template.loader import get_template
-from django.urls import reverse
 
 from .evaluation import Evaluate
 from .models import User
@@ -19,8 +17,8 @@ def startpage(request):
     if "heft" in request.session.keys():
         del request.session["heft"]
     # zum testen immer gleiche user_id nutzen
-    if User.objects.filter(id=53696).exists():
-        request.session["user"] = 53696
+    # if User.objects.filter(id=53696).exists():
+    #     request.session["user"] = 53696
     elif "user" in request.session.keys():
         del request.session["user"]
     if request.method == 'POST':
@@ -32,6 +30,7 @@ def startpage(request):
 def registration(request):
     context = {}
     if request.method == 'POST':
+        print(request.POST)
         # TODO Currently check for old users at each new registration later as a cronjob or celery task every day.
         helpers.delete_old_users()
 
@@ -58,6 +57,8 @@ def registration(request):
 
 
 def main_view(request, heft, direct_to_task_name):
+    if not request.session.get("user"):
+        return redirect(startpage)
     user_id = request.session.get("user")
     context = {}
     if request.method == 'POST':
@@ -106,37 +107,25 @@ def evaluation(request):
     return render(request, 'mathesdigi_app/evaluation.html')
 
 
-def evaluation_show(request):
+def get_template_and_evaluate(request):
     user_id = request.session["user"]
     user = User.objects.get(id=user_id)
-    eval_obj = Evaluate(user)
     # Template laden und mit Daten füllen
     template = get_template('evaluation_template.html')
-    context = {'name': str(user.user_name),
-               'pub_date': f"{user.pub_date.day}.{user.pub_date.month}.{user.pub_date.year}",
-               'rohwert': str(eval_obj.summed_points),
-               'prozentrang': str(eval_obj.prozentrang),
-               'negativ_prozentrang': str(100-eval_obj.prozentrang),
-               't_wert': str(eval_obj.t_wert),
-               'leistungseinschätzung': str(eval_obj.performance_evaluation)}
+    eval_obj = Evaluate(user)
+    context = eval_obj.create_evaluation_context()
+    return template, context
+
+
+def evaluation_show(request):
+    template, context = get_template_and_evaluate(request)
     html = template.render(context)
-    # Return the rendered HTML page
     return HttpResponse(html)
 
 
 def evaluation_download(request):
-    user_id = request.session["user"]
-    user = User.objects.get(id=user_id)
-    eval_obj = Evaluate(user)
-    # Template laden und mit Daten füllen
-    template = get_template('evaluation_template.html')
-    context = {'name': str(user.user_name),
-               'pub_date': f"{user.pub_date.day}.{user.pub_date.month}.{user.pub_date.year}",
-               'rohwert': str(eval_obj.summed_points),
-               'prozentrang': str(eval_obj.prozentrang),
-               'negativ_prozentrang': str(100-eval_obj.prozentrang),
-               't_wert': str(eval_obj.t_wert),
-               'leistungseinschätzung': str(eval_obj.performance_evaluation)}
+    template, context = get_template_and_evaluate(request)
+    context.update({'width': 150})
     html = template.render(context)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="Auswertung.pdf"'
@@ -146,6 +135,3 @@ def evaluation_download(request):
     if pisa_status.err:
         return HttpResponse('Error generating PDF file')
     return response
-
-
-

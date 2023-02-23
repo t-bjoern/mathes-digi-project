@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html>
-<style>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<style type="text/css">
   table {
     border-collapse: collapse;
-    width: 100%;
+    table-layout: auto;
   }
   th, td {
+  {% if width %} width: {{ width }}px; {% endif %}
     border: 1px solid black;
-    padding: 8px;
+    padding: 5px;
     text-align: left;
   }
   .center {
@@ -19,81 +20,35 @@
 <body>
 {% load static %}
 <div class="center">
-    <img src="{% static 'mathesdigi_app/img/Logo.svg' %}">
+    <img src="http://www.mathes-digi.de/static/mathesdigi_app/img/Logo.svg" alt="">
 </div>
 <h1>Ergebnisübersicht für {{ name }} vom {{ pub_date }} </h1>
-<table style="table-layout: auto;">
-  <thead>
-    <tr>
-      <th>Aufgabe</th>
-      <th>Beschreibung</th>
-      <th>Punkte</th>
-      <th>von</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>Zählen</td>
-      <td>XXX</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Ordnen</td>
-      <td>XXX</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>Verdoppeln</td>
-      <td>XXX</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>Halbieren</td>
-      <td>XXX</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>Addieren</td>
-      <td>XXX</td>
-      <td>12</td>
-    </tr>
-    <tr>
-      <td>6</td>
-      <td>Subtrahieren</td>
-      <td>XXX</td>
-      <td>12</td>
-    </tr>
-    <tr>
-      <td>7</td>
-      <td>Grundvorstellungen Multiplikation</td>
-      <td>XXX</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>8</td>
-      <td>Multiplizieren</td>
-      <td>XXX</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td>9</td>
-      <td>Dividieren</td>
-      <td>XXX</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td>Gesamt</td>
-      <td>-------------------</td>
-      <td></td>
-      <td>56</td>
-    </tr>
-  </tbody>
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>Aufgabe</th>
+                <th>Beschreibung</th>
+                <th>Punkte</th>
+                <th>von</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for aufgabe in aufgaben %}
+            <tr>
+                <td>{{ aufgabe.aufgaben_nr }}</td>
+                <td>{{ aufgabe.bezeichnung }}</td>
+                <td>{{ aufgabe.punkte }}</td>
+                <td>{{ aufgabe.punktzahl }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>Gesamt</td>
+                <td>--------------</td>
+                <td>{{ rohwert }}</td>
+                <td>{{ summed_task_points }}</td>
+            </tr>
+        </tbody>
+    </table>
 
 <h1>Normorientierte Leistungseinschätzung</h1>
 <table>
@@ -107,12 +62,38 @@
     <td>{{ rohwert }}</td>
     <td>{{ prozentrang }}</td>
     <td>{{ t_wert }}</td>
-    <td>{{ leistungseinschätzung }}</td>
+    <td style="background-color: {{ performance_color }}">{{ leistungseinschätzung }}</td>
   </tr>
 </table>
 <p>{{ negativ_prozentrang }} Prozent  der gleichaltrigen Schülerinnen und Schüler haben ein besseres Ergebnis erzielt.
     Für den Vergleich wurden ... Testergebnisse anderer Kinder zum gleichen Testzeitpunkt herangezogen.
     Vor diesem Hintergrund ist die Leistung als {{ leistungseinschätzung }} zu bewerten.
     Eine differenzierte Analyse des Lernstandes des Kindes und darauf angepasste Fördermaßnahmen werden empfohlen. </p>
+
+<h1>Ergebnisse im Detail</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Inhaltsbereich</th>
+                <th>Aufgabe</th>
+                <th>Eingetragener Wert</th>
+                <th>Bewertung</th>
+                <th>Bearbeitungszeit in Sekunden</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for teilaufgabe in teilaufgaben %}
+            <tr {% if teilaufgabe.bewertung == 'Richtig' %} style="background-color: lightgreen"
+                                                            {% else %} style="background-color: lightsalmon"
+            {% endif %} >
+                <td>{{ teilaufgabe.beschreibung }}</td>
+                <td>{{ teilaufgabe.aufgabe }}</td>
+                <td>{{ teilaufgabe.wert }}</td>
+                <td>{{ teilaufgabe.bewertung }}</td>
+                <td>{{ teilaufgabe.bearbeitungszeit }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
