@@ -1,3 +1,6 @@
+// ATTENTION
+// functions in here ARE used even if it is not shown here. They are called in each template in a String.
+
 const shake_duration = 800;
 const red_to_green_duration = 1000;
 const correct_forward = 2000;
@@ -142,7 +145,7 @@ function checkForm_example_dragAndDrop(solution) {
         // submit form
         setTimeout(function () {
             document.getElementById("example_form").submit();
-        }, wrong_forward);
+        }, wrong_forward * 2);
     }
     return false;
 }

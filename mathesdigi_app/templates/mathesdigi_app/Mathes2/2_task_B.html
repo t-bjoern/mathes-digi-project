@@ -1,94 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- encoding und rauszoomen auf mobiler Ansicht-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
-    <!-- Statics -->
-    {% load static %}
-    <!-- CSS -->
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'mathesdigi_app/css/00_general.css' %}?version={{ timestamp }}">
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'mathesdigi_app/css/exercise.css' %}?version={{ timestamp }}">
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'mathesdigi_app/css/drag_and_drop_answer.css' %}?version={{ timestamp }}">
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'mathesdigi_app/css/number_keyboard.css' %}?version={{ timestamp }}">
-    <!-- JS -->
-    <script src="{% static 'mathesdigi_app/JS/form_functions.js' %}?version{{ timestamp }}"></script>
-    <script src="{% static 'mathesdigi_app/JS/drag_drop.js' %}?version{{ timestamp }}"></script>
-    <!-- Schriftart -->
-    <link href="https://fonts.cdnfonts.com/css/ink-free" rel="stylesheet">
-    <!-- Title -->
-    <title>Mathes 2 - 2.B</title>
-</head>
+{% extends 'mathesdigi_app/base_task_template.html' %}
+{% load static %}
 
-<body>
-{# TODO onsubmit="return checkForm_dragAndDrop()" #}
-<form action="{% url 'main_view' heft='Mathes2' direct_to_task_name='3_example' %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="this_task_process" value="task_normal">
-    <div class="raster">
-        <!-- logo (header) -->
-        <div class="logo"><img src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
+{% block static_files %}
+    {% with 'drag_and_drop' as page %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
 
-        <!-- Sidebar -->
-        <img class="monkey" src="{% static 'mathesdigi_app/img/Affe_2.svg' %}" alt="">
-        <!-- move to next page and submit answers-->
-        <button class="forward-button" type="submit">
-            <img src="{% static 'mathesdigi_app/img/weiter.svg' %}" alt="Submit"></button>
+{% block title %}Mathes 2 - 2.A{% endblock %}
 
-        <!-- return to page before -->
-        <button class="backwards" type="button"
-                onclick="window.location.href = '{% url "main_view" heft="Mathes2" direct_to_task_name="2_task_A" %}'">
-            <img src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt="">
-        </button>
+<!-- Form -->
+{% block form %}
+    {% url 'main_view' heft='Mathes2' direct_to_task_name='3_example' as forward_url %}
+    {% url 'main_view' heft='Mathes2' direct_to_task_name='2_task_A' as backward_url %}
+    {#    {% with "return checkForm_dragAndDrop()" as onsubmit %}#}
+    {% with 'task_normal' as this_task_process %}
+        {{ block.super }}
+    {% endwith %}
+    {#    {% endwith %}#}
+{% endblock %}
 
-        <!-- Task and Answer Field -->
-        <div class="task" style="background-image: url('{% static "mathesdigi_app/img/Background_clean.svg" %}');">
-            <div class="task_text">Ordne. Beginne mit der kleinsten Zahl.</div>
-            <div class="task_pics dropzone" id="task_pics">
-                <img id="72" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_72.svg' %}" draggable="true"
-                     alt="">
-                <img id="34" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_34.svg' %}" draggable="true"
-                     alt="">
-                <img id="67" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_67.svg' %}" draggable="true"
-                     alt="">
-                <img id="71" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_71.svg' %}" draggable="true"
-                     alt="">
-                <img id="14" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_14.svg' %}" draggable="true"
-                     alt="">
-                <img id="0" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_0.svg' %}" draggable="true"
-                     alt="">
-            </div>
-            <div class="answers">
-                <div id="kids_answer_1" class="answer dropzone" inputmode="none"></div>
-                <div id="kids_answer_2" class="answer dropzone" inputmode="none"></div>
-                <div id="kids_answer_3" class="answer dropzone" inputmode="none"></div>
-                <div id="kids_answer_4" class="answer dropzone" inputmode="none"></div>
-                <div id="kids_answer_5" class="answer dropzone" inputmode="none"></div>
-                <div id="kids_answer_6" class="answer dropzone" inputmode="none"></div>
-            </div>
+<!-- Images -->
+{% block images %}
+    {% with '2' as monkey_number %}
+        {% with '0' as progressbar %}
+            {{ block.super }}
+        {% endwith %}
+    {% endwith %}
+{% endblock %}
 
-            <!-- Only for sending the data in our form. -->
-            <input id="answers_collected" hidden name="2A2B">
+<!-- Task -->
+{% block task %}
+    <div class="task" style="background-image: url('{% static "mathesdigi_app/img/Background_clean.svg" %}');">
+        <div class="task_text">Ordne. Beginne mit der kleinsten Zahl.</div>
+        <div class="task_pics dropzone" id="task_pics">
+            <img id="72" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_72.svg' %}" draggable="true"
+                 alt="">
+            <img id="34" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_34.svg' %}" draggable="true"
+                 alt="">
+            <img id="67" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_67.svg' %}" draggable="true"
+                 alt="">
+            <img id="71" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_71.svg' %}" draggable="true"
+                 alt="">
+            <img id="14" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_14.svg' %}" draggable="true"
+                 alt="">
+            <img id="0" class="multi_pic" src="{% static 'mathesdigi_app/img/2_task/2_0.svg' %}" draggable="true"
+                 alt="">
         </div>
-
-        <!-- Number/Input buttons -->
-        <div class="input_buttons">
-            {% include "mathesdigi_app/number_buttons.html" %}
+        <div class="answers">
+            <div id="kids_answer_1" class="answer dropzone" inputmode="none"></div>
+            <div id="kids_answer_2" class="answer dropzone" inputmode="none"></div>
+            <div id="kids_answer_3" class="answer dropzone" inputmode="none"></div>
+            <div id="kids_answer_4" class="answer dropzone" inputmode="none"></div>
+            <div id="kids_answer_5" class="answer dropzone" inputmode="none"></div>
+            <div id="kids_answer_6" class="answer dropzone" inputmode="none"></div>
         </div>
-
-        <!-- progressbar -->
-        <div class="progressbar"
-             style="background-image: url('{% static "mathesdigi_app/img/progressbar/Fortschrittsbalken_0.svg" %}');"></div>
-
-        <!-- full-screen -->
-        <div class="full-screen"><img src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""
-                                      onclick="openFullscreen()"></div>
     </div>
-    <div id="turn_device"></div>
-</form>
-</body>
-</html>
+{% endblock %}
 
+<!-- Input Buttons -->
+{% block input-buttons %}{% include 'mathesdigi_app/number_buttons.html' %}{% endblock %}
