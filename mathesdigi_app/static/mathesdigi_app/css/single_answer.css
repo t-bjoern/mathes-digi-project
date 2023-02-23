@@ -44,7 +44,6 @@
     width: 8vw;
     margin-top: 21.5vh;
     margin-left: 0.5vw;
-    color: black;
 }
 
 .input_field_small_left {
@@ -53,7 +52,6 @@
     width: 8vw;
     margin-top: 21.5vh;
     margin-left: 22.2vw;
-    color: black;
 }
 
 
@@ -91,20 +89,3 @@
         font-size: 3.0vh;
     }
 }
-
-/* Shake (used for empty Input-Fields)*/
-.input_field_shake {
-    animation: shake 0.8s;
-}
-
-@keyframes shake {
-    10%, 30%, 50%, 70%, 90% {
-        transform: translate3d(-10px, 0, 0);
-    }
-    20%, 40%, 60%, 80% {
-        transform: translate3d(10px, 0, 0);
-    }
-}
-
-
-

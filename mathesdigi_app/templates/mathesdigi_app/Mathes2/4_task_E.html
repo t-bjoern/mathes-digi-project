@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css"
           href="{% static 'mathesdigi_app/css/number_keyboard.css' %}?version={{ timestamp }}">
     <!-- JS -->
-    <script src="{% static 'mathesdigi_app/JS/Keyboard_functions.js' %}?version={{ timestamp }}"></script>
+    <script src="{% static 'mathesdigi_app/JS/single_answer.js' %}?version={{ timestamp }}"></script>
     <script src="{% static 'mathesdigi_app/JS/form_functions.js' %}?version{{ timestamp }}"></script>
     <!-- Schriftart -->
     <link href="https://fonts.cdnfonts.com/css/ink-free" rel="stylesheet">
@@ -47,7 +47,7 @@
         <div class="task"
              style="background-image: url('{% static "mathesdigi_app/img/Background_eimer_3.svg" %}');">
             <div class="task_text">Halbiere.</div>
-            <input class="input_field_small_right" disabled value="84">
+            <input class="input_field_small_right" readonly value="84">
             <input class="input_field_small_left" type="text" inputmode="None" id="kids_answer_1" name="2A4E"
                    placeholder="Antwort" value="{% if 2A4E %}{{ 2A4E }}{% endif %}">
         </div>
