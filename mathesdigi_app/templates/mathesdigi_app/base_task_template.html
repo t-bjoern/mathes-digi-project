@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- encoding und rauszoomen auf mobiler Ansicht-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+
+    <!-- Statics -->
+    {% load static %}
+    {% block static_files %}
+        <!-- CSS -->
+        <link rel="stylesheet" type="text/css"
+              href="{% static 'mathesdigi_app/css/00_general.css' %}?version={{ timestamp }}">
+        <link rel="stylesheet" type="text/css"
+              href="{% static 'mathesdigi_app/css/exercise.css' %}?version={{ timestamp }}">
+        <!-- JS -->
+        <script src="{% static 'mathesdigi_app/JS/form_functions.js' %}?version{{ timestamp }}"></script>
+
+        {% if page == 'single_answer' %}
+            <link rel="stylesheet" type="text/css"
+                  href="{% static 'mathesdigi_app/css/single_answer.css' %}?version={{ timestamp }}">
+            <!-- JS -->
+            <script src="{% static 'mathesdigi_app/JS/single_answer.js' %}?version={{ timestamp }}"></script>
+        {% elif page == 'drag_and_drop' %}
+            <link rel="stylesheet" type="text/css"
+                  href="{% static 'mathesdigi_app/css/drag_and_drop_answer.css' %}?version={{ timestamp }}">
+            <script src="{% static 'mathesdigi_app/JS/drag_drop.js' %}?version{{ timestamp }}"></script>
+            <link rel="stylesheet" type="text/css"
+                  href="{% static 'mathesdigi_app/css/drag_and_drop_answer.css' %}?version={{ timestamp }}">
+        {% endif %}
+    {% endblock %}
+
+    <!-- Schriftart -->
+    <link href="https://fonts.cdnfonts.com/css/ink-free" rel="stylesheet">
+    <!-- Title -->
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+{% block form %}
+    <body class="{% if this_task_process == 'example' %} example_page {% endif %}">
+    <!-- Form -->
+    <form {% if this_task_process == 'example' %}id="example_form"{% endif %}
+          onsubmit="{{ onsubmit }}" action="{{ forward_url }}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="this_task_process" value="{{ this_task_process }}">
+        <div class="raster">
+            <button class="forward-button" type="submit">
+                <img src="{% static 'mathesdigi_app/img/weiter.svg' %}" alt="Submit"></button>
+
+            <button class="backwards " type="button" onclick="window.location.href = '{{ backward_url }}'">
+                <img src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt=""></button>
+
+            {% block task %}{% endblock %}
+            {% block input-buttons %}{% endblock %}
+
+            <!-- Images -->
+            {% block images %}
+                <div class="logo"><img src="{% static 'mathesdigi_app/img/Logo.svg' %}" alt=""></div>
+                <img class="monkey" src="{% static 'mathesdigi_app/img/Affe_'|add:monkey_number|add:'.svg' %}"
+                     alt="">
+                <img class="progressbar"
+                     src="{% static 'mathesdigi_app/img/progressbar/Fortschrittsbalken_'|add:progressbar|add:'.svg' %}"
+                     alt="">
+                <div class="full-screen"><img src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""></div>
+                </div>
+            {% endblock %}
+    </form>
+    <div id="turn_device"></div>
+    </body>
+{% endblock %}
+</html>
