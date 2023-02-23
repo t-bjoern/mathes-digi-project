@@ -28,7 +28,6 @@ def create_random_user_id():
 def validate_registration_create_or_update_user(registration_data: dict, user_id=None):
     user_name = registration_data["user_name"].strip()
     mail = registration_data["mail"].strip()
-
     # Validierung der Eingabedaten
     if user_name == "" or mail == "":
         raise ValidationError("Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!")
