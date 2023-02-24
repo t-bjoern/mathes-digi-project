@@ -46,6 +46,7 @@ def test_registration_view(user_name, user_mail, count_user, error):
 
 
 class TestMainView:
+    @pytest.mark.django_db
     def test_main_view_redirects_to_startpage_if_no_user_in_session(self, client):
         response = client.get(reverse('main_view', kwargs={'heft': 'Mathes2', 'direct_to_task_name': '1_task_A'}))
         assert response.status_code == 302
