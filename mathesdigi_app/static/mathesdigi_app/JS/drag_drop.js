@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     multi_answers.forEach(function (answer) {
         answer.addEventListener("click", function () {
             last_clicked_input_div_id = this.id;
+            this.style.border = "2px solid blue";
         });
         // answer.addEventListener("keydown", keyboard_add_number_div);
     });
