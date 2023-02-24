@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block static_files %}
-    {% with 'single_answer' as page %}
+    {% with 'task_normal' as page %}
         {{ block.super }}
     {% endwith %}
 {% endblock %}
@@ -34,13 +34,11 @@
     <div class="task"
          style="background-image: url('{% static "mathesdigi_app/img/Background_with_single_answerfield.svg" %}');">
         <div class="task_text">Wie viele Radiergummis sind es?</div>
-        <div class="task_pic"><img src="{% static 'mathesdigi_app/img/2_task/1_1.svg' %}"
-                                   alt="">
+        <div class="task_pic"><img
+                src="{% static 'mathesdigi_app/img/Mathes_2/task_1/part_A.svg' %}"
+                alt="">
         </div>
         <input class="input_field_large" type="text" inputmode="None" id="kids_answer_1" name="2A1A"
                placeholder="Antwort" value="{% if 2A1A %}{{ 2A1A }}{% endif %}">
     </div>
 {% endblock %}
-
-<!-- Input Buttons -->
-{% block input-buttons %}{% include 'mathesdigi_app/number_buttons.html' %}{% endblock %}

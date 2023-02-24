@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block static_files %}
-    {% with 'single_answer' as page %}
+    {% with 'task_normal' as page %}
         {{ block.super }}
     {% endwith %}
 {% endblock %}
@@ -32,12 +32,9 @@
 <!-- Task -->
 {% block task %}
     <div class="task"
-         style="background-image: url('{% static "mathesdigi_app/img/Background_eimer_1.svg" %}');">
+         style="background-image: url('{% static "mathesdigi_app/img/Mathes_2/task_3_4/Background_1.svg" %}');">
         <div class="task_text">Halbiere.</div>
         <input class="input_field_small_right" readonly value="4">
         <input class="input_field_small_left" type="text" inputmode="None" id="kids_answer_1" placeholder="Antwort">
     </div>
 {% endblock %}
-
-<!-- Input Buttons -->
-{% block input-buttons %}{% include 'mathesdigi_app/number_buttons.html' %}{% endblock %}

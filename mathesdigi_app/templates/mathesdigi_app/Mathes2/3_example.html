@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block static_files %}
-    {% with 'single_answer' as page %}
+    {% with 'task_normal' as page %}
         {{ block.super }}
     {% endwith %}
 {% endblock %}
@@ -32,12 +32,9 @@
 <!-- Task -->
 {% block task %}
     <div class="task"
-         style="background-image: url('{% static "mathesdigi_app/img/Background_eimer_2.svg" %}');">
+         style="background-image: url('{% static "mathesdigi_app/img/Mathes_2/task_3_4/Background_2.svg" %}');">
         <div class="task_text">Verdopple.</div>
         <input class="input_field_small_left" readonly value="5">
         <input class="input_field_small_right" type="text" inputmode="None" id="kids_answer_1" placeholder="Antwort">
     </div>
 {% endblock %}
-
-<!-- Input Buttons -->
-{% block input-buttons %}{% include 'mathesdigi_app/number_buttons.html' %}{% endblock %}
