@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import random
 import re
@@ -27,7 +28,6 @@ def create_random_user_id():
 def validate_registration_create_or_update_user(registration_data: dict, user_id=None):
     user_name = registration_data["user_name"].strip()
     mail = registration_data["mail"].strip()
-
     # Validierung der Eingabedaten
     if user_name == "" or mail == "":
         raise ValidationError("Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!")
@@ -87,18 +87,16 @@ def get_previous_solution(heft, direct_to_task_name, user_id, context):
 def create_or_update_wertung_apply(row, heft_nr, start_month, start_day, end_month, end_day):
     updated = 0
     created = 0
+    start_time = timezone.make_aware(datetime(day=start_day, month=start_month, year=2000))
+    end_time = timezone.make_aware(datetime(day=end_day, month=end_month, year=2000))
     wertung_exists = Wertung.objects.filter(heft_nr=heft_nr,
-                                            start_month=start_month,
-                                            start_day=start_day,
-                                            end_month=end_month,
-                                            end_day=end_day,
+                                            start_time=start_time,
+                                            end_time=end_time,
                                             rohwert=row["Rohwert"]).exists()
     if wertung_exists:
         wertung = Wertung.objects.get(heft_nr=heft_nr,
-                                      start_month=start_month,
-                                      start_day=start_day,
-                                      end_month=end_month,
-                                      end_day=end_day,
+                                      start_time=start_time,
+                                      end_time=end_time,
                                       rohwert=row["Rohwert"])
         wertung.t_wert = row["T-Wert"]
         wertung.prozentrang = row["Prozentrang"]
@@ -106,10 +104,8 @@ def create_or_update_wertung_apply(row, heft_nr, start_month, start_day, end_mon
         updated += 1
     else:
         Wertung.objects.create(heft_nr=heft_nr,
-                               start_month=start_month,
-                               start_day=start_day,
-                               end_month=end_month,
-                               end_day=end_day,
+                               start_time=start_time,
+                               end_time=end_time,
                                rohwert=row["Rohwert"],
                                t_wert=row["T-Wert"],
                                prozentrang=row["Prozentrang"])

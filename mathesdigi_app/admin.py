@@ -50,8 +50,8 @@ class WertungAdmin(admin.ModelAdmin):
     list_display = ('heft_nr', 'zeitraum', 'rohwert', 't_wert', 'prozentrang')
 
     def zeitraum(self, obj):
-        return f"{obj.start_day}.{self.month_names[obj.start_month - 1]} - " \
-               f"{obj.end_day}.{self.month_names[obj.end_month - 1]} "
+        return f"{obj.start_time.day}.{self.month_names[obj.start_time.month - 1]} - " \
+               f"{obj.end_time.day}.{self.month_names[obj.end_time.month - 1]}"
 
     change_list_template = "entities/changelist.html"
 
@@ -73,15 +73,16 @@ class WertungAdmin(admin.ModelAdmin):
                     start_day, start_month = request.POST["start_time"].split(".")
                     end_day, end_month = request.POST["end_time"].split(".")
                     result = df.apply(helpers.create_or_update_wertung_apply,
-                                      args=(request.POST["heft_nr"], start_month, start_day, end_month, end_day), axis=1)
+                                      args=(request.POST["heft_nr"], int(start_month), int(start_day),
+                                            int(end_month), int(end_day)), axis=1)
                     updated = result.apply(lambda x: x[0]).sum()
                     created = result.apply(lambda x: x[1]).sum()
                     self.message_user(request, f"Your file has been imported. Updated: {updated} Created: {created}")
                     return redirect("..")
                 except ValueError:
                     error_message.append("Datum ist im falschen Format. Bitte im Format dd.mm angeben. Beispiel: 01.02")
-                except Exception as e:
-                    error_message.append(str(e))
+                # except Exception as e:
+                #     error_message.append(str(e))
             if error_message:
                 form = CsvImportForm(initial={'heft_nr': request.POST.get('heft_nr'),
                                               'start_time': request.POST.get('start_time'),

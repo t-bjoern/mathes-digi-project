@@ -29,7 +29,7 @@ class Aufgaben(models.Model):
 class Teilaufgaben(models.Model):
     teilaufgaben_id = models.CharField(max_length=5)
     loesung = models.CharField(max_length=20)
-    aufgabe = models.ForeignKey(Aufgaben, on_delete=models.CASCADE)
+    aufgabe = models.ForeignKey(Aufgaben, on_delete=models.CASCADE, related_name='teilaufgaben')
 
     class Meta:
         verbose_name = "Teilaufgabe"
@@ -41,7 +41,7 @@ class Ergebnisse(models.Model):
     wertung = models.BooleanField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     time_required = models.IntegerField(null=True, default=None)
-    teilaufgabe = models.ForeignKey(Teilaufgaben, on_delete=models.CASCADE)
+    teilaufgabe = models.ForeignKey(Teilaufgaben, on_delete=models.CASCADE, related_name='ergebnisse')
 
     class Meta:
         verbose_name = "Ergebnis"
@@ -53,10 +53,8 @@ class Wertung(models.Model):
     rohwert = models.IntegerField()
     t_wert = models.CharField(max_length=4)
     prozentrang = models.IntegerField()
-    start_month = models.IntegerField()
-    start_day = models.IntegerField()
-    end_month = models.IntegerField()
-    end_day = models.IntegerField()
+    start_time = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(null=True)
 
     class Meta:
         verbose_name = "Wertung"

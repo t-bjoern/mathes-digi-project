@@ -1,22 +1,24 @@
-import re
 import time
+from io import BytesIO
 
 from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.template.loader import get_template
 
 from .evaluation import Evaluate
 from .models import User
 
 from mathesdigi_app import helpers
+from xhtml2pdf import pisa
 
 
 def startpage(request):
     if "heft" in request.session.keys():
         del request.session["heft"]
     # zum testen immer gleiche user_id nutzen
-    # if User.objects.filter(id=91281).exists():
-    #     request.session["user"] = 91281
+    # if User.objects.filter(id=53696).exists():
+    #     request.session["user"] = 53696
     elif "user" in request.session.keys():
         del request.session["user"]
     if request.method == 'POST':
@@ -28,6 +30,7 @@ def startpage(request):
 def registration(request):
     context = {}
     if request.method == 'POST':
+        print(request.POST)
         # TODO Currently check for old users at each new registration later as a cronjob or celery task every day.
         helpers.delete_old_users()
 
@@ -43,7 +46,7 @@ def registration(request):
             request.session["user"] = user.id
             user.heft = request.session["heft"]
             user.save()
-            return redirect(reverse('main_view', args=(request.session["heft"], "1_example")))
+            return redirect(check_user_data)
         except ValidationError as e:
             context = post_data
             context["error_message"] = str(e)
@@ -54,6 +57,8 @@ def registration(request):
 
 
 def main_view(request, heft, direct_to_task_name):
+    if not request.session.get("user"):
+        return redirect(startpage)
     user_id = request.session.get("user")
     context = {}
     if request.method == 'POST':
@@ -75,25 +80,14 @@ def main_view(request, heft, direct_to_task_name):
     return render(request, f'mathesdigi_app/{heft}/{direct_to_task_name}.html', context=context)
 
 
-def evaluation(request):
+def check_user_data(request):
     user_id = request.session["user"]
     user = User.objects.get(id=user_id)
-    context = {"user_name": user.user_name, "mail": user.mail}
-    return render(request, 'mathesdigi_app/evaluation.html', context)
+    context = {"user_name": user.user_name, "mail": user.mail, "heft": user.heft}
+    return render(request, 'mathesdigi_app/check_user_data.html', context)
 
 
-def evaluation_send(request):
-    user_id = request.session["user"]
-    user = User.objects.get(id=user_id)
-    context = {"mail": user.mail}
-    Evaluate(user)
-    # eva_obj.send_evaluation()
-    # eva_obj.save_results_for_statistic()
-    # save values for statistics
-    return render(request, 'mathesdigi_app/end.html', context)
-
-
-def evaluation_change_user_data(request):
+def change_user_data(request):
     user_id = request.session["user"]
     user = User.objects.get(id=user_id)
     if request.method == "POST":
@@ -105,5 +99,39 @@ def evaluation_change_user_data(request):
         user.user_name = user_name
         user.mail = mail
         user.save()
-    context = {"user_name": user.user_name, "mail": user.mail}
-    return render(request, 'mathesdigi_app/evaluation.html', context)
+    context = {"user_name": user.user_name, "mail": user.mail, "heft": user.heft}
+    return render(request, 'mathesdigi_app/check_user_data.html', context)
+
+
+def evaluation(request):
+    return render(request, 'mathesdigi_app/evaluation.html')
+
+
+def get_template_and_evaluate(request):
+    user_id = request.session["user"]
+    user = User.objects.get(id=user_id)
+    # Template laden und mit Daten füllen
+    template = get_template('evaluation_template.html')
+    eval_obj = Evaluate(user)
+    context = eval_obj.create_evaluation_context()
+    return template, context
+
+
+def evaluation_show(request):
+    template, context = get_template_and_evaluate(request)
+    html = template.render(context)
+    return HttpResponse(html)
+
+
+def evaluation_download(request):
+    template, context = get_template_and_evaluate(request)
+    context.update({'width': 150})
+    html = template.render(context)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Auswertung.pdf"'
+    # Generate the PDF from the HTML content
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    # Check if the PDF was generated successfully
+    if pisa_status.err:
+        return HttpResponse('Error generating PDF file')
+    return response
