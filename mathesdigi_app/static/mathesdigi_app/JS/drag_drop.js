@@ -21,6 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault()
         });
     }
+    // Catch Touch-Move-Event (prevent scrolling on tablets)
+    document.addEventListener("touchmove", function (event) {
+        event.preventDefault();
+    }, {passive: false});
 });
 
 function click(event) {

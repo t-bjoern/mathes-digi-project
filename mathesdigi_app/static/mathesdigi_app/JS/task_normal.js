@@ -9,6 +9,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         inputField.addEventListener("keydown", keyboard_add_number);
     });
+
+    // Catch Touch-Move-Event (prevent scrolling on tablets)
+    document.addEventListener("touchmove", function (event) {
+        event.preventDefault();
+    }, {passive: false});
 });
 
 /** Action for keyboard-input
