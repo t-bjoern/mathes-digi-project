@@ -31,28 +31,27 @@ def validate_registration_create_or_update_user(registration_data: dict, user_id
     # Validierung der Eingabedaten
     if user_name == "" or mail == "":
         raise ValidationError("Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!")
-
     user, created = User.objects.get_or_create(id=user_id, defaults={
         "user_name": user_name,
         "mail": mail,
         "id": create_random_user_id()
     })
-
     if not created:
         user.user_name = user_name
         user.mail = mail
         user.save()
-
     return user
 
 
 def delete_old_users():
+    one_day_future = timezone.now() + timezone.timedelta(days=1)
     one_week_ago = timezone.now() - timezone.timedelta(days=7)
-    old_users = User.objects.filter(pub_date__lt=one_week_ago)
-    old_users.delete()
+    old_and_future_users = User.objects.filter(pub_date__lt=one_week_ago) | \
+                           User.objects.filter(pub_date__gt=one_day_future)
+    old_and_future_users.delete()
 
 
-def save_answer(teilaufgaben_id: str, ergebnis: int, user_id: int, time_required: int):
+def save_answer(teilaufgaben_id: str, ergebnis: str, user_id: int, time_required: int):
     teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
 
     if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():
@@ -144,10 +143,6 @@ def read_and_validate_file(file, max_file_size=1048576):
         error_message.append(
             "Table format is incorrect. The table contains too many columns.")
     return df, error_message
-
-
-def str2bool(string: str):
-    return string.lower() in ("yes", "true", "t", "1")
 
 
 def preprocess_request_post_data(post_data: dict):
