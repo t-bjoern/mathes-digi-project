@@ -11,21 +11,21 @@
         <link rel="stylesheet" type="text/css"
               href="{% static 'mathesdigi_app/css/00_general.css' %}?version={{ timestamp }}">
         <link rel="stylesheet" type="text/css"
-              href="{% static 'mathesdigi_app/css/exercise.css' %}?version={{ timestamp }}">
+              href="{% static 'mathesdigi_app/css/01_exercise_frame.css' %}?version={{ timestamp }}">
         <!-- JS -->
         <script src="{% static 'mathesdigi_app/JS/form_functions.js' %}?version{{ timestamp }}"></script>
 
         {% if page == 'single_answer' %}
             <link rel="stylesheet" type="text/css"
-                  href="{% static 'mathesdigi_app/css/single_answer.css' %}?version={{ timestamp }}">
+                  href="{% static 'mathesdigi_app/css/02_task_normal.css' %}?version={{ timestamp }}">
             <!-- JS -->
             <script src="{% static 'mathesdigi_app/JS/single_answer.js' %}?version={{ timestamp }}"></script>
         {% elif page == 'drag_and_drop' %}
             <link rel="stylesheet" type="text/css"
-                  href="{% static 'mathesdigi_app/css/drag_and_drop_answer.css' %}?version={{ timestamp }}">
+                  href="{% static 'mathesdigi_app/css/02_drag_and_drop.css' %}?version={{ timestamp }}">
             <script src="{% static 'mathesdigi_app/JS/drag_drop.js' %}?version{{ timestamp }}"></script>
             <link rel="stylesheet" type="text/css"
-                  href="{% static 'mathesdigi_app/css/drag_and_drop_answer.css' %}?version={{ timestamp }}">
+                  href="{% static 'mathesdigi_app/css/02_drag_and_drop.css' %}?version={{ timestamp }}">
         {% endif %}
     {% endblock %}
 
@@ -50,7 +50,7 @@
                 <img src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt=""></button>
 
             {% block task %}{% endblock %}
-            {% block input-buttons %}{% endblock %}
+            {% block input-buttons %}{% include 'mathesdigi_app/number_buttons.html' %}{% endblock %}
 
             <!-- Images -->
             {% block images %}
