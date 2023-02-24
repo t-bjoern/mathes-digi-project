@@ -47,9 +47,11 @@ def validate_registration_create_or_update_user(registration_data: dict, user_id
 
 
 def delete_old_users():
+    one_day_future = timezone.now() + timezone.timedelta(days=1)
     one_week_ago = timezone.now() - timezone.timedelta(days=7)
-    old_users = User.objects.filter(pub_date__lt=one_week_ago)
-    old_users.delete()
+    old_and_future_users = User.objects.filter(pub_date__lt=one_week_ago) | \
+                           User.objects.filter(pub_date__gt=one_day_future)
+    old_and_future_users.delete()
 
 
 def save_answer(teilaufgaben_id: str, ergebnis: int, user_id: int, time_required: int):
@@ -144,10 +146,6 @@ def read_and_validate_file(file, max_file_size=1048576):
         error_message.append(
             "Table format is incorrect. The table contains too many columns.")
     return df, error_message
-
-
-def str2bool(string: str):
-    return string.lower() in ("yes", "true", "t", "1")
 
 
 def preprocess_request_post_data(post_data: dict):
