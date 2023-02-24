@@ -31,18 +31,15 @@ def validate_registration_create_or_update_user(registration_data: dict, user_id
     # Validierung der Eingabedaten
     if user_name == "" or mail == "":
         raise ValidationError("Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!")
-
     user, created = User.objects.get_or_create(id=user_id, defaults={
         "user_name": user_name,
         "mail": mail,
         "id": create_random_user_id()
     })
-
     if not created:
         user.user_name = user_name
         user.mail = mail
         user.save()
-
     return user
 
 
@@ -54,7 +51,7 @@ def delete_old_users():
     old_and_future_users.delete()
 
 
-def save_answer(teilaufgaben_id: str, ergebnis: int, user_id: int, time_required: int):
+def save_answer(teilaufgaben_id: str, ergebnis: str, user_id: int, time_required: int):
     teilaufgabe = Teilaufgaben.objects.get(teilaufgaben_id=teilaufgaben_id)
 
     if Ergebnisse.objects.filter(user_id=user_id, teilaufgabe=teilaufgabe).exists():

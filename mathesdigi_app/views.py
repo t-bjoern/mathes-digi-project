@@ -1,5 +1,4 @@
 import time
-from io import BytesIO
 
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
@@ -62,7 +61,6 @@ def main_view(request, heft, direct_to_task_name):
     context = {}
     if request.method == 'POST':
         time_required = round(time.time() - request.session.get("start_time"))
-        print(request.POST)
         post_data, teilaufgaben_ids, this_task_process = helpers.preprocess_request_post_data(dict(request.POST).copy())
         if this_task_process in ["task_normal", "drag_and_drop"]:
             for teilaufgaben_id in teilaufgaben_ids:
