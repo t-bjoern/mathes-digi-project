@@ -30,7 +30,6 @@ def startpage(request):
 def registration(request):
     context = {}
     if request.method == 'POST':
-        print(request.POST)
         # TODO Currently check for old users at each new registration later as a cronjob or celery task every day.
         helpers.delete_old_users()
 
@@ -63,15 +62,12 @@ def main_view(request, heft, direct_to_task_name):
     context = {}
     if request.method == 'POST':
         time_required = round(time.time() - request.session.get("start_time"))
+        print(request.POST)
         post_data, teilaufgaben_ids, this_task_process = helpers.preprocess_request_post_data(dict(request.POST).copy())
-        if this_task_process == "task_normal":
+        if this_task_process in ["task_normal", "drag_and_drop"]:
             for teilaufgaben_id in teilaufgaben_ids:
                 ergebnis = post_data.get(teilaufgaben_id)
                 helpers.save_answer(teilaufgaben_id, ergebnis, user_id, time_required)
-        elif this_task_process == "drag_and_drop":
-            # preprocess ...
-            # helpers.save_answer(teilaufgaben_id, ergebnis, user_id)
-            pass
     if "task" in direct_to_task_name:
         context = helpers.get_previous_solution(heft, direct_to_task_name, user_id, context)
     if direct_to_task_name == "evaluation":
@@ -81,8 +77,13 @@ def main_view(request, heft, direct_to_task_name):
 
 
 def check_user_data(request):
+    if not request.session.get("user"):
+        return redirect(startpage)
     user_id = request.session["user"]
-    user = User.objects.get(id=user_id)
+    try:
+        user = User.objects.get(id=user_id)
+    except Exception:
+        return redirect(startpage)
     context = {"user_name": user.user_name, "mail": user.mail, "heft": user.heft}
     return render(request, 'mathesdigi_app/check_user_data.html', context)
 
