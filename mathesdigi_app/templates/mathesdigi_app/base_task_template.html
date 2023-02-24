@@ -15,11 +15,11 @@
         <!-- JS -->
         <script src="{% static 'mathesdigi_app/JS/form_functions.js' %}?version{{ timestamp }}"></script>
 
-        {% if page == 'single_answer' %}
+        {% if page == 'task_normal' %}
             <link rel="stylesheet" type="text/css"
                   href="{% static 'mathesdigi_app/css/02_task_normal.css' %}?version={{ timestamp }}">
             <!-- JS -->
-            <script src="{% static 'mathesdigi_app/JS/single_answer.js' %}?version={{ timestamp }}"></script>
+            <script src="{% static 'mathesdigi_app/JS/task_normal.js' %}?version={{ timestamp }}"></script>
         {% elif page == 'drag_and_drop' %}
             <link rel="stylesheet" type="text/css"
                   href="{% static 'mathesdigi_app/css/02_drag_and_drop.css' %}?version={{ timestamp }}">
