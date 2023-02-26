@@ -28,7 +28,7 @@ def get_existing_sub_task_id(templates_dir, heft, template):
         return existing_sub_task_id_list[0]
 
 
-def test_html_templates():
+def test_template_task_id():
     templates_dir, heft_template_dict = get_heft_template_dict()
     for heft, template_list in heft_template_dict.items():
         for template in template_list:
@@ -40,3 +40,7 @@ def test_html_templates():
 
             print(heft, template, existing_sub_task_id)
     assert False
+
+
+def test_template_links():
+    pass
