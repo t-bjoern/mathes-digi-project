@@ -84,8 +84,7 @@ def get_previous_solution(heft, direct_to_task_name, user_id, context):
 
 
 def create_or_update_wertung_apply(row, heft_nr, start_month, start_day, end_month, end_day):
-    updated = 0
-    created = 0
+    updated, created = 0, 0
     start_time = timezone.make_aware(datetime(day=start_day, month=start_month, year=2000))
     end_time = timezone.make_aware(datetime(day=end_day, month=end_month, year=2000))
     wertung_exists = Wertung.objects.filter(heft_nr=heft_nr,
@@ -127,8 +126,7 @@ def read_and_validate_file(file, max_file_size=1048576):
     try:
         df = pd.read_excel(file)
     except Exception as e:
-        error_message.append(str(e))
-        error_message.append("Try to read with csv reader!")
+        error_message.append("No excel file try to read with csv reader!")
         try:
             df = pd.read_csv(file)
         except Exception as e:
@@ -139,9 +137,11 @@ def read_and_validate_file(file, max_file_size=1048576):
     if not all(col in df.columns for col in ["Rohwert", "T-Wert", "Prozentrang"]):
         error_message.append(
             "Table format is incorrect. Rohwert, T-Wert, and Prozentrang must be in the header.")
+        return None, error_message
     if len(df.columns) != 3:
         error_message.append(
             "Table format is incorrect. The table contains too many columns.")
+        return None, error_message
     return df, error_message
 
 

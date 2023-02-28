@@ -1,8 +1,11 @@
-import datetime
-import time
 import pytest
+import pandas as pd
+
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils import timezone
+
+from io import BytesIO
 
 from mathesdigi_app import helpers
 from mathesdigi_app.models import User, Aufgaben, Teilaufgaben, Ergebnisse
@@ -97,7 +100,86 @@ def test_get_previous_solution(template_name, teilaufgaben_id, output_context, i
     assert context == output_context
 
 
+class TestReadAndValidateFile:
+    # Test that the function returns None and an error message when given a file with
+    # an unsupported format or an invalid file
+    @pytest.mark.parametrize("file_type", [
+        ".txt", ".csv", ".xlsx"
+    ])
+    def test_read_and_validate_file_unsupported_format_and_invalid_file(self, file_type):
+        with open(f"mathesdigi_app/tests/test_files/unsupported_format{file_type}", "rb") as f:
+            df, error_message = helpers.read_and_validate_file(f)
+        assert df is None
+        assert error_message == ["File is not in the correct format. You can only upload Excel or CSV files."]
+
+    # Test that the function returns None and an error message when given a file that exceeds the maximum file size
+    def test_read_and_validate_file_exceeds_max_size(self):
+        df = pd.DataFrame({"A": range(100000)})
+        csv_string = df.to_csv(index=False)
+        file_obj = BytesIO(csv_string.encode())
+        file = InMemoryUploadedFile(file_obj, field_name=None, name='sample_file.csv', content_type='text/csv',
+                                    size=len(csv_string), charset=None)
+
+        df, error_message = helpers.read_and_validate_file(file, max_file_size=1000)
+        assert df is None
+        assert error_message == ["File size exceeds the limit of 0.00095367431640625 MB"]
+
+    # Test that the function returns a DataFrame and an empty error message when given a valid CSV file
+    def test_read_and_validate_file_valid_csv(self):
+        df = pd.DataFrame({"Rohwert": [1, 2, 3], "T-Wert": [4, 5, 6], "Prozentrang": [7, 8, 9]})
+        csv_string = df.to_csv(index=False)
+        file_obj = BytesIO(csv_string.encode())
+        file = InMemoryUploadedFile(file_obj, field_name=None, name='sample_file.csv', content_type='text/csv',
+                                    size=len(csv_string), charset=None)
+        df_result, error_message = helpers.read_and_validate_file(file)
+        pd.testing.assert_frame_equal(df_result, df)
+        assert error_message == ["No excel file try to read with csv reader!"]
+
+    # Test that the function returns a DataFrame and an empty error message when given a valid Excel file
+    # def test_read_and_validate_file_valid_excel(self):
+    #     df = pd.DataFrame({"Rohwert": [1, 2, 3], "T-Wert": [4, 5, 6], "Prozentrang": [7, 8, 9]})
+    #     excel_string = df.to_excel(index=False)
+    #     file_obj = BytesIO(excel_string.encode())
+    #     file = InMemoryUploadedFile(file_obj, field_name=None, name='sample_file.csv', content_type='text/csv',
+    #                                 size=len(excelstring), charset=None)
+    #     df_result, error_message = helpers.read_and_validate_file(file)
+    #     pd.testing.assert_frame_equal(df_result, df)
+    #     assert error_message == []
+    #
+    # Test that the function returns an error message when given a CSV file with an incorrect header
+    def test_read_and_validate_file_invalid_csv_header(self):
+        df = pd.DataFrame({"Rohwert": [1, 2, 3], "T-Wert": [4, 5, 6], "Incorrect Header": [7, 8, 9]})
+        csv_string = df.to_csv(index=False)
+        file_obj = BytesIO(csv_string.encode())
+        file = InMemoryUploadedFile(file_obj, field_name=None, name='sample_file.csv', content_type='text/csv',
+                                    size=len(csv_string), charset=None)
+        df_result, error_message = helpers.read_and_validate_file(file)
+        assert df_result is None
+        assert "Table format is incorrect. Rohwert, T-Wert, and Prozentrang must be in the header." in error_message
+
+    # Test that the function returns an error message when given an Excel file with an incorrect header
+    # def test_read_and_validate_file_invalid_excel_header(self):
+    #     df = pd.DataFrame({"Rohwert": [1, 2, 3], "T-Wert": [4, 5, 6], "Incorrect Header": [7, 8, 9]})
+    #     df.to_excel("invalid_file.xlsx", index=False)
+    #     with open("invalid_file.xlsx", "rb") as f:
+    #         df_result, error_message = helpers.read_and_validate_file(f)
+    #     assert df_result is None
+    #     assert "Table format is incorrect. Rohwert, T-Wert, and Prozentrang must be in the header." in error_message
+    #
+    # # Test that the function returns an error message when given an Excel file with too many columns
+    # def test_read_and_validate_file_invalid_excel_columns(self):
+    #     df = pd.DataFrame(
+    #         {"Rohwert": [1, 2, 3], "T-Wert": [4, 5, 6], "Prozentrang": [7, 8, 9], "Extra Column": [10, 11, 12]})
+    #     df.to_excel("invalid_file.xlsx", index=False)
+    #     with open("invalid_file.xlsx", "rb") as f:
+    #         df_result, error_message = helpers.read_and_validate_file(f)
+    #     assert df_result is None
+    #     assert "Table format is incorrect. The table contains too many columns." in error_message
+    #
+    # Test that the function returns an error message when given an invalid CSV file
+
+
+
 
 # def create_or_update_wertung_apply(row, heft_nr, start_month, start_day, end_month, end_day)
-# def read_and_validate_file(file, max_file_size=1048576)
 # def preprocess_request_post_data(post_data: dict)
