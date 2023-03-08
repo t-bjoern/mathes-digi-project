@@ -30,6 +30,7 @@ class Teilaufgaben(models.Model):
     teilaufgaben_id = models.CharField(max_length=5)
     loesung = models.CharField(max_length=20)
     aufgabe = models.ForeignKey(Aufgaben, on_delete=models.CASCADE, related_name='teilaufgaben')
+    beschreibung = models.CharField(max_length=30, default="")
 
     class Meta:
         verbose_name = "Teilaufgabe"
