@@ -3,7 +3,9 @@ import time
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
 from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
 
 from .evaluation import Evaluate
 from .models import User
@@ -16,8 +18,8 @@ def startpage(request):
     if "heft" in request.session.keys():
         del request.session["heft"]
     # zum testen immer gleiche user_id nutzen
-    # if User.objects.filter(id=53696).exists():
-    #     request.session["user"] = 53696
+    if User.objects.filter(id=61478).exists():
+        request.session["user"] = 61478
     elif "user" in request.session.keys():
         del request.session["user"]
     if request.method == 'POST':
@@ -27,8 +29,14 @@ def startpage(request):
 
 
 def registration(request):
+    if not request.session.get("heft"):
+        return redirect(startpage)
     context = {}
-    if request.method == 'POST':
+    if request.session.get("user"):
+        user = User.objects.get(id=request.session["user"])
+        context.update({"user_name": user.user_name, "mail": user.mail})
+        return redirect(check_user_data)
+    elif request.method == 'POST':
         # TODO Currently check for old users at each new registration later as a cronjob or celery task every day.
         helpers.delete_old_users()
 
@@ -37,8 +45,6 @@ def registration(request):
             post_data[key] = post_data[key][0]
         del post_data["csrfmiddlewaretoken"]
         try:
-            if not request.session.get("heft"):
-                raise ValidationError("Bitte starte auf der ersten Seite und wähle dort ein Heft aus!")
             user_id = request.session["user"] if request.session.get("user") else None
             user = helpers.validate_registration_create_or_update_user(post_data, user_id)
             request.session["user"] = user.id
@@ -48,9 +54,6 @@ def registration(request):
         except ValidationError as e:
             context = post_data
             context["error_message"] = str(e)
-    if request.session.get("user"):
-        user = User.objects.get(id=request.session["user"])
-        context.update({"user_name": user.user_name, "mail": user.mail})
     return render(request, 'mathesdigi_app/registration.html', context)
 
 
@@ -92,12 +95,9 @@ def change_user_data(request):
     if request.method == "POST":
         post_data = dict(request.POST).copy()
         post_data = {key: value[0] for key, value in post_data.items()}
-        user_name = post_data["user_name"]
-        mail = post_data["mail"]
 
-        user.user_name = user_name
-        user.mail = mail
-        user.save()
+        user = helpers.validate_registration_create_or_update_user(post_data, user_id)
+
     context = {"user_name": user.user_name, "mail": user.mail, "heft": user.heft}
     return render(request, 'mathesdigi_app/check_user_data.html', context)
 
@@ -114,6 +114,24 @@ def get_template_and_evaluate(request):
     eval_obj = Evaluate(user)
     context = eval_obj.create_evaluation_context()
     return template, context
+
+
+def evaluation_send(request):
+    user_id = request.session["user"]
+    user = User.objects.get(id=user_id)
+
+    from_email = "test@md-staging.django.group"
+    to_email = user.mail
+    subject = f"Auswertung des Testes von {user.user_name}"
+
+    template, context = get_template_and_evaluate(request)
+
+    html_content = template.render(context)
+    text_content = 'Dies ist eine Beispiel-E-Mail, die mit einem HTML-Template erstellt wurde.'
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+    return redirect(evaluation)
 
 
 def evaluation_show(request):

@@ -60,9 +60,9 @@ def test_create_evaluation_context(setup_test_data):
     eval_obj = Evaluate(user)
     assert eval_obj.create_evaluation_context() == {
         'teilaufgaben': [
-            {'beschreibung': 'Zählen', 'aufgabe': 1, 'wert': '1', 'bewertung': 'Richtig', 'bearbeitungszeit': None},
-            {'beschreibung': 'Zählen', 'aufgabe': 1, 'wert': '2', 'bewertung': 'Falsch', 'bearbeitungszeit': None},
-            {'beschreibung': 'Zählen', 'aufgabe': 1, 'wert': '3', 'bewertung': 'Richtig', 'bearbeitungszeit': None}
+            {'beschreibung': 'Zählen', 'aufgabe': '', 'wert': '1', 'bewertung': 'Richtig', 'bearbeitungszeit': None},
+            {'beschreibung': 'Zählen', 'aufgabe': '', 'wert': '2', 'bewertung': 'Falsch', 'bearbeitungszeit': None},
+            {'beschreibung': 'Zählen', 'aufgabe': '', 'wert': '3', 'bewertung': 'Richtig', 'bearbeitungszeit': None}
         ],
         'aufgaben': [{'aufgaben_nr': 1, 'bezeichnung': 'Zählen', 'punkte': 2, 'punktzahl': 2}],
         'summed_task_points': 2,

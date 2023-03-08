@@ -47,10 +47,6 @@ class Evaluate:
                    'performance_color': self.performance_color}
         return context
 
-    def send_evaluation(self):
-        # Alles an Lehrer per Mail schicken
-        pass
-
     def save_results_for_statistic(self):
         # Die Ergebnisse speichern für die Erstellung neuer Auswertungszeiträume
         pass
