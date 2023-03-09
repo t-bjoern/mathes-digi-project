@@ -24,9 +24,9 @@
 {% block images %}
     {% with '2_example' as monkey_number %}
         {% with '0' as progressbar %}
-            Back            {% with 'Background_with_single_answerfield' as background %}
-            {{ block.super }}
-        {% endwith %}
+            {% with 'Background_with_single_answerfield' as background %}
+                {{ block.super }}
+            {% endwith %}
         {% endwith %}
     {% endwith %}
 {% endblock %}

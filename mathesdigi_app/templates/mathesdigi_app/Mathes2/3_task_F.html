@@ -13,11 +13,9 @@
 {% block form %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='4_example' as forward_url %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='3_task_E' as backward_url %}
-    {#    {% with "return checkForm_singleAnswer()" as onsubmit %}#}
     {% with 'task_normal' as this_task_process %}
         {{ block.super }}
     {% endwith %}
-    {#    {% endwith %}#}
 {% endblock %}
 
 <!-- Images -->

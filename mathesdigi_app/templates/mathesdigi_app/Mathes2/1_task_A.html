@@ -13,10 +13,8 @@
 {% block form %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='1_task_B' as forward_url %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='1_example' as backward_url %}
-    {% with "return checkForm_singleAnswer()" as onsubmit %}
-        {% with 'task_normal' as this_task_process %}
-            {{ block.super }}
-        {% endwith %}
+    {% with 'task_normal' as this_task_process %}
+        {{ block.super }}
     {% endwith %}
 {% endblock %}
 
@@ -24,21 +22,20 @@
 {% block images %}
     {% with '2' as monkey_number %}
         {% with '0' as progressbar %}
-            {{ block.super }}
+            {% with 'Background_with_single_answerfield' as background %}
+                {{ block.super }}
+            {% endwith %}
         {% endwith %}
     {% endwith %}
 {% endblock %}
 
 <!-- Task -->
 {% block task %}
-    <div class="task"
-         style="background-image: url('{% static "mathesdigi_app/img/Background_with_single_answerfield.svg" %}');">
-        <div class="task_text">Wie viele Radiergummis sind es?</div>
-        <div class="task_pic"><img
-                src="{% static 'mathesdigi_app/img/Mathes_2/task_1/part_A.svg' %}"
-                alt="">
-        </div>
-        <input class="input_field_large" type="text" inputmode="None" id="kids_answer_1" name="2A1A"
-               placeholder="Antwort" value="{% if 2A1A %}{{ 2A1A }}{% endif %}">
+    <div class="task_text">Wie viele Radiergummis sind es?</div>
+    <div class="task_pic"><img
+            src="{% static 'mathesdigi_app/img/Mathes_2/task_1/part_A.svg' %}"
+            alt="">
     </div>
+    <input class="input_field_large" type="text" inputmode="None" id="kids_answer_1" name="2A1A"
+           placeholder="Antwort" value="{% if 2A1A %}{{ 2A1A }}{% endif %}">
 {% endblock %}
