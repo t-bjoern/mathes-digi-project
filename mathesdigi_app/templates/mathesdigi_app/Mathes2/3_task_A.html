@@ -22,18 +22,17 @@
 {% block images %}
     {% with '2' as monkey_number %}
         {% with '0' as progressbar %}
-            {{ block.super }}
+            {% with 'Mathes_2/task_3_4/Background_1' as background %}
+                {{ block.super }}
+            {% endwith %}
         {% endwith %}
     {% endwith %}
 {% endblock %}
 
 <!-- Task -->
 {% block task %}
-    <div class="task"
-         style="background-image: url('{% static "mathesdigi_app/img/Mathes_2/task_3_4/Background_1.svg" %}');">
-        <div class="task_text">Verdopple.</div>
-        <input class="input_field_small_left" readonly value="4">
-        <input class="input_field_small_right" type="text" inputmode="None" id="kids_answer_1" name="2A3A"
-               placeholder="Antwort" value="{% if 2A3A %}{{ 2A3A }}{% endif %}">
-    </div>
+    <div class="task_text">Verdopple.</div>
+    <input class="input_field_small_left" readonly value="4">
+    <input class="input_field_small_right" type="text" inputmode="None" id="kids_answer_1" name="2A3A"
+           placeholder="Antwort" value="{% if 2A3A %}{{ 2A3A }}{% endif %}">
 {% endblock %}
