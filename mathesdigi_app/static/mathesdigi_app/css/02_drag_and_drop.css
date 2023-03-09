@@ -1,7 +1,11 @@
 @import "00_variablen.css";
 
-.task {
-    grid-area: task;
+.task-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: grid;
     background-repeat: no-repeat;
     background-size: 80vw 60vh;
