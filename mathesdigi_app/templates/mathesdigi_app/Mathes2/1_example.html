@@ -24,20 +24,19 @@
 {% block images %}
     {% with '2_example' as monkey_number %}
         {% with '0' as progressbar %}
+            Back            {% with 'Background_with_single_answerfield' as background %}
             {{ block.super }}
+        {% endwith %}
         {% endwith %}
     {% endwith %}
 {% endblock %}
 
 <!-- Task -->
 {% block task %}
-    <div class="task"
-         style="background-image: url('{% static "mathesdigi_app/img/Background_with_single_answerfield.svg" %}');">
-        <div class="task_text">Wie viele Radiergummis sind es?</div>
-        <div class="task_pic"><img
-                src="{% static 'mathesdigi_app/img/Mathes_2/task_1/example.svg' %}"
-                alt="">
-        </div>
-        <input class="input_field_large" type="text" inputmode="None" id="kids_answer_1" placeholder="Antwort">
+    <div class="task_text">Wie viele Radiergummis sind es?</div>
+    <div class="task_pic">
+        <img src="{% static 'mathesdigi_app/img/Mathes_2/task_1/example.svg' %}" alt="">
     </div>
+    <input class="input_field_large" type="text" inputmode="None" id="kids_answer_1"
+           placeholder="Antwort">
 {% endblock %}

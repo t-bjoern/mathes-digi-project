@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
             last_clicked_input_field_id = this.id;
         });
         inputField.addEventListener("keydown", keyboard_add_number);
+        inputField.addEventListener("touchstart", function () {
+            last_clicked_input_field_id = this.id;
+        })
     });
 
     // Catch Touch-Move-Event (prevent scrolling on tablets)
