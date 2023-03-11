@@ -18,9 +18,9 @@ def startpage(request):
     if "heft" in request.session.keys():
         del request.session["heft"]
     # zum testen immer gleiche user_id nutzen
-    # if User.objects.filter(id=61478).exists():
-    #     request.session["user"] = 61478
-    if "user" in request.session.keys():
+    if User.objects.filter(id=61478).exists():
+        request.session["user"] = 61478
+    elif "user" in request.session.keys():
         del request.session["user"]
     if request.method == 'POST':
         request.session["heft"] = request.POST["Mathes2"]
@@ -102,6 +102,10 @@ def change_user_data(request):
     return render(request, 'mathesdigi_app/check_user_data.html', context)
 
 
+def evaluation(request):
+    return render(request, 'mathesdigi_app/evaluation.html')
+
+
 def get_template_and_evaluate(request):
     user_id = request.session["user"]
     user = User.objects.get(id=user_id)
@@ -110,27 +114,6 @@ def get_template_and_evaluate(request):
     eval_obj = Evaluate(user)
     context = eval_obj.create_evaluation_context()
     return template, context
-
-
-def evaluation(request):
-    try:
-        user_id = request.session["user"]
-        user = User.objects.get(id=user_id)
-
-        from_email = "lasttest@mathes-digi.de"
-        to_email = user.mail
-        subject = f"Auswertung des Testes von {user.user_name}"
-
-        template, context = get_template_and_evaluate(request)
-
-        html_content = template.render(context)
-        text_content = 'Dies ist eine Beispiel-E-Mail, die mit einem HTML-Template erstellt wurde.'
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
-    except Exception as e:
-        context = {"error": str(e)}
-    return render(request, 'mathesdigi_app/evaluation.html', context)
 
 
 def evaluation_send(request):

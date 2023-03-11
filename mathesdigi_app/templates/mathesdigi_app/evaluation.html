@@ -10,19 +10,10 @@
   </head>
   <body>
     <div style="text-align: center;">
-        <h1>Vielen Dank für das Testen unserer Webseite!</h1>
-        {% if error %}
-            <h1>Da hat leider etwas nicht funktioniert!</h1>
-            <p>Folgender Fehler ist aufgetretten:</p>
-            <p>{{ error }}</p>
-        {% else %}
-            <h1>Der Datensatz wurde erfolgreich übermittelt. Wenn du möchtest kannst du einen neuen Test starten.</h1>
-        {% endif %}
-        <a href="{% url 'startpage' %}"><button type="button">Neuen Test starten</button></a>
-{#        <h1>Auswertung</h1>#}
-{#      <a href="{% url 'evaluation_show' %}"><button type="button">Auswertung anzeigen</button></a>#}
-{#      <a href="{% url 'evaluation_download' %}"><button type="button">Auswertung herunterladen</button></a>#}
-{#      <a href="{% url 'evaluation_send' %}"><button type="button">Auswertung versenden</button></a>#}
+        <h1>Auswertung</h1>
+      <a href="{% url 'evaluation_show' %}"><button type="button">Auswertung anzeigen</button></a>
+      <a href="{% url 'evaluation_download' %}"><button type="button">Auswertung herunterladen</button></a>
+      <a href="{% url 'evaluation_send' %}"><button type="button">Auswertung versenden</button></a>
     </div>
   </body>
 </html>

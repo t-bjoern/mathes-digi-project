@@ -85,8 +85,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.wservices.ch'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'lasttest@mathes-digi.de'
-EMAIL_HOST_PASSWORD = 'iuudje84hjso3j2kdJKL'
+EMAIL_HOST_USER = 'test@md-staging.django.group'
+EMAIL_HOST_PASSWORD = 'Admin1234567'
 
 
 # Password validation
