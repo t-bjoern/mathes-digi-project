@@ -14,13 +14,6 @@
             "task-pic answer-field";
 }
 
-
-.task_pic {
-    grid-area: task-pic;
-    margin-left: 5vw;
-    margin-bottom: 5vh;
-}
-
 .task_text {
     grid-area: task-text;
     text-align: left;
@@ -29,6 +22,12 @@
     align-self: end;
     margin-bottom: 1vh;
     font-family: var(--standard-font-family);
+}
+
+.task_pic {
+    grid-area: task-pic;
+    margin-left: 5vw;
+    margin-bottom: 5vh;
 }
 
 .input_field_large {

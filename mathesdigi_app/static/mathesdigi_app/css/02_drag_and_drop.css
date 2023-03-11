@@ -16,6 +16,16 @@
             "answers";
 }
 
+.task_text {
+    grid-area: task-text;
+    text-align: left;
+    margin-left: 5vw;
+    font-size: var(--task-font-size);
+    align-self: end;
+    margin-bottom: 1vh;
+    font-family: var(--standard-font-family);
+}
+
 .task_pics {
     grid-area: task-pic;
     display: flex;
@@ -29,15 +39,6 @@
     width: auto;
     max-width: 10vw;
     height: 20vh;
-}
-
-.task_text {
-    grid-area: task-text;
-    align-self: end;
-    margin-left: 5vw;
-    font-size: var(--task-font-size);
-    margin-bottom: 1vh;
-    font-family: var(--standard-font-family);
 }
 
 .answers {
