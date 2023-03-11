@@ -11,9 +11,9 @@
     grid-template-rows: 14vh 15vh 15vh 16vh;
     grid-template-areas:
             "task-text task-text"
-            "first_task first_answer-field"
-            "second_task second_answer-field"
-            "third_task third_answer-field";
+            "first_task first_solution"
+            "second_task second_solution"
+            "third_task third_solution";
 }
 
 .task_text {
@@ -26,7 +26,7 @@
     font-family: var(--standard-font-family);
 }
 
-.first_input_field {
+.first_solution {
     grid-area: first_answer-field;
     height: 9vh;
     width: 21vw;
@@ -35,7 +35,7 @@
     /*margin-right: 7vw;*/
 }
 
-.second_input_field {
+.second_solution {
     grid-area: second_answer-field;
     height: 9vh;
     width: 21vw;
@@ -44,7 +44,7 @@
     /*margin-right: 7vw;*/
 }
 
-.third_input_field {
+.third_solution {
     grid-area: third_answer-field;
     height: 9vh;
     width: 21vw;
