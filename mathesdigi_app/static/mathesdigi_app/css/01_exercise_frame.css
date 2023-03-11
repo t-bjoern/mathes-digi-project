@@ -65,8 +65,9 @@ Version:       1.0
 
 .progressbar {
     grid-area: progressbar;
-    width: 100%;
-    height: 100%;
+    width: 80vw;
+    height: 5vh;
+    object-fit: fill;
 }
 
 .full-screen {

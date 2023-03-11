@@ -18,12 +18,15 @@
         {% if page == 'task_normal' %}
             <link rel="stylesheet" type="text/css"
                   href="{% static 'mathesdigi_app/css/02_task_normal.css' %}?version={{ timestamp }}">
-            <!-- JS -->
             <script src="{% static 'mathesdigi_app/JS/task_normal.js' %}?version={{ timestamp }}"></script>
         {% elif page == 'drag_and_drop' %}
             <link rel="stylesheet" type="text/css"
                   href="{% static 'mathesdigi_app/css/02_drag_and_drop.css' %}?version={{ timestamp }}">
             <script src="{% static 'mathesdigi_app/JS/drag_drop.js' %}?version{{ timestamp }}"></script>
+        {% elif page == 'multiple_answers' %}
+            <link rel="stylesheet" type="text/css"
+                  href="{% static 'mathesdigi_app/css/02_multiple_answers.css' %}?version={{ timestamp }}">
+            <script src="{% static 'mathesdigi_app/JS/task_normal.js' %}?version={{ timestamp }}"></script>
         {% endif %}
     {% endblock %}
 
