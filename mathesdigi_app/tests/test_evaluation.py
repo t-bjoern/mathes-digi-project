@@ -1,3 +1,4 @@
+import time
 from datetime import timedelta
 
 import pytest
@@ -57,17 +58,16 @@ def test_get_performance_evaluation(setup_test_data, prozentrang, performance_ev
 def test_create_evaluation_context(setup_test_data):
     user = User.objects.get(id=123)
     eval_obj = Evaluate(user)
-    print()
     assert eval_obj.create_evaluation_context() == {
         'teilaufgaben': [
-            {'beschreibung': 'Zählen', 'aufgabe': 1, 'wert': '1', 'bewertung': 'Richtig', 'bearbeitungszeit': None},
-            {'beschreibung': 'Zählen', 'aufgabe': 1, 'wert': '2', 'bewertung': 'Falsch', 'bearbeitungszeit': None},
-            {'beschreibung': 'Zählen', 'aufgabe': 1, 'wert': '3', 'bewertung': 'Richtig', 'bearbeitungszeit': None}
+            {'beschreibung': 'Zählen', 'aufgabe': '', 'wert': '1', 'bewertung': 'Richtig', 'bearbeitungszeit': None},
+            {'beschreibung': 'Zählen', 'aufgabe': '', 'wert': '2', 'bewertung': 'Falsch', 'bearbeitungszeit': None},
+            {'beschreibung': 'Zählen', 'aufgabe': '', 'wert': '3', 'bewertung': 'Richtig', 'bearbeitungszeit': None}
         ],
         'aufgaben': [{'aufgaben_nr': 1, 'bezeichnung': 'Zählen', 'punkte': 2, 'punktzahl': 2}],
         'summed_task_points': 2,
         'name': 'Test_User',
-        'pub_date': '24.2.2023',
+        'pub_date': f"{datetime.now().day}.{datetime.now().month}.{datetime.now().year}",
         'rohwert': 2,
         'prozentrang': 50,
         'negativ_prozentrang': 50,

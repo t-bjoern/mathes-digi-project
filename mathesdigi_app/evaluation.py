@@ -47,10 +47,6 @@ class Evaluate:
                    'performance_color': self.performance_color}
         return context
 
-    def send_evaluation(self):
-        # Alles an Lehrer per Mail schicken
-        pass
-
     def save_results_for_statistic(self):
         # Die Ergebnisse speichern für die Erstellung neuer Auswertungszeiträume
         pass
@@ -62,15 +58,19 @@ class Evaluate:
 
     def create_teilaufgaben_ergebnis_list(self):
         teilaufgaben_ergebnis_list = []
-        for teilaufgabe in Teilaufgaben.objects.filter(ergebnisse__user=self.user):
-            ergebnis = teilaufgabe.ergebnisse.get(user=self.user)
+        for teilaufgabe in Teilaufgaben.objects.filter(aufgabe__heft_nr=2):
+            try:
+                ergebnis = Ergebnisse.objects.get(teilaufgabe=teilaufgabe, user=self.user)
+            except Ergebnisse.DoesNotExist:
+                ergebnis = None
+
             teilaufgaben_ergebnis_list.append(
                 {
                     "beschreibung": teilaufgabe.aufgabe.bezeichnung,
-                    "aufgabe": teilaufgabe.aufgabe.aufgaben_nr,
-                    "wert": ergebnis.eingabe,
-                    "bewertung": "Richtig" if ergebnis.wertung else "Falsch",
-                    "bearbeitungszeit": ergebnis.time_required
+                    "aufgabe": teilaufgabe.beschreibung,
+                    "wert": ergebnis.eingabe if ergebnis else "Keine Eingabe vorhanden",
+                    "bewertung": "Richtig" if ergebnis and ergebnis.wertung else "Falsch",
+                    "bearbeitungszeit": ergebnis.time_required if ergebnis else 0
                 })
         return teilaufgaben_ergebnis_list
 

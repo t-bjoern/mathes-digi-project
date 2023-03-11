@@ -19,12 +19,13 @@ def setup_test_data(django_db_setup, django_db_blocker):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("user_name, user_mail, count_user, error", [
-    ("test_user", "test@mail.de", 1, False),
-    ("", "test@mail.de", 0, True),
-    (" test_user  ", "test@mail.de", 1, False),
+@pytest.mark.parametrize("user_name, user_mail, count_user, error, error_message", [
+    ("test_user", "test@mail.de", 1, False, ""),
+    ("", "test@mail.de", 0, True, "Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!"),
+    (" test_user  ", "test@mail.de", 1, False, ""),
+    ("test_user", "test@shktlhfg.de", 0, True, "Die eingegebene E-Mail ist ungültig!")
 ])
-def test_registration_view(user_name, user_mail, count_user, error):
+def test_registration_view(user_name, user_mail, count_user, error, error_message):
     # Erstellen Sie eine Test-Request-Instanz
     request = RequestFactory().post(reverse('registration'))
     # Fügen Sie die Middleware hinzu, um Sitzungsdaten zu simulieren
@@ -41,11 +42,17 @@ def test_registration_view(user_name, user_mail, count_user, error):
                                 mail=user_mail.strip())
         assert user
     assert User.objects.count() == count_user
-    assert bool("Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!" \
-                in str(response.content, "utf-8")) == error
+    assert error_message in str(response.content, "utf-8")
+
+
+def test_registration_view_redirects_to_startpage_if_no_heft_in_session(client):
+    response = client.get(reverse('registration'))
+    assert response.status_code == 302
+    assert response.url == reverse('startpage')
 
 
 class TestMainView:
+    @pytest.mark.django_db
     def test_main_view_redirects_to_startpage_if_no_user_in_session(self, client):
         response = client.get(reverse('main_view', kwargs={'heft': 'Mathes2', 'direct_to_task_name': '1_task_A'}))
         assert response.status_code == 302

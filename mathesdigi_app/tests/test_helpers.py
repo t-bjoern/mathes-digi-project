@@ -1,11 +1,14 @@
-import datetime
-import time
 import pytest
+import pandas as pd
+
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils import timezone
 
+from io import BytesIO
+
 from mathesdigi_app import helpers
-from mathesdigi_app.models import User, Aufgaben, Teilaufgaben, Ergebnisse
+from mathesdigi_app.models import User, Aufgaben, Teilaufgaben, Ergebnisse, Wertung
 
 
 @pytest.mark.django_db
@@ -93,11 +96,109 @@ def test_get_previous_solution(template_name, teilaufgaben_id, output_context, i
     teilaufgabe = Teilaufgaben.objects.create(teilaufgaben_id=teilaufgaben_id, aufgabe=aufgabe)
     if is_solution:
         Ergebnisse.objects.create(teilaufgabe=teilaufgabe, user=user, eingabe='1', wertung=True)
-    context = helpers.get_previous_solution(heft="Mathes2", direct_to_task_name=template_name, user_id=user.id, context={})
+    context = helpers.get_previous_solution(heft="Mathes2", direct_to_task_name=template_name, user_id=user.id,
+                                            context={})
     assert context == output_context
 
 
+class TestReadAndValidateFile:
+    # Test that the function returns None and an error message when given a file with
+    # an unsupported format or an invalid file
+    @pytest.mark.parametrize("file_type", [
+        ".txt", ".csv", ".xlsx"
+    ])
+    def test_read_and_validate_file_unsupported_format_and_invalid_file(self, file_type):
+        with open(f"mathesdigi_app/tests/test_files/unsupported_format{file_type}", "rb") as f:
+            df, error_message = helpers.read_and_validate_file(f)
+        assert df is None
+        assert error_message == ["File is not in the correct format. You can only upload Excel or CSV files."]
 
-# def create_or_update_wertung_apply(row, heft_nr, start_month, start_day, end_month, end_day)
-# def read_and_validate_file(file, max_file_size=1048576)
-# def preprocess_request_post_data(post_data: dict)
+    # Test that the function returns None and an error message when given a file that exceeds the maximum file size
+    def test_read_and_validate_file_exceeds_max_size(self):
+        df = pd.DataFrame({"A": range(100000)})
+        csv_string = df.to_csv(index=False)
+        file_obj = BytesIO(csv_string.encode())
+        file = InMemoryUploadedFile(file_obj, field_name=None, name='sample_file.csv', content_type='text/csv',
+                                    size=len(csv_string), charset=None)
+        df, error_message = helpers.read_and_validate_file(file, max_file_size=1000)
+        assert df is None
+        assert error_message == ["File size exceeds the limit of 0.00095367431640625 MB"]
+
+    # Test that the function returns a DataFrame and an empty error message when given a valid CSV file
+    def test_read_and_validate_file_valid_csv(self):
+        df = pd.DataFrame({"Rohwert": [1, 2, 3], "T-Wert": [4, 5, 6], "Prozentrang": [7, 8, 9]})
+        csv_string = df.to_csv(index=False)
+        file_obj = BytesIO(csv_string.encode())
+        file = InMemoryUploadedFile(file_obj, field_name=None, name='sample_file.csv', content_type='text/csv',
+                                    size=len(csv_string), charset=None)
+        df_result, error_message = helpers.read_and_validate_file(file)
+        pd.testing.assert_frame_equal(df_result, df)
+        assert error_message == ["No excel file try to read with csv reader!"]
+
+    # Test that the function returns a DataFrame and an empty error message when given a valid Excel file
+    def test_read_and_validate_file_valid_excel(self):
+        df = pd.DataFrame({"Rohwert": [1, 2, 3], "T-Wert": [4, 5, 6], "Prozentrang": [7, 8, 9]})
+        with BytesIO() as excel_file:
+            df.to_excel(excel_file, index=False)
+            excel_content = excel_file.getvalue()
+        file = InMemoryUploadedFile(BytesIO(excel_content), None, 'sample_file.xlsx',
+                                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                    len(excel_content), None)
+        df_result, error_message = helpers.read_and_validate_file(file)
+        pd.testing.assert_frame_equal(df_result, df)
+        assert error_message == []
+
+    # Test that the function returns an error message when given a CSV file with an incorrect header
+    def test_read_and_validate_file_invalid_header(self):
+        df = pd.DataFrame({"Rohwert": [1, 2, 3], "T-Wert": [4, 5, 6], "Incorrect Header": [7, 8, 9]})
+        csv_string = df.to_csv(index=False)
+        file_obj = BytesIO(csv_string.encode())
+        file = InMemoryUploadedFile(file_obj, field_name=None, name='sample_file.csv', content_type='text/csv',
+                                    size=len(csv_string), charset=None)
+        df_result, error_message = helpers.read_and_validate_file(file)
+        assert df_result is None
+        assert "Table format is incorrect. Rohwert, T-Wert, and Prozentrang must be in the header." in error_message
+
+    # Test that the function returns an error message when given an Excel file with too many columns
+    def test_read_and_validate_file_invalid_columns(self):
+        df = pd.DataFrame(
+            {"Rohwert": [1, 2, 3], "T-Wert": [4, 5, 6], "Prozentrang": [7, 8, 9], "Extra Column": [10, 11, 12]})
+        csv_string = df.to_csv(index=False)
+        file_obj = BytesIO(csv_string.encode())
+        file = InMemoryUploadedFile(file_obj, field_name=None, name='sample_file.csv', content_type='text/csv',
+                                    size=len(csv_string), charset=None)
+        df_result, error_message = helpers.read_and_validate_file(file)
+        assert df_result is None
+        assert "Table format is incorrect. The table contains too many columns." in error_message
+
+
+@pytest.mark.django_db
+def test_create_or_update_wertung_apply():
+    row = pd.Series({"Rohwert": 56, "T-Wert": "73", "Prozentrang": 100})
+    updated, created = helpers.create_or_update_wertung_apply(row=row, heft_nr=2, start_month=2, start_day=1,
+                                                              end_month=3, end_day=31)
+    assert created == 1, updated == 0
+    assert Wertung.objects.count() == 1
+    wertung_obj = Wertung.objects.get(rohwert=row["Rohwert"])
+    assert wertung_obj.t_wert == row["T-Wert"], wertung_obj.prozentrang == row["Prozentrang"]
+
+    # Pass an existing wertung to the function to test if it will be updated
+    row = pd.Series({"Rohwert": 56, "T-Wert": "74", "Prozentrang": 90})
+    updated, created = helpers.create_or_update_wertung_apply(row=row, heft_nr=2, start_month=2, start_day=1,
+                                                              end_month=3, end_day=31)
+    assert created == 0, updated == 1
+    assert Wertung.objects.count() == 1
+    wertung_obj = Wertung.objects.get(rohwert=row["Rohwert"])
+    assert wertung_obj.t_wert == row["T-Wert"], wertung_obj.prozentrang == row["Prozentrang"]
+
+
+def test_preprocess_request_post_data():
+    post_data = {"csrfmiddlewaretoken": ["sRsPS74ilPwQ6PbsDBvXOqSJ5UPBAGhg7Cd61PboqJ8bRUBN5w1wEc3ZUjuqe0ll"],
+                 "this_task_process": ["task_normal"],
+                 "2A1A": [""],
+                 "2A1B": [""]}
+    new_post_data, teilaufgaben_ids, this_task_process = helpers.preprocess_request_post_data(post_data)
+
+    assert not new_post_data.get("csfrmiddlewaretoken")
+    assert teilaufgaben_ids == ["2A1A", "2A1B"]
+    assert this_task_process == post_data.get("this_task_process")[0]

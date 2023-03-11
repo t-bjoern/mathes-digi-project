@@ -2,8 +2,13 @@ from datetime import datetime
 import os
 import random
 import re
+import dns.resolver
+from email.utils import parseaddr
 
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.template.loader import render_to_string, get_template
+from django.core.mail import EmailMultiAlternatives
 
 import pandas as pd
 from django.utils import timezone
@@ -25,12 +30,33 @@ def create_random_user_id():
     return user_id
 
 
+def is_valid_email(email):
+    # Überprüfen, ob das Format der E-Mail-Adresse korrekt ist
+    try:
+        addr = parseaddr(email)
+        if not addr[1]:
+            return False
+    except:
+        return False
+
+    # Überprüfen, ob der Domain-Name existiert
+    domain = email.split('@')[1]
+    try:
+        dns.resolver.resolve(domain, 'MX')
+    except:
+        return False
+
+    return True
+
+
 def validate_registration_create_or_update_user(registration_data: dict, user_id=None):
     user_name = registration_data["user_name"].strip()
     mail = registration_data["mail"].strip()
     # Validierung der Eingabedaten
     if user_name == "" or mail == "":
         raise ValidationError("Bitte überprüfen Sie die Eingabe. Die Felder dürfen nicht leer sein!")
+    if not is_valid_email(mail):
+        raise ValidationError("Die eingegebene E-Mail ist ungültig!")
     user, created = User.objects.get_or_create(id=user_id, defaults={
         "user_name": user_name,
         "mail": mail,
@@ -84,8 +110,7 @@ def get_previous_solution(heft, direct_to_task_name, user_id, context):
 
 
 def create_or_update_wertung_apply(row, heft_nr, start_month, start_day, end_month, end_day):
-    updated = 0
-    created = 0
+    updated, created = 0, 0
     start_time = timezone.make_aware(datetime(day=start_day, month=start_month, year=2000))
     end_time = timezone.make_aware(datetime(day=end_day, month=end_month, year=2000))
     wertung_exists = Wertung.objects.filter(heft_nr=heft_nr,
@@ -127,8 +152,7 @@ def read_and_validate_file(file, max_file_size=1048576):
     try:
         df = pd.read_excel(file)
     except Exception as e:
-        error_message.append(str(e))
-        error_message.append("Try to read with csv reader!")
+        error_message.append("No excel file try to read with csv reader!")
         try:
             df = pd.read_csv(file)
         except Exception as e:
@@ -139,9 +163,11 @@ def read_and_validate_file(file, max_file_size=1048576):
     if not all(col in df.columns for col in ["Rohwert", "T-Wert", "Prozentrang"]):
         error_message.append(
             "Table format is incorrect. Rohwert, T-Wert, and Prozentrang must be in the header.")
+        return None, error_message
     if len(df.columns) != 3:
         error_message.append(
             "Table format is incorrect. The table contains too many columns.")
+        return None, error_message
     return df, error_message
 
 
@@ -153,3 +179,12 @@ def preprocess_request_post_data(post_data: dict):
     teilaufgaben_ids = [key for key in post_data.keys() if re.match(r"^\d\w\d\w$", key)]
     this_task_process = post_data.get("this_task_process")
     return post_data, teilaufgaben_ids, this_task_process
+
+
+def send_email(from_email, to_email, subject, context):
+    template = get_template('evaluation_template.html')
+    html_content = render_to_string(template, context)
+    text_content = 'Dies ist eine Beispiel-E-Mail, die mit einem HTML-Template erstellt wurde.'
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()

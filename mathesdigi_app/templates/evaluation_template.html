@@ -84,6 +84,7 @@
         <tbody>
             {% for teilaufgabe in teilaufgaben %}
             <tr {% if teilaufgabe.bewertung == 'Richtig' %} style="background-color: lightgreen"
+                                                            {% elif teilaufgabe.wert == "Keine Eingabe vorhanden" %} style="background-color: lightgray"
                                                             {% else %} style="background-color: lightsalmon"
             {% endif %} >
                 <td>{{ teilaufgabe.beschreibung }}</td>
