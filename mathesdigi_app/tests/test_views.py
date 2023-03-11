@@ -45,6 +45,7 @@ def test_registration_view(user_name, user_mail, count_user, error, error_messag
     assert error_message in str(response.content, "utf-8")
 
 
+@pytest.mark.django_db
 def test_registration_view_redirects_to_startpage_if_no_heft_in_session(client):
     response = client.get(reverse('registration'))
     assert response.status_code == 302
