@@ -27,7 +27,7 @@
 }
 
 .first_solution {
-    grid-area: first_answer-field;
+    grid-area: first_solution;
     height: 9vh;
     width: 21vw;
     /*margin-top: 24vh;*/
@@ -36,7 +36,7 @@
 }
 
 .second_solution {
-    grid-area: second_answer-field;
+    grid-area: second_solution;
     height: 9vh;
     width: 21vw;
     /*margin-top: 24vh;*/
@@ -45,7 +45,7 @@
 }
 
 .third_solution {
-    grid-area: third_answer-field;
+    grid-area: third_solution;
     height: 9vh;
     width: 21vw;
     /*margin-top: 24vh;*/
