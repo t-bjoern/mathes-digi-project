@@ -13,29 +13,26 @@
 {% block form %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='3_task_D' as forward_url %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='3_task_B' as backward_url %}
-    {#    {% with "return checkForm_singleAnswer()" as onsubmit %}#}
     {% with 'task_normal' as this_task_process %}
         {{ block.super }}
     {% endwith %}
-    {#    {% endwith %}#}
 {% endblock %}
 
 <!-- Images -->
 {% block images %}
     {% with '2' as monkey_number %}
         {% with '0' as progressbar %}
-            {{ block.super }}
+            {% with 'Mathes_2/task_3_4/Background_4' as background %}
+                {{ block.super }}
+            {% endwith %}
         {% endwith %}
     {% endwith %}
 {% endblock %}
 
 <!-- Task -->
 {% block task %}
-    <div class="task"
-         style="background-image: url('{% static "mathesdigi_app/img/Mathes_2/task_3_4/Background_4.svg" %}');">
-        <div class="task_text">Verdopple.</div>
-        <input class="input_field_small_left" readonly value="40">
-        <input class="input_field_small_right" type="text" inputmode="None" id="kids_answer_1" name="2A3C"
-               placeholder="Antwort" value="{% if 2A3C %}{{ 2A3C }}{% endif %}">
-    </div>
+    <div class="task_text">Verdopple.</div>
+    <input class="input_field_small_left" readonly value="40">
+    <input class="input_field_small_right" type="text" inputmode="None" id="kids_answer_1" name="2A3C"
+           placeholder="Antwort" value="{% if 2A3C %}{{ 2A3C }}{% endif %}">
 {% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'mathesdigi_app/base_task_template.html' %}
+{% load static %}
+
+{% block static_files %}
+    {% with 'multiple_answers' as page %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block title %}Mathes 2 - 5.ABC{% endblock %}
+
+<!-- Form -->
+{% block form %}
+    {% url 'main_view' heft='Mathes2' direct_to_task_name='evaluation' as forward_url %}
+    {% url 'main_view' heft='Mathes2' direct_to_task_name='4_task_F' as backward_url %}
+    {% with 'task_normal' as this_task_process %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+<!-- Images -->
+{% block images %}
+    {% with '2' as monkey_number %}
+        {% with '0' as progressbar %}
+            {% with 'Background_clean' as background %}
+                {{ block.super }}
+            {% endwith %}
+        {% endwith %}
+    {% endwith %}
+{% endblock %}
+
+<!-- Task -->
+{% block task %}
+    <div class="task_text">Rechne.</div>
+    <input class="first_task" readonly value="30 + 40 = ">
+    <input class="first_solution" type="text" inputmode="None" name="2A5A" placeholder="Antwort" id="kids_answer_1"
+           value="{% if 2A5A %}{{ 2A5A }}{% endif %}">
+    <input class="second_task" readonly value="72 + 5 = ">
+    <input class="second_solution" type="text" inputmode="None" name="2A5B" placeholder="Antwort" id="kids_answer_2"
+           value="{% if 2A5B %}{{ 2A5B }}{% endif %}">
+    <input class="third_task" readonly value="56 + 8 = ">
+    <input class="third_solution" type="text" inputmode="None" name="2A5C" placeholder="Antwort" id="kids_answer_3"
+           value="{% if 2A5C %}{{ 2A5C }}{% endif %}">
+{% endblock %}

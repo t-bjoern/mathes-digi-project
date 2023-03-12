@@ -8,9 +8,7 @@ let last_clicked_input_div_id;
 document.addEventListener("DOMContentLoaded", function () {
     const multi_answers = document.querySelectorAll('.answer');
     multi_answers.forEach(function (answer) {
-        answer.addEventListener("click", function () {
-            last_clicked_input_div_id = this.id;
-        });
+        answer.addEventListener("click", click);
         // answer.addEventListener("keydown", keyboard_add_number_div);
     });
 
@@ -23,7 +21,21 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault()
         });
     }
+    // Catch Touch-Move-Event (prevent scrolling on tablets)
+    document.addEventListener("touchmove", function (event) {
+        event.preventDefault();
+    }, {passive: false});
 });
+
+function click(event) {
+    const multi_answers = document.querySelectorAll('.answer');
+    multi_answers.forEach(function (answer) {
+        answer.style.border = "1px solid black";
+    });
+    last_clicked_input_div_id = event.currentTarget.id;
+    event.currentTarget.style.border = "2px solid blue";
+
+}
 
 // /** Action for keyboard-input
 //  * Only keys 0-9 and Backspace are allowed. Only three digits can be written.

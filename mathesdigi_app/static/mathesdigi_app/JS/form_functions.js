@@ -1,27 +1,7 @@
 // ATTENTION
 // functions in here ARE used even if it is not shown here. They are called in each template in a String.
-
 const shake_duration = 800;
-const red_to_green_duration = 1000;
-const correct_forward = 2000;
-const wrong_forward = 3000;
-
-
-/** This function checks if the input field is empty and if so, adds a CSS class input_field_shake
- *  to create a shaking effect to draw the user's attention.
- *  It then removes this class after a delay of 1 second using setTimeout().*/
-function checkForm_singleAnswer() {
-    const kids_answer_input_field = document.getElementById("kids_answer_1");
-    if (kids_answer_input_field.value.trim() === "") {
-        kids_answer_input_field.classList.add("input_field_shake");
-        setTimeout(function () {
-            kids_answer_input_field.classList.remove("input_field_shake");
-        }, shake_duration);
-        return false;
-    } else {
-        return true;
-    }
-}
+const red_to_green_duration = 2000;
 
 /** This function is called for each single_example. The input-field shakes if it is empty. Otherwise, it changes the
  * color of the answer to red or green. For wrong answers it shows the correct solution.
@@ -35,56 +15,13 @@ function checkForm_example_singleAnswer(solution) {
             kids_answer_input_field.classList.remove("input_field_shake");
         }, shake_duration);
     } else if (kids_answer_input_field.value === solution) {
-        kids_answer_input_field.style.color = 'green';
-        setTimeout(function () {
-            document.getElementById("example_form").submit();
-        }, correct_forward);
+        return true
     } else {
         kids_answer_input_field.style.color = 'red';
         setTimeout(function () {
             kids_answer_input_field.value = solution;
             kids_answer_input_field.style.color = 'green';
         }, red_to_green_duration);
-        setTimeout(function () {
-            document.getElementById("example_form").submit();
-        }, wrong_forward);
-    }
-    return false;
-}
-
-/** Handling for Drag and Drop tasks.
- * Adds shaking to empty answer-fields and sets the given answers into a hidden input-field for submitting.
- * Divs are needed for allowing images and text in the same field. */
-function checkForm_dragAndDrop() {
-    const answer_divs = document.querySelectorAll('.answer');
-    let kids_answer_list = [];
-    let shake = false;
-
-
-    answer_divs.forEach(function (single_answer) {
-        // shake-Handling
-        if (single_answer.innerHTML.trim() === '') {
-            single_answer.classList.add("input_field_shake");
-            setTimeout(function () {
-                single_answer.classList.remove("input_field_shake");
-            }, shake_duration);
-            shake = true;
-        }
-        // collecting kids_answers
-        else if (single_answer.innerHTML.includes('<img')) {
-            let imgElement = single_answer.querySelector('img');
-            let imgID = imgElement.getAttribute('id');
-            kids_answer_list.push(imgID);
-        } else {
-            kids_answer_list.push(single_answer.textContent.trim());
-        }
-    });
-
-    // set collected_answers in hidden input-field and submit form
-    if (!shake) {
-        const input_field = document.getElementById('answers_collected');
-        input_field.value = kids_answer_list;
-        return true;
     }
     return false;
 }
@@ -142,11 +79,39 @@ function checkForm_example_dragAndDrop(solution) {
             })
         }, red_to_green_duration * 2);
 
-        // submit form
-        setTimeout(function () {
-            document.getElementById("example_form").submit();
-        }, wrong_forward * 2);
+        let all_correct = true;
+        answer_divs.forEach(function (single_answer) {
+            if (single_answer.style.color === 'red') {
+                all_correct = false
+            }
+        })
+        if (all_correct) {
+            return true
+        }
     }
     return false;
 }
 
+/** Handling for Drag and Drop tasks.
+ * Sets the given answers into a hidden input-field for submitting.
+ * Divs are needed for allowing images and text in the same field. */
+function checkForm_dragAndDrop() {
+    const answer_divs = document.querySelectorAll('.answer');
+    let kids_answer_list = [];
+
+    answer_divs.forEach(function (single_answer) {
+        // collecting kids_answers
+        if (single_answer.innerHTML.includes('<img')) {
+            let imgElement = single_answer.querySelector('img');
+            let imgID = imgElement.getAttribute('id');
+            kids_answer_list.push(imgID);
+        } else {
+            kids_answer_list.push(single_answer.textContent.trim());
+        }
+    });
+
+    // set collected_answers in hidden input-field and submit form
+    const input_field = document.getElementById('answers_collected');
+    input_field.value = kids_answer_list;
+    return true;
+}

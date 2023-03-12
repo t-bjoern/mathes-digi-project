@@ -18,14 +18,15 @@
         {% if page == 'task_normal' %}
             <link rel="stylesheet" type="text/css"
                   href="{% static 'mathesdigi_app/css/02_task_normal.css' %}?version={{ timestamp }}">
-            <!-- JS -->
             <script src="{% static 'mathesdigi_app/JS/task_normal.js' %}?version={{ timestamp }}"></script>
         {% elif page == 'drag_and_drop' %}
             <link rel="stylesheet" type="text/css"
                   href="{% static 'mathesdigi_app/css/02_drag_and_drop.css' %}?version={{ timestamp }}">
             <script src="{% static 'mathesdigi_app/JS/drag_drop.js' %}?version{{ timestamp }}"></script>
+        {% elif page == 'multiple_answers' %}
             <link rel="stylesheet" type="text/css"
-                  href="{% static 'mathesdigi_app/css/02_drag_and_drop.css' %}?version={{ timestamp }}">
+                  href="{% static 'mathesdigi_app/css/02_multiple_answers.css' %}?version={{ timestamp }}">
+            <script src="{% static 'mathesdigi_app/JS/task_normal.js' %}?version={{ timestamp }}"></script>
         {% endif %}
     {% endblock %}
 
@@ -49,7 +50,6 @@
             <button class="backwards " type="button" onclick="window.location.href = '{{ backward_url }}'">
                 <img src="{% static 'mathesdigi_app/img/zurueck.svg' %}" alt=""></button>
 
-            {% block task %}{% endblock %}
             {% block input-buttons %}{% include 'mathesdigi_app/number_buttons.html' %}{% endblock %}
 
             <!-- Images -->
@@ -60,9 +60,24 @@
                 <img class="progressbar"
                      src="{% static 'mathesdigi_app/img/progressbar/Fortschrittsbalken_'|add:progressbar|add:'.svg' %}"
                      alt="">
-                <div class="full-screen"><img src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""></div>
+                <div class="full-screen" onclick="openFullscreen()"><img
+                        src="{% static 'mathesdigi_app/img/full_screen.svg' %}" alt=""></div>
+                <div class="task">
+                    <picture class="task">
+                        <!-- Bild für Verhältnis 16:9 -->
+                        <source media="(min-aspect-ratio: 16/9)"
+                                srcset="{% static 'mathesdigi_app/img/'|add:background|add:'_16_9.svg' %}">
+                        <!-- Bild für Verhältnis 4:3 -->
+                        <source srcset="{% static 'mathesdigi_app/img/'|add:background|add:'_4_3.svg' %}">
+                        <!-- Fallback-Bild für ältere Browser -->
+                        <img class="task" src="{% static 'mathesdigi_app/img/'|add:background|add:'_4_3.svg' %}" alt="">
+                    </picture>
+                    <div class="task-overlay">
+                        {% block task %}{% endblock %}
+                    </div>
                 </div>
             {% endblock %}
+        </div>
     </form>
     <div id="turn_device"></div>
     </body>

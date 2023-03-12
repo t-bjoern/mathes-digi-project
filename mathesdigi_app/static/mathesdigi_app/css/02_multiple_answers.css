@@ -1,0 +1,82 @@
+@import "00_variablen.css";
+
+.task-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 50vw 30vw;
+    grid-template-rows: 14vh 15vh 15vh 16vh;
+    grid-template-areas:
+            "task-text task-text"
+            "first_task first_solution"
+            "second_task second_solution"
+            "third_task third_solution";
+}
+
+.task_text {
+    grid-area: task-text;
+    text-align: left;
+    margin-left: 5vw;
+    font-size: var(--task-font-size);
+    align-self: end;
+    margin-bottom: 1vh;
+    font-family: var(--standard-font-family);
+}
+
+.first_solution {
+    grid-area: first_solution;
+    height: 9vh;
+    width: 21vw;
+    /*margin-top: 24vh;*/
+    /*margin-left: 2vw;*/
+    /*margin-right: 7vw;*/
+}
+
+.second_solution {
+    grid-area: second_solution;
+    height: 9vh;
+    width: 21vw;
+    /*margin-top: 24vh;*/
+    /*margin-left: 2vw;*/
+    /*margin-right: 7vw;*/
+}
+
+.third_solution {
+    grid-area: third_solution;
+    height: 9vh;
+    width: 21vw;
+    /*margin-top: 24vh;*/
+    /*margin-left: 2vw;*/
+    /*margin-right: 7vw;*/
+}
+
+.first_task {
+    grid-area: first_task;
+    height: 9vh;
+    width: 21vw;
+    /*margin-top: 24vh;*/
+    margin-left: 2vw;
+    /*margin-right: 7vw;*/
+}
+
+.second_task {
+    grid-area: second_task;
+    height: 9vh;
+    width: 21vw;
+    /*margin-top: 24vh;*/
+    margin-left: 2vw;
+    /*margin-right: 7vw;*/
+}
+
+.third_task {
+    grid-area: third_task;
+    height: 9vh;
+    width: 21vw;
+    /*margin-top: 24vh;*/
+    margin-left: 2vw;
+    /*margin-right: 7vw;*/
+}
+

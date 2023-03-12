@@ -14,7 +14,7 @@
     {% url 'main_view' heft='Mathes2' direct_to_task_name='2_task_B' as forward_url %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='2_example' as backward_url %}
     {% with "return checkForm_dragAndDrop()" as onsubmit %}
-        {% with 'task_normal' as this_task_process %}
+        {% with '´drag_and_drop' as this_task_process %}
             {{ block.super }}
         {% endwith %}
     {% endwith %}
@@ -24,45 +24,45 @@
 {% block images %}
     {% with '2' as monkey_number %}
         {% with '0' as progressbar %}
-            {{ block.super }}
+            {% with 'Background_clean' as background %}
+                {{ block.super }}
+            {% endwith %}
         {% endwith %}
     {% endwith %}
 {% endblock %}
 
 <!-- Task -->
 {% block task %}
-    <div class="task" style="background-image: url('{% static "mathesdigi_app/img/Background_clean.svg" %}');">
-        <div class="task_text">Ordne. Beginne mit der kleinsten Zahl.</div>
-        <div class="task_pics dropzone" id="task_pics">
-            <img id="55" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_55.svg' %}"
-                 draggable="true"
-                 alt="">
-            <img id="8" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_8.svg' %}"
-                 draggable="true"
-                 alt="">
-            <img id="98" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_98.svg' %}"
-                 draggable="true"
-                 alt="">
-            <img id="12" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_12.svg' %}"
-                 draggable="true"
-                 alt="">
-            <img id="45" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_45.svg' %}"
-                 draggable="true"
-                 alt="">
-            <img id="88" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_88.svg' %}"
-                 draggable="true"
-                 alt="">
-        </div>
-        <div class="answers">
-            <div id="kids_answer_1" class="answer dropzone" inputmode="none"></div>
-            <div id="kids_answer_2" class="answer dropzone" inputmode="none"></div>
-            <div id="kids_answer_3" class="answer dropzone" inputmode="none"></div>
-            <div id="kids_answer_4" class="answer dropzone" inputmode="none"></div>
-            <div id="kids_answer_5" class="answer dropzone" inputmode="none"></div>
-            <div id="kids_answer_6" class="answer dropzone" inputmode="none"></div>
-        </div>
-
-        <!-- Only for sending the data in our form. -->
-        <input id="answers_collected" hidden name="2A2A">
+    <div class="task_text">Ordne. Beginne mit der kleinsten Zahl.</div>
+    <div class="task_pics dropzone" id="task_pics">
+        <img id="55" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_55.svg' %}"
+             draggable="true"
+             alt="">
+        <img id="8" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_8.svg' %}"
+             draggable="true"
+             alt="">
+        <img id="98" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_98.svg' %}"
+             draggable="true"
+             alt="">
+        <img id="12" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_12.svg' %}"
+             draggable="true"
+             alt="">
+        <img id="45" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_45.svg' %}"
+             draggable="true"
+             alt="">
+        <img id="88" class="multi_pic" src="{% static 'mathesdigi_app/img/Mathes_2/task_2/book_88.svg' %}"
+             draggable="true"
+             alt="">
     </div>
+    <div class="answers">
+        <div id="kids_answer_1" class="answer dropzone" inputmode="none">{% if 2A2A %}{{ 2A2A }}{% endif %}</div>
+        <div id="kids_answer_2" class="answer dropzone" inputmode="none"></div>
+        <div id="kids_answer_3" class="answer dropzone" inputmode="none"></div>
+        <div id="kids_answer_4" class="answer dropzone" inputmode="none"></div>
+        <div id="kids_answer_5" class="answer dropzone" inputmode="none"></div>
+        <div id="kids_answer_6" class="answer dropzone" inputmode="none"></div>
+    </div>
+
+    <!-- Only for sending the data in our form. -->
+    <input id="answers_collected" hidden name="2A2A">
 {% endblock %}
