@@ -12,7 +12,7 @@
 <!-- Form -->
 {% block form %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='3_task_A' as forward_url %}
-    {% url 'main_view' heft='Mathes2' direct_to_task_name='1_task_B' as backward_url %}
+    {% url 'main_view' heft='Mathes2' direct_to_task_name='2_task_B' as backward_url %}
     {% with "return checkForm_example_singleAnswer(solution = '10')" as onsubmit %}
         {% with 'example' as this_task_process %}
             {{ block.super }}
