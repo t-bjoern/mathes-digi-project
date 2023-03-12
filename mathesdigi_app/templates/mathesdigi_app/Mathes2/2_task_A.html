@@ -13,8 +13,10 @@
 {% block form %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='2_task_B' as forward_url %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='2_example' as backward_url %}
-    {% with '´drag_and_drop' as this_task_process %}
-        {{ block.super }}
+    {% with "return checkForm_dragAndDrop()" as onsubmit %}
+        {% with '´drag_and_drop' as this_task_process %}
+            {{ block.super }}
+        {% endwith %}
     {% endwith %}
 {% endblock %}
 

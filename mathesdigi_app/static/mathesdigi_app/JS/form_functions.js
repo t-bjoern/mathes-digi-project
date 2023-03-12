@@ -92,3 +92,26 @@ function checkForm_example_dragAndDrop(solution) {
     return false;
 }
 
+/** Handling for Drag and Drop tasks.
+ * Sets the given answers into a hidden input-field for submitting.
+ * Divs are needed for allowing images and text in the same field. */
+function checkForm_dragAndDrop() {
+    const answer_divs = document.querySelectorAll('.answer');
+    let kids_answer_list = [];
+
+    answer_divs.forEach(function (single_answer) {
+        // collecting kids_answers
+        if (single_answer.innerHTML.includes('<img')) {
+            let imgElement = single_answer.querySelector('img');
+            let imgID = imgElement.getAttribute('id');
+            kids_answer_list.push(imgID);
+        } else {
+            kids_answer_list.push(single_answer.textContent.trim());
+        }
+    });
+
+    // set collected_answers in hidden input-field and submit form
+    const input_field = document.getElementById('answers_collected');
+    input_field.value = kids_answer_list;
+    return true;
+}
