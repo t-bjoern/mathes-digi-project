@@ -11,7 +11,7 @@
 
 <!-- Form -->
 {% block form %}
-    {% url 'main_view' heft='Mathes2' direct_to_task_name='evaluation' as forward_url %}
+    {% url 'main_view' heft='Mathes2' direct_to_task_name='5_task_ABC' as forward_url %}
     {% url 'main_view' heft='Mathes2' direct_to_task_name='4_task_E' as backward_url %}
     {% with 'task_normal' as this_task_process %}
         {{ block.super }}

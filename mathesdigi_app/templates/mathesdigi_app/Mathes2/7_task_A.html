@@ -7,12 +7,12 @@
     {% endwith %}
 {% endblock %}
 
-{% block title %}Mathes 2 - 1.B{% endblock %}
+{% block title %}Mathes 2 - 7.A{% endblock %}
 
 <!-- Form -->
 {% block form %}
-    {% url 'main_view' heft='Mathes2' direct_to_task_name='2_example' as forward_url %}
-    {% url 'main_view' heft='Mathes2' direct_to_task_name='1_task_A' as backward_url %}
+    {% url 'main_view' heft='Mathes2' direct_to_task_name='7_task_B' as forward_url %}
+    {% url 'main_view' heft='Mathes2' direct_to_task_name='7_example' as backward_url %}
     {% with 'task_normal' as this_task_process %}
         {{ block.super }}
     {% endwith %}
@@ -31,12 +31,10 @@
 
 <!-- Task -->
 {% block task %}
-    <div class="task_text">Wie viele Radiergummis sind es?</div>
-    <div class="task_pic"><img
-            src="{% static 'mathesdigi_app/img/Mathes_2/task_1/B.svg' %}"
-            alt="">
+    <div class="task_text">Schreibe die passende Malaufgabe.</div>
+    <div class="task_pic">
+        <img src="{% static 'mathesdigi_app/img/Mathes_2/task_7/A.svg' %}" alt="">
     </div>
-    <input class="input_field_large" type="text" inputmode="None" id="kids_answer_1" name="2A1B"
-           placeholder="Antwort" value="{% if 2A1B %}{{ 2A1B }}{% endif %}">
-
+    <input class="input_field_large" type="text" inputmode="None" id="kids_answer_1"
+           placeholder="Antwort">
 {% endblock %}

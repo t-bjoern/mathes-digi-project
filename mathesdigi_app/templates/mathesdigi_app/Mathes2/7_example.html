@@ -1,0 +1,42 @@
+{% extends 'mathesdigi_app/base_task_template.html' %}
+{% load static %}
+
+{% block static_files %}
+    {% with 'task_normal' as page %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block title %}Mathes 2 - 7.Bsp{% endblock %}
+
+<!-- Form -->
+{% block form %}
+    {% url 'main_view' heft='Mathes2' direct_to_task_name='7_task_A' as forward_url %}
+    {% url 'main_view' heft='Mathes2' direct_to_task_name='5_task_ABC' as backward_url %}
+    {% with "return checkForm_example_singleAnswer(solution='3*4')" as onsubmit %}
+        {% with 'example' as this_task_process %}
+            {{ block.super }}
+        {% endwith %}
+    {% endwith %}
+{% endblock %}
+
+<!-- Images -->
+{% block images %}
+    {% with '2_example' as monkey_number %}
+        {% with '0' as progressbar %}
+            {% with 'Background_with_single_answerfield' as background %}
+                {{ block.super }}
+            {% endwith %}
+        {% endwith %}
+    {% endwith %}
+{% endblock %}
+
+<!-- Task -->
+{% block task %}
+    <div class="task_text">Schreibe die passende Malaufgabe.</div>
+    <div class="task_pic">
+        <img src="{% static 'mathesdigi_app/img/Mathes_2/task_7/example.svg' %}" alt="">
+    </div>
+    <input class="input_field_large" type="text" inputmode="None" id="kids_answer_1"
+           placeholder="Antwort">
+{% endblock %}
